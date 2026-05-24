@@ -33,7 +33,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       {isMobileMenuOpen && (
         <div 
           onClick={() => setIsMobileMenuOpen(false)}
-          className="lg:hidden fixed inset-0 bg-gray-900/50 backdrop-blur-xs z-40 transition-opacity"
+          className="lg:hidden fixed inset-0 bg-gray-900/50 backdrop-blur-xs z-[9999] transition-opacity"
         ></div>
       )}
 
@@ -42,7 +42,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       
       {/* Main Content Area - adds left margin on desktop to account for fixed sidebar */}
       <main className="flex-1 lg:ml-64 pb-16 lg:pb-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 lg:py-8">
           {children}
         </div>
       </main>
