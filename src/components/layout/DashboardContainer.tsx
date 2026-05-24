@@ -42,13 +42,10 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       
       {/* Main Content Area - adds left margin on desktop to account for fixed sidebar */}
       <main className="flex-1 lg:ml-64 pb-16 lg:pb-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 lg:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 pt-16 pb-16 lg:py-6 animate-fade-in">
           {children}
         </div>
       </main>
-
-      {/* Persistent Sharia AI Chat Co-Pilot */}
-      <FloatingAIChat />
 
       {/* Mobile Bottom Navigation */}
       <BottomNavigationBar />
