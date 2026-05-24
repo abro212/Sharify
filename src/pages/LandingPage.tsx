@@ -5,11 +5,11 @@ import {
   Lock, AlertTriangle, BookOpen, MessageSquare, Briefcase, BrainCircuit,
   TrendingUp, Users, Star, Quote, Menu, X
 } from 'lucide-react';
-import { useSettingsStore } from '../store/settingsStore';
+import { useSettingsStore, bustCache } from '../store/settingsStore';
 
 export const LandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { settings } = useSettingsStore();
+  const { settings, loading } = useSettingsStore();
 
   return (
     <div className="min-h-screen bg-gray-50 selection:bg-accent selection:text-white font-sans">
@@ -18,8 +18,11 @@ export const LandingPage: React.FC = () => {
       <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center">
-            {settings.logo_url ? (
-              <img src={settings.logo_url} alt="Logo" className="h-9 object-contain" />
+            {loading ? (
+              // Skeleton placeholder while settings load — prevents flash of wrong logo
+              <div className="h-9 w-24 bg-gray-200 rounded animate-pulse" />
+            ) : settings.logo_url ? (
+              <img src={bustCache(settings.logo_url)} alt="Logo" className="h-9 object-contain" />
             ) : (
               <>
                 <ShieldCheck className="h-8 w-8 text-[#0F4C3A]" />
@@ -470,7 +473,7 @@ export const LandingPage: React.FC = () => {
             <div className="col-span-2">
               <div className="flex items-center mb-4">
                 {settings.logo_url ? (
-                  <img src={settings.logo_url} alt="Logo" className="h-6 object-contain" />
+                  <img src={bustCache(settings.logo_url)} alt="Logo" className="h-6 object-contain" />
                 ) : (
                   <>
                     <ShieldCheck className="h-6 w-6 text-[#0F4C3A]" />

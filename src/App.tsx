@@ -28,11 +28,14 @@ import { supabase } from './lib/supabase';
 
 function App() {
   const { setSession } = useAuthStore();
-  const { fetchSettings } = useSettingsStore();
+  const { fetchSettings, subscribeToRealtime, unsubscribeFromRealtime } = useSettingsStore();
 
   useEffect(() => {
-    // Fetch global configuration and CMS settings
+    // Fetch global configuration and CMS settings once on load
     fetchSettings();
+
+    // Start Realtime subscription so logo/CMS changes propagate live
+    subscribeToRealtime();
 
     // Check active session on initial load
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -46,8 +49,11 @@ function App() {
       setSession(session);
     });
 
-    return () => subscription.unsubscribe();
-  }, [setSession, fetchSettings]);
+    return () => {
+      subscription.unsubscribe();
+      unsubscribeFromRealtime();
+    };
+  }, [setSession, fetchSettings, subscribeToRealtime, unsubscribeFromRealtime]);
 
   return (
     <Router>

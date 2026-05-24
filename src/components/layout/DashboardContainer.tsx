@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Menu, ShieldCheck } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { BottomNavigationBar } from './BottomNavigationBar';
-import { FloatingAIChat } from './FloatingAIChat';
 
 interface DashboardContainerProps {
   children: React.ReactNode;

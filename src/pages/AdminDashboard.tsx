@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { useAuthStore } from '../store/authStore';
-import { useSettingsStore } from '../store/settingsStore';
+import { useSettingsStore, bustCache } from '../store/settingsStore';
 import type { SystemSettings } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
 import { 
@@ -79,25 +79,28 @@ export const AdminDashboard: React.FC = () => {
     setUploadLoading(prev => ({ ...prev, [fieldName]: true }));
     try {
       const fileExt = file.name.split('.').pop();
-      // Use clean, deterministic filenames for auto-upsert replacement to save storage space
-      const fileName = `branding_${fieldName}_${Date.now()}.${fileExt}`;
-      const filePath = `branding/${fileName}`;
+      // Use deterministic filenames per asset type so old files are overwritten
+      // (avoids storage bucket bloat)
+      const filePath = `branding/${fieldName}.${fileExt}`;
 
-      // 1. Upload file into public bucket 'assets'
+      // 1. Upload file — set cacheControl '0' so CDN does not serve stale copy
       const { error } = await supabase.storage
         .from('assets')
-        .upload(filePath, file, { cacheControl: '3600', upsert: true });
+        .upload(filePath, file, { cacheControl: '0', upsert: true });
 
       if (error) throw error;
 
-      // 2. Fetch the newly uploaded file's public URL path
+      // 2. Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('assets')
         .getPublicUrl(filePath);
 
-      // 3. Hydrate form state with new public URL
-      setBrandingForm(prev => ({ ...prev, [fieldName]: publicUrl }));
-      triggerToast(`File berhasil diunggah ke storage assets!`);
+      // 3. Immediately persist URL to database so it survives page refresh
+      await updateSettings({ [fieldName]: publicUrl });
+
+      // 4. Update local form preview state (bustCache so preview also shows fresh image)
+      setBrandingForm(prev => ({ ...prev, [fieldName]: bustCache(publicUrl) }));
+      triggerToast(`File berhasil diunggah dan disimpan!`);
     } catch (err: any) {
       console.error(err);
       triggerToast(`Gagal mengunggah file: ${err.message || 'Error'}`);
