@@ -96,7 +96,8 @@ export const AdminDashboard: React.FC = () => {
         .getPublicUrl(filePath);
 
       // 3. Immediately persist URL to database so it survives page refresh
-      await updateSettings({ [fieldName]: publicUrl });
+      const { ok, error: saveErr } = await updateSettings({ [fieldName]: publicUrl });
+      if (!ok) throw new Error(saveErr || 'Save failed');
 
       // 4. Update local form preview state (bustCache so preview also shows fresh image)
       setBrandingForm(prev => ({ ...prev, [fieldName]: bustCache(publicUrl) }));
@@ -112,13 +113,13 @@ export const AdminDashboard: React.FC = () => {
   const handleSaveBranding = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSavingBranding(true);
-    const success = await updateSettings(brandingForm);
+    const { ok, error: saveErr } = await updateSettings(brandingForm);
     setIsSavingBranding(false);
 
-    if (success) {
+    if (ok) {
       triggerToast('Aset branding berhasil diperbarui dan diterapkan ke seluruh aplikasi!');
     } else {
-      triggerToast('Terjadi kesalahan saat memperbarui aset branding.');
+      triggerToast(`Gagal menyimpan: ${saveErr || 'Cek koneksi dan izin RLS Anda.'}`);
     }
   };
 
@@ -161,13 +162,13 @@ export const AdminDashboard: React.FC = () => {
   const handleSaveCMS = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSavingCMS(true);
-    const success = await updateSettings(cmsForm);
+    const { ok, error: saveErr } = await updateSettings(cmsForm);
     setIsSavingCMS(false);
 
-    if (success) {
+    if (ok) {
       triggerToast('Konten Landing Page berhasil dipublikasikan secara live!');
     } else {
-      triggerToast('Gagal memperbarui konten Landing Page.');
+      triggerToast(`Gagal menyimpan: ${saveErr || 'Cek koneksi dan izin RLS Anda.'}`);
     }
   };
 

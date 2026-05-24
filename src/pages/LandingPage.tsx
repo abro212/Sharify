@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, HeartPulse, Calculator, RefreshCcw, CheckCircle2, 
@@ -6,10 +6,56 @@ import {
   TrendingUp, Users, Star, Quote, Menu, X
 } from 'lucide-react';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
+import { supabase } from '../lib/supabase';
 
 export const LandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { settings, loading } = useSettingsStore();
+  const { settings } = useSettingsStore();
+
+  // ── Direct logo fetch ──────────────────────────────────────────
+  // The logo is fetched directly from Supabase here in the component
+  // (not just from the store) so it is guaranteed to be the latest
+  // value from the database on every page mount.
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchLogo = async () => {
+      setLogoLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'logo_url')
+          .maybeSingle();
+
+        if (!cancelled) {
+          if (error) {
+            console.error('[LandingPage] Logo fetch error:', error.message);
+            setLogoUrl(null);
+          } else {
+            // Verify the value is a non-empty string before using it
+            const rawUrl = data?.value;
+            setLogoUrl(rawUrl && rawUrl.trim() !== '' ? rawUrl.trim() : null);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[LandingPage] Unexpected logo fetch error:', err);
+          setLogoUrl(null);
+        }
+      } finally {
+        if (!cancelled) setLogoLoading(false);
+      }
+    };
+
+    fetchLogo();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Cache-bust the URL once at fetch time (not on every render)
+  const resolvedLogoUrl = useMemo(() => bustCache(logoUrl), [logoUrl]);
 
   return (
     <div className="min-h-screen bg-gray-50 selection:bg-accent selection:text-white font-sans">
@@ -18,12 +64,19 @@ export const LandingPage: React.FC = () => {
       <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center">
-            {loading ? (
-              // Skeleton placeholder while settings load — prevents flash of wrong logo
+            {logoLoading ? (
+              // Skeleton: shown while direct DB fetch is in-flight
               <div className="h-9 w-24 bg-gray-200 rounded animate-pulse" />
-            ) : settings.logo_url ? (
-              <img src={bustCache(settings.logo_url)} alt="Logo" className="h-9 object-contain" />
+            ) : resolvedLogoUrl ? (
+              // URL verified non-null from DB — cache-busted at fetch time
+              <img
+                src={resolvedLogoUrl}
+                alt="Sharify Logo"
+                className="h-9 object-contain"
+                onError={() => setLogoUrl(null)}
+              />
             ) : (
+              // Fallback to default brand mark when no logo is in DB
               <>
                 <ShieldCheck className="h-8 w-8 text-[#0F4C3A]" />
                 <span className="ml-2 text-2xl font-bold text-gray-900 tracking-tight">Sharify</span>

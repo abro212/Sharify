@@ -2,69 +2,78 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
-/**
- * Append a cache-busting timestamp to any Supabase Storage public URL
- * so browsers always fetch the latest uploaded asset instead of a cached copy.
- */
-export const bustCache = (url: string): string => {
-  if (!url) return url;
-  // Only bust Supabase Storage URLs (contains /storage/v1/object/public/)
+// ─────────────────────────────────────────────────────────────────
+// Cache-busting helper
+// Appends ?t=<timestamp> ONLY to Supabase Storage public URLs so
+// the browser skips its HTTP cache and always fetches the latest asset.
+// Call this once (e.g. when you store the URL in state) not on every render.
+// ─────────────────────────────────────────────────────────────────
+export const bustCache = (url: string | null | undefined): string => {
+  if (!url) return '';
   if (url.includes('/storage/v1/object/public/')) {
-    const sep = url.includes('?') ? '&' : '?';
-    return `${url}${sep}t=${Date.now()}`;
+    // Strip any existing ?t= param before re-adding so we don't accumulate them
+    const base = url.split('?t=')[0];
+    return `${base}?t=${Date.now()}`;
   }
   return url;
 };
 
+// ─────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────
 export interface SystemSettings {
   logo_url: string;
   favicon_url: string;
   ai_widget_icon: string;
   chat_avatar_url: string;
-  
+
   // Hero Section CMS
   hero_title: string;
   hero_subtitle: string;
   hero_cta_primary: string;
   hero_cta_secondary: string;
-  
+
   // Solusi Section CMS
   solusi_title: string;
   solusi_subtitle: string;
-  
+
   // Fitur Section CMS
   fitur_title: string;
   fitur_subtitle: string;
-  
+
   // Harga Section CMS
   harga_title: string;
   harga_subtitle: string;
-  
+
   // Footer Section CMS
   footer_desc: string;
   footer_copyright: string;
 }
 
 const DEFAULT_SETTINGS: SystemSettings = {
-  logo_url: '', // Empty means fallback to default Sharify shield icon
+  logo_url: '',
   favicon_url: '/favicon.ico',
   ai_widget_icon: 'Sparkles',
-  chat_avatar_url: '', // Empty means fallback to default advisor bot avatar
-  
+  chat_avatar_url: '',
+
   hero_title: 'Navigasi Finansial Syariah Masa Depan Anda',
-  hero_subtitle: 'Konsultan keuangan pintar berbasis AI untuk menghitung zakat, merancang goals, membersihkan riba, dan merencanakan waris fardh secara berkah.',
+  hero_subtitle:
+    'Konsultan keuangan pintar berbasis AI untuk menghitung zakat, merancang goals, membersihkan riba, dan merencanakan waris fardh secara berkah.',
   hero_cta_primary: 'Mulai Konsultasi Gratis',
   hero_cta_secondary: 'Pelajari Fitur',
-  
+
   solusi_title: 'Solusi Pengelolaan Finansial Islami Modern',
-  solusi_subtitle: 'Sharify menghadirkan integrasi AI dengan hukum fiqh muamalah komprehensif guna menjaga ketenteraman finansial keluarga.',
-  
+  solusi_subtitle:
+    'Sharify menghadirkan integrasi AI dengan hukum fiqh muamalah komprehensif guna menjaga ketenteraman finansial keluarga.',
+
   fitur_title: 'Fitur Utama Pilihan Pengguna',
-  fitur_subtitle: 'Akses mudah ke berbagai kalkulator Fiqh, tracker bebas riba, hingga AI co-pilot interaktif.',
-  
+  fitur_subtitle:
+    'Akses mudah ke berbagai kalkulator Fiqh, tracker bebas riba, hingga AI co-pilot interaktif.',
+
   harga_title: 'Pilihan Rencana Investasi Finansial Anda',
-  harga_subtitle: 'Mulai dari Rp 0 untuk akses dasar atau nikmati layanan penasihat premium Fiqh yang personal.',
-  
+  harga_subtitle:
+    'Mulai dari Rp 0 untuk akses dasar atau nikmati layanan penasihat premium Fiqh yang personal.',
+
   footer_desc: 'Asisten Keuangan Syariah Masa Depan Anda berlandaskan AI.',
   footer_copyright: '© 2026 Sharify Indonesia. Semua Hak Dilindungi.',
 };
@@ -72,89 +81,124 @@ const DEFAULT_SETTINGS: SystemSettings = {
 interface SettingsState {
   settings: SystemSettings;
   loading: boolean;
+  fetchError: string | null;
   _channel: RealtimeChannel | null;
   fetchSettings: () => Promise<void>;
-  updateSettings: (newSettings: Partial<SystemSettings>) => Promise<boolean>;
+  updateSettings: (newSettings: Partial<SystemSettings>) => Promise<{ ok: boolean; error?: string }>;
   subscribeToRealtime: () => void;
   unsubscribeFromRealtime: () => void;
 }
 
+// ─────────────────────────────────────────────────────────────────
+// Store
+// ─────────────────────────────────────────────────────────────────
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: DEFAULT_SETTINGS,
   loading: false,
+  fetchError: null,
   _channel: null,
 
+  // ── READ ───────────────────────────────────────────────────────
   fetchSettings: async () => {
-    set({ loading: true });
+    set({ loading: true, fetchError: null });
     try {
       const { data, error } = await supabase
         .from('system_settings')
         .select('key, value');
-      
-      if (!error && data && data.length > 0) {
-        const loadedSettings = { ...DEFAULT_SETTINGS };
-        data.forEach((row) => {
-          if (row.key in loadedSettings) {
-            (loadedSettings as any)[row.key] = row.value;
-          }
-        });
-        set({ settings: loadedSettings });
+
+      if (error) {
+        // Surface the real Supabase error (RLS, table missing, etc.)
+        console.error('[settingsStore] fetchSettings error:', error.message, error.details);
+        set({ fetchError: error.message, loading: false });
+        return;
       }
-    } catch (err) {
-      console.warn('Gagal memuat pengaturan sistem dari database. Menggunakan preset bawaan.', err);
-    } finally {
-      set({ loading: false });
-    }
-  },
 
-  updateSettings: async (newSettings) => {
-    try {
-      const keys = Object.keys(newSettings) as Array<keyof SystemSettings>;
-      
-      // Update locally first to trigger re-renders instantly across the application
-      const updatedLocal = { ...get().settings, ...newSettings };
-      set({ settings: updatedLocal });
+      if (!data || data.length === 0) {
+        // Table exists but has no rows yet — keep defaults
+        console.warn('[settingsStore] system_settings table is empty. Using defaults.');
+        set({ loading: false });
+        return;
+      }
 
-      // Upsert into Supabase for persistence
-      const promises = keys.map((key) => {
-        const val = newSettings[key];
-        if (val === undefined) return Promise.resolve();
-        return supabase
-          .from('system_settings')
-          .upsert({ key, value: String(val) });
+      // Merge fetched rows on top of defaults
+      const loaded: SystemSettings = { ...DEFAULT_SETTINGS };
+      data.forEach((row: { key: string; value: string }) => {
+        if (Object.prototype.hasOwnProperty.call(loaded, row.key) && row.value != null) {
+          // Apply cache-busting at fetch time so the stored URL is already "fresh"
+          (loaded as unknown as Record<string, string>)[row.key] =
+            row.key.endsWith('_url') ? bustCache(row.value) : row.value;
+        }
       });
 
-      await Promise.all(promises);
-      return true;
-    } catch (err) {
-      console.error('Gagal menyimpan pembaruan ke database:', err);
-      return false;
+      set({ settings: loaded, loading: false });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('[settingsStore] Unexpected error in fetchSettings:', msg);
+      set({ fetchError: msg, loading: false });
     }
   },
 
+  // ── WRITE ──────────────────────────────────────────────────────
+  updateSettings: async (newSettings) => {
+    // Optimistic local update for instant UI feedback
+    const optimistic: SystemSettings = { ...get().settings, ...newSettings };
+    set({ settings: optimistic });
+
+    const keys = Object.keys(newSettings) as Array<keyof SystemSettings>;
+    const errors: string[] = [];
+
+    // Upsert each key individually so we catch per-row errors
+    for (const key of keys) {
+      const rawVal = newSettings[key];
+      if (rawVal === undefined) continue;
+
+      // Strip cache-bust param before writing to DB — store the clean base URL
+      const cleanVal = typeof rawVal === 'string' ? rawVal.split('?t=')[0] : String(rawVal);
+
+      const { error } = await supabase
+        .from('system_settings')
+        // onConflict targets the 'key' column (PK / UNIQUE) for true upsert behaviour
+        .upsert({ key, value: cleanVal }, { onConflict: 'key' });
+
+      if (error) {
+        console.error(`[settingsStore] Failed to upsert key "${key}":`, error.message, error.details);
+        errors.push(`${key}: ${error.message}`);
+      }
+    }
+
+    if (errors.length > 0) {
+      return { ok: false, error: errors.join(' | ') };
+    }
+
+    // Re-fetch to confirm the DB state matches and apply fresh cache-bust timestamps
+    await get().fetchSettings();
+    return { ok: true };
+  },
+
+  // ── REALTIME ──────────────────────────────────────────────────
   subscribeToRealtime: () => {
-    // Avoid duplicate subscriptions
-    if (get()._channel) return;
+    if (get()._channel) return; // Already subscribed
 
     const channel = supabase
-      .channel('system_settings_changes')
+      .channel('system_settings_live')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'system_settings' },
         () => {
-          // Re-fetch all settings whenever any row changes in the DB
           get().fetchSettings();
-        }
+        },
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('[settingsStore] Realtime status:', status);
+      });
 
     set({ _channel: channel });
   },
 
   unsubscribeFromRealtime: () => {
-    const channel = get()._channel;
-    if (channel) {
-      supabase.removeChannel(channel);
+    const ch = get()._channel;
+    if (ch) {
+      supabase.removeChannel(ch);
       set({ _channel: null });
     }
   },
