@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,106 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    @apply bg-slate-50/50 text-slate-800 font-sans antialiased text-sm;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply tracking-tight;
   }
 }
+
+@layer utilities {
+  /* Ultra-Premium Glassmorphism Card style */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(241, 245, 249, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(15, 76, 58, 0.03), 0 2px 8px -1px rgba(212, 175, 55, 0.02);
+  }
+
+  .glass-card-dark {
+    background: rgba(8, 47, 35, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(214, 175, 85, 0.15);
+    box-shadow: 0 10px 30px -10px rgba(8, 47, 35, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* Shimmering Metallic Gold Text / Border effect */
+  @keyframes goldShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .shimmer-gold-text {
+    background: linear-gradient(to right, #D4AF37 20%, #FBBF24 40%, #FFFBEB 50%, #FBBF24 60%, #D4AF37 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: goldShimmer 4s linear infinite;
+  }
+
+  .shimmer-emerald-text {
+    background: linear-gradient(to right, #0F4C3A 20%, #10B981 40%, #D4D4D8 50%, #10B981 60%, #0F4C3A 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: goldShimmer 4s linear infinite;
+  }
+
+  /* Multi-layered Soft Shifting Background Glows */
+  .emerald-gold-glow {
+    position: relative;
+  }
+  .emerald-gold-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(to right, rgba(15, 76, 58, 0.15), rgba(212, 175, 55, 0.25), rgba(15, 76, 58, 0.15));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Micro-animation scale triggers */
+  .interactive-scale {
+    @apply transition-all duration-300 cubic-bezier-[0.16,1,0.3,1];
+  }
+  .interactive-scale:hover {
+    @apply transform scale-[1.015] -translate-y-[2px] shadow-md border-slate-200/60;
+  }
+
+  /* Elegant Smooth Routing Fade */
+  @keyframes premiumFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: premiumFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Drag indicator dot grid */
+  .drag-dots {
+    background-image: radial-gradient(rgba(212, 175, 55, 0.4) 1.5px, transparent 1.5px);
+    background-size: 4px 4px;
+  }
+}
+
+/* Global transitions to ensure premium smoothness */
+a, button, input, select, textarea, [role="button"] {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
