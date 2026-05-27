@@ -7,109 +7,109 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #020907;
+    background-color: #F4FAF7;
   }
   body {
-    background-color: #020907;
-    @apply text-emerald-200/90 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden;
+    background-color: #F4FAF7;
+    @apply text-emerald-950/90 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', 'Inter', sans-serif;
-    @apply tracking-tight text-emerald-50 font-bold;
+    @apply tracking-tight text-emerald-950 font-bold;
   }
 
-  /* Cybernetic High-Contrast Mapping Overrides */
-  /* This maps standard tailwind colors to gorgeous futuristic dark cyber variants globally */
+  /* Cybernetic High-Contrast Soft Light Mapping Overrides */
+  /* Maps standard colors to gorgeous, high-contrast forest-green and light-glass variants globally */
   .text-gray-900, .text-slate-900, .text-slate-950, .text-gray-950 {
-    color: #F0FDF4 !important; /* White-green */
+    color: #064E3B !important; /* Deep forest green */
   }
   .text-gray-800, .text-slate-800, .text-gray-700, .text-slate-700 {
-    color: #D1FAE5 !important; /* Pale emerald */
+    color: #0B664D !important; /* Slightly lighter deep forest */
   }
   .text-gray-600, .text-slate-600, .text-gray-500, .text-slate-500 {
-    color: #6EE7B7 !important; /* Soft glowing green */
-    opacity: 0.8;
+    color: #047857 !important; /* Forest emerald green */
+    opacity: 0.9;
   }
   .text-gray-400, .text-slate-400 {
-    color: #34D399 !important; /* Emerald 400 */
-    opacity: 0.6;
+    color: #10B981 !important; /* Emerald green */
+    opacity: 0.8;
   }
   .bg-white {
-    background-color: rgba(4, 23, 16, 0.75) !important;
+    background-color: rgba(255, 255, 255, 0.78) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-color: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.12) !important;
   }
   .bg-gray-50, .bg-slate-50, .bg-slate-50\/20, .bg-slate-50\/50, .bg-gray-50\/20, .bg-gray-50\/50 {
-    background-color: rgba(2, 9, 7, 0.85) !important;
+    background-color: rgba(240, 253, 244, 0.6) !important;
   }
   .border-gray-100, .border-gray-200, .border-slate-100, .border-slate-200, .border-slate-200\/60, .border-slate-200\/50, .border-slate-200\/40 {
-    border-color: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.12) !important;
   }
   .hover\:bg-gray-50:hover, .hover\:bg-slate-50:hover {
-    background-color: rgba(16, 185, 129, 0.08) !important;
+    background-color: rgba(16, 185, 129, 0.06) !important;
   }
   .bg-primary\/10 {
-    background-color: rgba(16, 185, 129, 0.12) !important;
+    background-color: rgba(16, 185, 129, 0.08) !important;
   }
   .text-primary, .text-primary-dark {
-    color: #34D399 !important;
+    color: #059669 !important;
   }
 }
 
 @layer utilities {
-  /* Dynamic Cyber-Grid Backdrop */
+  /* Dynamic Soft Cyber-Grid Backdrop */
   .bg-cyber-grid {
-    background-color: #020907;
+    background-color: #F4FAF7;
     background-image: 
-      radial-gradient(circle at 50% 50%, #05261b 0%, #020907 80%),
-      linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px), 
-      linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+      radial-gradient(circle at 50% 50%, #f9fcfb 0%, #edf6f2 80%),
+      linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px), 
+      linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
     background-size: 100% 100%, 36px 36px, 36px 36px;
     background-attachment: fixed;
   }
 
-  /* Futuristic Glass-HUD Panels */
+  /* Futuristic Soft Light Glass-HUD Panels */
   .glass-hud-emerald {
-    background: rgba(3, 19, 13, 0.8);
+    background: rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(52, 211, 153, 0.25);
-    box-shadow: 0 0 30px -5px rgba(4, 120, 87, 0.1), inset 0 0 15px rgba(52, 211, 153, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(4, 120, 87, 0.05), inset 0 0 10px rgba(16, 185, 129, 0.02);
   }
 
   .glass-hud-gold {
-    background: rgba(6, 16, 11, 0.85);
+    background: rgba(255, 255, 255, 0.76);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 0 30px -5px rgba(212, 175, 55, 0.1), inset 0 0 15px rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    box-shadow: 0 8px 32px 0 rgba(212, 175, 55, 0.06), inset 0 0 10px rgba(212, 175, 55, 0.02);
   }
 
   .glass-hud-dark {
-    background: rgba(1, 6, 4, 0.9);
+    background: rgba(250, 253, 251, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(16, 185, 129, 0.15);
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
   }
 
-  /* Neon Glowing Shadows */
+  /* Neon Glowing Shadows in Light Theme */
   .shadow-neon-emerald {
-    box-shadow: 0 0 15px rgba(52, 211, 153, 0.35);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.18);
   }
   .shadow-neon-gold {
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.18);
   }
 
-  /* Shimmering Metallic Glow text */
+  /* Shimmering Metallic Gold text suited for Light backgrounds */
   @keyframes goldShimmer {
     0% { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
 
   .shimmer-gold-text {
-    background: linear-gradient(to right, #D4AF37 20%, #FBBF24 40%, #FFFBEB 50%, #FBBF24 60%, #D4AF37 80%);
+    background: linear-gradient(to right, #B45309 20%, #D97706 40%, #F59E0B 50%, #D97706 60%, #B45309 80%);
     background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -118,7 +118,7 @@
   }
 
   .shimmer-emerald-text {
-    background: linear-gradient(to right, #34D399 20%, #6EE7B7 40%, #ECFDF5 50%, #6EE7B7 60%, #34D399 80%);
+    background: linear-gradient(to right, #047857 20%, #059669 40%, #10B981 50%, #059669 60%, #047857 80%);
     background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -133,14 +133,14 @@
   }
   .interactive-teleport:hover {
     @apply transform scale-[1.025] -translate-y-[3px] border-emerald-400/40;
-    box-shadow: 0 0 20px rgba(52, 211, 153, 0.2);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
   }
 
-  /* Holographic Scan Line sweep */
+  /* Holographic Scan Line sweep in Light Mode */
   @keyframes scanSweep {
     0% { transform: translateY(-100%); opacity: 0; }
-    10% { opacity: 0.5; }
-    90% { opacity: 0.5; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
     100% { transform: translateY(200%); opacity: 0; }
   }
 
@@ -155,9 +155,9 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.8), transparent);
-    box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
-    animation: scanSweep 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background: linear-gradient(to right, transparent, rgba(16, 185, 129, 0.4), transparent);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    animation: scanSweep 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     pointer-events: none;
   }
 
@@ -186,24 +186,24 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: #34D399;
-    box-shadow: 0 0 8px #34D399;
+    background-color: #10B981;
+    box-shadow: 0 0 8px #10B981;
     animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }
 
-/* Scrollbar Overrides: Futuristic Dark */
+/* Scrollbar Overrides: Futuristic Light */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #020907;
+  background: #F4FAF7;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(52, 211, 153, 0.2);
+  background: rgba(16, 185, 129, 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(52, 211, 153, 0.4);
+  background: rgba(16, 185, 129, 0.3);
 }

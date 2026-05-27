@@ -424,7 +424,7 @@ export const FloatingAIChat: React.FC = () => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Tanyakan akad, zakat, atau investasi halal..." 
-                  className="flex-1 px-3 py-2 border border-emerald-500/30 rounded-xl text-[11px] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 bg-emerald-950/90 text-emerald-100 focus:bg-[#020907] transition-all select-text font-sans"
+                  className="flex-1 px-3 py-2 border border-emerald-500/30 rounded-xl text-[11px] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 bg-[#E6F4ED]/50 text-emerald-950 focus:bg-white transition-all select-text font-sans"
                   disabled={isLoading}
                 />
                 <button 

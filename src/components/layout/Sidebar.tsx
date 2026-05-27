@@ -46,10 +46,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     : baseItems;
 
   return (
-    <aside className={`fixed inset-y-0 left-0 w-64 bg-[#020907]/90 backdrop-blur-xl border-r border-[#10B981]/25 flex flex-col z-[10000] transition-transform duration-300 transform lg:translate-x-0 ${
+    <aside className={`fixed inset-y-0 left-0 w-64 bg-[#F4FAF7]/95 backdrop-blur-xl border-r border-[#10B981]/25 flex flex-col z-[10000] transition-transform duration-300 transform lg:translate-x-0 ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     }`}>
-      <div className="flex items-center justify-between lg:justify-center h-16 border-b border-[#10B981]/20 px-4 bg-[#020b08]/50">
+      <div className="flex items-center justify-between lg:justify-center h-16 border-b border-[#10B981]/20 px-4 bg-[#E6F4ED]/60">
         <div className="flex items-center">
           {resolvedLogoUrl ? (
             <img
@@ -85,8 +85,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               className={({ isActive }) =>
                 `group flex items-center px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-300 border-l-[3px] relative overflow-hidden ${
                   isActive
-                    ? 'bg-[#031d14] text-[#34D399] border-amber-400 pl-2.5 font-black shadow-inner shadow-emerald-500/5'
-                    : 'text-emerald-300/70 border-transparent hover:bg-emerald-500/5 hover:text-white hover:translate-x-1 pl-3'
+                    ? 'bg-[#E6F4ED] text-[#064E3B] border-amber-500 pl-2.5 font-black shadow-inner shadow-emerald-500/5'
+                    : 'text-emerald-800/80 border-transparent hover:bg-emerald-500/10 hover:text-emerald-950 hover:translate-x-1 pl-3'
                 }`
               }
             >
@@ -94,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <>
                   <item.icon
                     className={`mr-2.5 flex-shrink-0 h-4 w-4 transition-transform group-hover:scale-115 ${
-                      isActive ? 'text-[#34D399] drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]' : 'text-emerald-500/60 group-hover:text-emerald-400'
+                      isActive ? 'text-[#064E3B] drop-shadow-[0_0_5px_rgba(4,120,87,0.3)]' : 'text-emerald-700/60 group-hover:text-[#064E3B]'
                     }`}
                     aria-hidden="true"
                   />
@@ -124,18 +124,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         </nav>
       </div>
 
-      <div className="p-3 border-t border-[#10B981]/20 bg-[#020b08]/30">
-        <div className="bg-gradient-to-br from-[#020d09] via-[#041710] to-[#020907] rounded-xl p-3 border border-[#10B981]/25 shadow-md relative overflow-hidden group hologram-scanner">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-200 opacity-[0.01] blur-md group-hover:opacity-5 transition-opacity pointer-events-none"></div>
+      <div className="p-3 border-t border-[#10B981]/20 bg-[#E6F4ED]/30">
+        <div className="bg-gradient-to-br from-emerald-50 via-white to-amber-50/50 rounded-xl p-3 border border-[#10B981]/25 shadow-md relative overflow-hidden group hologram-scanner">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-450 to-yellow-200 opacity-[0.01] blur-md group-hover:opacity-5 transition-opacity pointer-events-none"></div>
           <div className="flex justify-between items-center mb-1.5 relative z-10">
             <p className="text-[9px] uppercase font-black tracking-widest shimmer-gold-text">
               ENERGY MATRIX
             </p>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide bg-amber-400/20 text-amber-300 border border-amber-400/40 font-mono">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide bg-amber-400/20 text-amber-700 border border-amber-400/40 font-mono">
               {profile?.role || 'Free'}
             </span>
           </div>
-          <p className="text-[10px] text-emerald-300/80 leading-normal mb-2.5 relative z-10 font-mono">
+          <p className="text-[10px] text-[#047857]/80 leading-normal mb-2.5 relative z-10 font-mono">
             Sistem telemetri & instrumen finansial aktif.
           </p>
           <button 
