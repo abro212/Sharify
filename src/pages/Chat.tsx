@@ -206,13 +206,12 @@ export const Chat: React.FC = () => {
                   )}
                 </div>
                 
-                {/* Message Bubble */}
                 <div className={`px-4 py-3 rounded-2xl shadow-xs border ${
                   message.role === 'user' 
-                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-50 rounded-tr-none shadow-[0_0_10px_rgba(52,211,153,0.05)]' 
-                    : 'bg-emerald-950/75 border-emerald-500/15 text-emerald-200 rounded-tl-none'
+                    ? 'bg-[#064E3B] border-[#043E2F] text-white rounded-tr-none shadow-sm' 
+                    : 'bg-white border-emerald-500/20 text-emerald-950 rounded-tl-none'
                 }`}>
-                  <div className={`prose prose-sm max-w-none break-words ${message.role === 'user' ? 'prose-invert text-emerald-55 font-bold' : 'text-emerald-200'}`}>
+                  <div className={`prose prose-sm max-w-none break-words ${message.role === 'user' ? 'prose-invert text-white' : 'text-emerald-950 font-medium'}`}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {message.content}
                     </ReactMarkdown>

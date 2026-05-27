@@ -349,13 +349,12 @@ export const FloatingAIChat: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Bubble text content */}
                   <div className={`px-3 py-2.5 rounded-2xl text-[11px] leading-relaxed shadow-xs border ${
                     msg.role === 'user' 
-                      ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-50 rounded-tr-none shadow-[0_0_10px_rgba(52,211,153,0.05)]' 
-                      : 'bg-emerald-950/75 border-emerald-500/15 text-emerald-200 rounded-tl-none'
+                      ? 'bg-[#064E3B] border-[#043E2F] text-white rounded-tr-none shadow-sm' 
+                      : 'bg-white border-emerald-500/20 text-emerald-950 rounded-tl-none'
                   }`}>
-                    <div className={`prose prose-sm max-w-none break-words ${msg.role === 'user' ? 'prose-invert text-emerald-50 font-bold' : 'text-emerald-200'}`}>
+                    <div className={`prose prose-sm max-w-none break-words ${msg.role === 'user' ? 'prose-invert text-white' : 'text-emerald-950 font-medium'}`}>
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {msg.content}
                       </ReactMarkdown>
