@@ -125,39 +125,46 @@ export const Chat: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="glass-card rounded-2xl border border-slate-200/50 h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden shadow-md">
-        
+      <div className="glass-hud-dark rounded-2xl border border-emerald-500/30 h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden shadow-2xl relative">
+        {/* Telemetry border corners */}
+        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-emerald-500/30 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-emerald-500/30 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-emerald-500/30 pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-emerald-500/30 pointer-events-none"></div>
+
         {/* Header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white/40">
+        <div className="p-4 border-b border-emerald-500/25 flex items-center justify-between bg-gradient-to-r from-[#03130d] to-[#010604] relative overflow-hidden shrink-0 select-none">
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl pointer-events-none"></div>
+          
           <div className="flex items-center">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#0F4C3A] to-emerald-600 flex items-center justify-center text-white mr-3 shadow-xs">
-              <MessageSquare className="h-5 w-5 text-amber-300" />
+            <div className="h-9 w-9 rounded-xl bg-emerald-950 flex items-center justify-center border border-emerald-500/30 mr-3 shadow-neon-emerald">
+              <MessageSquare className="h-5 w-5 text-amber-400" />
             </div>
             <div>
-              <h2 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center">
+              <h2 className="text-sm font-extrabold text-emerald-50 uppercase tracking-widest flex items-center font-bold">
                 Sharify AI Co-Pilot
                 <span className="ml-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
               </h2>
-              <p className="text-[10px] text-slate-500 font-semibold">Penasihat Keuangan Syariah Virtual (Fiqh Muamalah)</p>
+              <p className="text-[10px] text-emerald-400/60 font-mono tracking-wider">FIQH_MUAMALAH_CORE_SYSTEM</p>
             </div>
           </div>
 
           <div className="flex items-center space-x-2">
             {isFreeUser ? (
-              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+              <span className={`text-[9px] font-mono font-bold px-2.5 py-1 rounded-md border ${
                 messageCount >= maxFreeMessages 
-                  ? 'bg-rose-50 border border-rose-100 text-rose-600' 
-                  : 'bg-slate-100 text-slate-600'
+                  ? 'bg-rose-950/80 border-rose-500/30 text-rose-400' 
+                  : 'bg-emerald-950 border-emerald-500/20 text-emerald-400/80'
               }`}>
                 {messageCount >= maxFreeMessages 
-                  ? 'Batas Kuota Gratis Tercapai' 
-                  : `Kuota: ${messageCount}/${maxFreeMessages} Pesan`
+                  ? 'FREE_LIMIT_EXCEEDED' 
+                  : `MESSAGES: ${messageCount}/${maxFreeMessages}`
                 }
               </span>
             ) : (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 border border-amber-500/20 text-[10px] font-extrabold shadow-sm">
-                <Crown className="w-3 h-3 mr-1 text-[#D4AF37]" />
-                {userRole.toUpperCase()} PLAN
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-emerald-950/50 text-amber-400 border border-amber-500/20 text-[9px] font-mono font-extrabold shadow-neon-gold">
+                <Crown className="w-3 h-3 mr-1.5 text-amber-400 animate-pulse" />
+                {userRole.toUpperCase()}_PLAN
               </span>
             )}
             
@@ -166,7 +173,7 @@ export const Chat: React.FC = () => {
               <button 
                 onClick={handleResetCountMock}
                 title="Reset Counter (Dev)"
-                className="text-[9px] bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded font-mono text-slate-600 font-bold"
+                className="text-[9px] bg-emerald-900/30 hover:bg-emerald-900/50 border border-emerald-500/20 px-2 py-1 rounded font-mono text-amber-400 font-bold cursor-pointer"
               >
                 Reset
               </button>
@@ -175,7 +182,7 @@ export const Chat: React.FC = () => {
         </div>
         
         {/* Chat Messages */}
-        <div className="flex-1 p-5 overflow-y-auto bg-slate-50/20 space-y-5 select-text">
+        <div className="flex-1 p-5 overflow-y-auto bg-emerald-950/15 space-y-5 select-text font-sans text-emerald-200">
           {messages.map((message) => (
             <div 
               key={message.id} 
@@ -185,8 +192,8 @@ export const Chat: React.FC = () => {
                 {/* Avatar */}
                 <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center border ${
                   message.role === 'model' 
-                    ? 'bg-emerald-50 text-[#0F4C3A] border-emerald-100' 
-                    : 'bg-white text-slate-500 border-slate-200'
+                    ? 'bg-emerald-950 text-emerald-400 border-emerald-500/20' 
+                    : 'bg-emerald-900/30 text-emerald-300 border-emerald-500/10'
                 } ${message.role === 'user' ? 'ml-3' : 'mr-3'}`}>
                   {message.role === 'model' ? (
                     settings.chat_avatar_url ? (
@@ -202,10 +209,10 @@ export const Chat: React.FC = () => {
                 {/* Message Bubble */}
                 <div className={`px-4 py-3 rounded-2xl shadow-xs border ${
                   message.role === 'user' 
-                    ? 'bg-[#0F4C3A] border-[#0A3327] text-white rounded-tr-none' 
-                    : 'bg-white border-slate-100 text-slate-800 rounded-tl-none'
+                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-50 rounded-tr-none shadow-[0_0_10px_rgba(52,211,153,0.05)]' 
+                    : 'bg-emerald-950/75 border-emerald-500/15 text-emerald-200 rounded-tl-none'
                 }`}>
-                  <div className={`prose prose-sm max-w-none break-words ${message.role === 'user' ? 'prose-invert text-white' : ''}`}>
+                  <div className={`prose prose-sm max-w-none break-words ${message.role === 'user' ? 'prose-invert text-emerald-55 font-bold' : 'text-emerald-200'}`}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {message.content}
                     </ReactMarkdown>
@@ -219,17 +226,17 @@ export const Chat: React.FC = () => {
           {isLoading && (
             <div className="flex justify-start">
               <div className="flex max-w-[80%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-emerald-50 text-[#0F4C3A] border border-emerald-100 mr-3">
+                <div className="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-emerald-950 text-emerald-400 border border-emerald-500/20 mr-3">
                   {settings.chat_avatar_url ? (
                     <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover rounded-full" />
                   ) : (
                     <Bot size={16} />
                   )}
                 </div>
-                <div className="px-4 py-3.5 rounded-2xl bg-white border border-slate-150 rounded-tl-none flex items-center space-x-2 shadow-xs">
-                  <div className="w-2 h-2 bg-[#0F4C3A] rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-[#0F4C3A] rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                  <div className="w-2 h-2 bg-[#0F4C3A] rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                <div className="px-4 py-3.5 rounded-2xl bg-emerald-950/70 border border-emerald-500/20 rounded-tl-none flex items-center space-x-2 shadow-xs">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                 </div>
               </div>
             </div>
@@ -238,24 +245,24 @@ export const Chat: React.FC = () => {
         </div>
 
         {/* Input Form Panel */}
-        <div className="p-4 border-t border-slate-100 bg-white shadow-inner select-text">
+        <div className="p-4 border-t border-emerald-500/25 bg-emerald-950/45 select-text shrink-0">
           {isFreeUser && messageCount >= maxFreeMessages ? (
             
             /* Gated locking panel */
             <div className="space-y-3 max-w-xl mx-auto py-1.5">
-              <div className="bg-rose-50 border border-rose-100 p-3 rounded-xl flex items-start space-x-2 text-rose-800">
-                <Lock className="w-4 h-4 text-rose-600 mt-0.5 shrink-0 animate-pulse" />
+              <div className="bg-rose-950/80 border border-rose-500/30 p-3 rounded-xl flex items-start space-x-2 text-rose-300">
+                <Lock className="w-4 h-4 text-rose-400 mt-0.5 shrink-0 animate-pulse" />
                 <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-wider">Konsultasi AI Terkunci</h4>
-                  <p className="text-[9px] mt-0.5 leading-relaxed text-rose-700/90 font-medium">Anda telah menggunakan batas **5 pesan gratis** di chatbot ini. Upgrade ke Plus untuk konsultasi hukum muamalah tanpa batas.</p>
+                  <h4 className="text-[10px] font-mono font-black uppercase tracking-wider">Konsultasi AI Terkunci</h4>
+                  <p className="text-[9px] mt-0.5 leading-relaxed text-rose-300/80 font-sans">Anda telah menggunakan batas **5 pesan gratis** di chatbot ini. Upgrade ke Plus untuk konsultasi hukum muamalah tanpa batas.</p>
                 </div>
               </div>
 
               <Link
                 to="/upgrade"
-                className="w-full bg-gradient-to-r from-amber-500 to-[#D4AF37] hover:from-amber-600 hover:to-[#bfa032] text-white font-extrabold py-2.5 px-4 rounded-xl text-xs shadow-md flex items-center justify-center space-x-1 transition-all active:scale-[0.98]"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-emerald-950 font-extrabold py-2.5 px-4 rounded-xl text-xs shadow-neon-gold flex items-center justify-center space-x-1 transition-all active:scale-[0.98] cursor-pointer"
               >
-                <Crown className="w-4 h-4 text-white mr-1" />
+                <Crown className="w-4 h-4 text-emerald-950 mr-1.5" />
                 <span>Upgrade ke Plus / Pro Sekarang</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
@@ -270,13 +277,13 @@ export const Chat: React.FC = () => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Tanyakan keraguan Fiqh Muamalah Anda (investasi halal, riba, nisab zakat)..." 
-                className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-[#0F4C3A] bg-slate-50/50 focus:bg-white transition-all select-text"
+                className="flex-1 px-4 py-3 border border-emerald-500/30 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 bg-emerald-950/90 text-emerald-100 focus:bg-[#020907] transition-all select-text font-sans"
                 disabled={isLoading}
               />
               <button 
                 type="submit"
                 disabled={isLoading || !inputValue.trim()}
-                className="bg-[#0F4C3A] hover:bg-emerald-950 text-white px-6 rounded-xl text-xs font-bold transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer"
+                className="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 px-6 rounded-xl text-xs font-bold transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer shadow-neon-emerald duration-300 shrink-0 font-sans"
               >
                 <Send size={14} className="mr-1.5" />
                 Kirim

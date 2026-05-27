@@ -12,18 +12,21 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-cyber-grid flex flex-col lg:flex-row relative">
+      {/* Ambient floating futuristic energy fields */}
+      <div className="absolute top-[20%] left-[20%] w-[350px] h-[350px] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-[20%] right-[10%] w-[300px] h-[300px] rounded-full bg-amber-500/5 blur-[100px] pointer-events-none z-0"></div>
       
       {/* Mobile Top Header (Sticky, only visible on lg:hidden) */}
-      <header className="lg:hidden bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-30 px-4 h-16 flex items-center justify-between shadow-xs">
+      <header className="lg:hidden bg-[#020907]/80 backdrop-blur-md border-b border-[#10B981]/20 sticky top-0 z-30 px-4 h-16 flex items-center justify-between shadow-xs relative z-30">
         <div className="flex items-center">
-          <ShieldCheck className="w-7 h-7 text-emerald-950 mr-2" />
-          <span className="text-lg font-bold text-slate-900 tracking-tight font-sans">Sharify</span>
+          <ShieldCheck className="w-7 h-7 text-[#34D399] drop-shadow-[0_0_6px_rgba(52,211,153,0.3)] mr-2" />
+          <span className="text-base font-black tracking-widest bg-gradient-to-r from-emerald-400 to-amber-300 bg-clip-text text-transparent font-sans uppercase">Sharify</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(true)}
           title="Buka Menu"
-          className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+          className="p-2 rounded-lg text-emerald-400 hover:bg-emerald-500/10 transition-colors"
         >
           <Menu className="w-6 h-6" />
         </button>

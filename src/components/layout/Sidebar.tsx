@@ -14,8 +14,10 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { profile } = useAuthStore();
+  const { settings } = useSettingsStore();
   const navigate = useNavigate();
   const userRole = profile?.role?.toLowerCase() || 'free';
+  const resolvedLogoUrl = settings?.logo_url;
   
   const baseItems = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },
@@ -43,14 +45,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ]
     : baseItems;
 
-  const { settings } = useSettingsStore();
-  const resolvedLogoUrl = settings.logo_url;
-
   return (
-    <aside className={`fixed inset-y-0 left-0 w-64 glass-card border-r border-slate-200/60 flex flex-col z-[10000] transition-transform duration-300 transform lg:translate-x-0 ${
+    <aside className={`fixed inset-y-0 left-0 w-64 bg-[#020907]/90 backdrop-blur-xl border-r border-[#10B981]/25 flex flex-col z-[10000] transition-transform duration-300 transform lg:translate-x-0 ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     }`}>
-      <div className="flex items-center justify-between lg:justify-center h-16 border-b border-slate-200/50 px-4 bg-white/30">
+      <div className="flex items-center justify-between lg:justify-center h-16 border-b border-[#10B981]/20 px-4 bg-[#020b08]/50">
         <div className="flex items-center">
           {resolvedLogoUrl ? (
             <img
@@ -60,15 +59,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             />
           ) : (
             <>
-              <ShieldCheck className="w-7 h-7 text-[#0F4C3A]" />
-              <span className="ml-2 text-lg font-black text-slate-900 tracking-tight font-sans">Sharify</span>
+              <ShieldCheck className="w-7 h-7 text-[#34D399] drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]" />
+              <span className="ml-2 text-base font-black tracking-widest bg-gradient-to-r from-emerald-400 to-amber-300 bg-clip-text text-transparent font-sans uppercase">Sharify</span>
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 ml-1.5 animate-pulse"></span>
             </>
           )}
         </div>
         {onClose && (
           <button 
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="lg:hidden p-1.5 rounded-lg text-emerald-400/80 hover:bg-emerald-500/10 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -83,10 +83,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               to={item.path}
               onClick={onClose}
               className={({ isActive }) =>
-                `group flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-300 ${
+                `group flex items-center px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-300 border-l-[3px] relative overflow-hidden ${
                   isActive
-                    ? 'bg-emerald-500/10 text-emerald-900 border-l-2 border-amber-500 pl-2.5 font-bold shadow-sm'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950 hover:translate-x-1 pl-3'
+                    ? 'bg-[#031d14] text-[#34D399] border-amber-400 pl-2.5 font-black shadow-inner shadow-emerald-500/5'
+                    : 'text-emerald-300/70 border-transparent hover:bg-emerald-500/5 hover:text-white hover:translate-x-1 pl-3'
                 }`
               }
             >
@@ -94,18 +94,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <>
                   <item.icon
                     className={`mr-2.5 flex-shrink-0 h-4 w-4 transition-transform group-hover:scale-115 ${
-                      isActive ? 'text-[#0F4C3A]' : 'text-slate-400 group-hover:text-slate-600'
+                      isActive ? 'text-[#34D399] drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]' : 'text-emerald-500/60 group-hover:text-emerald-400'
                     }`}
                     aria-hidden="true"
                   />
-                  <span className="flex-1 truncate">{item.name}</span>
+                  <span className="flex-1 truncate tracking-wide">{item.name}</span>
                   {item.tier && (
                     <span className={`ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-wider shadow-sm border ${
                       item.tier === 'plus' 
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-100/80' 
+                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' 
                         : item.tier === 'pro' 
-                        ? 'bg-amber-50 text-amber-700 border-amber-100/80 animate-pulse' 
-                        : 'bg-indigo-50 text-indigo-700 border-indigo-100/80'
+                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/20 animate-pulse' 
+                        : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20'
                     }`}>
                       {item.tier === 'plus' ? (
                         <Sparkles className="w-2 h-2 mr-0.5" />
@@ -124,19 +124,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         </nav>
       </div>
 
-      <div className="p-3 border-t border-slate-200/50 bg-slate-50/20">
-        <div className="bg-gradient-to-br from-emerald-950 via-[#0B3A2C] to-slate-900 rounded-xl p-3 border border-amber-500/20 shadow-md relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-200 opacity-[0.03] blur-md group-hover:opacity-10 transition-opacity pointer-events-none"></div>
+      <div className="p-3 border-t border-[#10B981]/20 bg-[#020b08]/30">
+        <div className="bg-gradient-to-br from-[#020d09] via-[#041710] to-[#020907] rounded-xl p-3 border border-[#10B981]/25 shadow-md relative overflow-hidden group hologram-scanner">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-200 opacity-[0.01] blur-md group-hover:opacity-5 transition-opacity pointer-events-none"></div>
           <div className="flex justify-between items-center mb-1.5 relative z-10">
-            <p className="text-[9px] uppercase font-black tracking-wider text-amber-400">
-              Sharify Premium
+            <p className="text-[9px] uppercase font-black tracking-widest shimmer-gold-text">
+              ENERGY MATRIX
             </p>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide bg-amber-400/10 text-amber-300 border border-amber-400/25">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide bg-amber-400/20 text-amber-300 border border-amber-400/40 font-mono">
               {profile?.role || 'Free'}
             </span>
           </div>
-          <p className="text-[10px] text-slate-300 leading-normal mb-2.5 relative z-10">
-            Kalkulasi Fiqh & Asisten AI Syariah secara lengkap tanpa batas.
+          <p className="text-[10px] text-emerald-300/80 leading-normal mb-2.5 relative z-10 font-mono">
+            Sistem telemetri & instrumen finansial aktif.
           </p>
           <button 
             onClick={() => {
@@ -146,14 +146,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 navigate('/upgrade');
               }
             }}
-            className="w-full bg-gradient-to-r from-amber-500 to-[#D4AF37] hover:from-amber-600 hover:to-[#bfa032] text-white text-[10px] font-bold py-1.5 px-3 rounded-lg shadow-lg hover:shadow-amber-500/20 transition-all active:scale-[0.98] flex items-center justify-center space-x-1 relative z-10 cursor-pointer"
+            className="w-full bg-gradient-to-r from-amber-500 to-[#D4AF37] hover:from-amber-600 hover:to-[#bfa032] text-white text-[10px] font-bold py-1.5 px-3 rounded-lg shadow-lg hover:shadow-amber-500/20 transition-all active:scale-[0.98] flex items-center justify-center space-x-1 relative z-10 cursor-pointer border border-amber-400/30"
           >
             <Crown className="w-3 h-3 text-white mr-1" />
-            <span>
-              {userRole === 'free' && 'Upgrade Sekarang'}
-              {userRole === 'plus' && 'Upgrade ke Pro'}
-              {userRole === 'pro' && 'Upgrade ke Family'}
-              {(userRole === 'family' || userRole === 'admin') && 'Kelola Langganan'}
+            <span className="tracking-wide">
+              {userRole === 'free' && 'UPGRADE CORE'}
+              {userRole === 'plus' && 'UPGRADE TO PRO'}
+              {userRole === 'pro' && 'UPGRADE TO FAMILY'}
+              {(userRole === 'family' || userRole === 'admin') && 'MANAGE CORE'}
             </span>
           </button>
         </div>
