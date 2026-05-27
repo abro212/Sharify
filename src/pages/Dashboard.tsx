@@ -58,47 +58,47 @@ export const Dashboard: React.FC = () => {
 
   return (
     <DashboardContainer>
-      {/* Premium Dark Greeting Banner for Stunning Contrast */}
-      <div className="bg-gradient-to-br from-[#064E3B] via-[#043E2F] to-[#022C22] text-white rounded-2xl p-6 sm:p-8 border border-emerald-500/30 relative overflow-hidden mb-8 shadow-md hologram-scanner">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-emerald-500/10 to-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      {/* High-Tech System Control Console (Greeting Banner - Light Glass background with Bold Dark Text) */}
+      <div className="glass-hud-emerald rounded-2xl p-6 sm:p-8 border border-emerald-500/30 relative overflow-hidden mb-8 hologram-scanner shadow-xs">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-emerald-500/5 to-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-emerald-950/80 text-emerald-400 text-[10px] font-mono font-semibold border border-emerald-500/30 uppercase tracking-wider">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-[#064E3B] text-[10px] font-mono font-semibold border border-emerald-500/30 uppercase tracking-wider">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 mr-1.5 animate-ping"></span>
                 SYSTEM_STATUS: NOMINAL
               </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-emerald-950/80 text-amber-400 text-[10px] font-mono font-semibold border border-amber-500/20 uppercase tracking-wider">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-amber-800 text-[10px] font-mono font-semibold border border-amber-500/20 uppercase tracking-wider">
                 SHARIA_BOARD: ONLINE
               </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-emerald-950/80 text-emerald-300 text-[10px] font-mono font-semibold border border-emerald-500/20 uppercase tracking-wider hidden sm:inline-flex">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-emerald-800 text-[10px] font-mono font-semibold border border-emerald-500/20 uppercase tracking-wider hidden sm:inline-flex">
                 NODE: JAKARTA_WEST
               </span>
             </div>
             
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans text-white font-bold">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans text-slate-950 font-bold">
               Assalamu alaikum, <span className="shimmer-gold-text font-black">{profile?.full_name?.split(' ')[0] || 'User'}</span>!
             </h1>
-            <p className="text-emerald-200/80 text-xs mt-2 max-w-2xl leading-relaxed font-sans">
+            <p className="text-[#047857] text-xs mt-2 max-w-2xl leading-relaxed font-sans font-medium">
               Selamat datang kembali di pusat kendali keuangan berkah Anda. Mari senantiasa menjaga kesucian harta dengan prinsip Syariah & Fiqh Muamalah modern melalui visualisasi telemetri futuristik.
             </p>
           </div>
           
-          <div className="shrink-0 lg:text-right font-mono bg-emerald-950/80 p-4 rounded-xl border border-emerald-500/30 glass-hud-dark min-w-[200px] shadow-lg">
+          <div className="shrink-0 lg:text-right font-mono bg-white p-4 rounded-xl border border-emerald-500/20 glass-hud-dark min-w-[200px] shadow-sm">
             <div className="flex justify-between lg:justify-end items-center gap-2 mb-1">
-              <span className="text-[9px] text-amber-400/80 font-mono tracking-widest uppercase">CORE METRIC SYSTEM</span>
-              <Cpu className="h-3 w-3 text-amber-400 animate-pulse" />
+              <span className="text-[9px] text-amber-800 font-mono tracking-widest uppercase">CORE METRIC SYSTEM</span>
+              <Cpu className="h-3 w-3 text-amber-600 animate-pulse" />
             </div>
-            <span className="text-sm font-black text-emerald-100 tracking-tight block">ACTIVE & MONITORING</span>
+            <span className="text-sm font-black text-slate-950 tracking-tight block">ACTIVE & MONITORING</span>
             <div className="flex justify-between lg:justify-end items-center gap-1.5 mt-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <p className="text-[8px] text-emerald-400/70 italic font-mono uppercase">SUPABASE DATABASE SYNCED</p>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+              <p className="text-[8px] text-[#047857] italic font-mono uppercase">SUPABASE DATABASE SYNCED</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Cyber Metrics Energy Cells (Light Panels - Dark Text) */}
+      {/* Cyber Metrics Energy Cells (Light Panels - High Contrast Text) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
         
         {/* Cell 1: Asset Core */}
@@ -109,7 +109,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="min-w-0 flex-1 relative z-10">
             <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#047857] block mb-0.5">TOTAL_ACTIVE_ASSETS</span>
-            <p className="text-xl sm:text-2xl font-black text-emerald-950 truncate font-sans">
+            <p className="text-xl sm:text-2xl font-black text-slate-950 truncate font-sans">
               Rp {financialProfile?.assets ? financialProfile.assets.toLocaleString('id-ID') : '0'}
             </p>
             <div className="flex items-center gap-1 mt-1">
@@ -122,12 +122,12 @@ export const Dashboard: React.FC = () => {
         {/* Cell 2: Income Matrix */}
         <div className="glass-hud-emerald p-5 rounded-2xl border border-emerald-500/20 transition-all duration-300 hover:scale-[1.015] hover:-translate-y-0.5 hover:border-amber-400/50 flex items-center group relative overflow-hidden shadow-xs">
           <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl pointer-events-none"></div>
-          <div className="h-11 w-11 bg-amber-500/10 text-amber-800 rounded-xl flex items-center justify-center border border-amber-500/20 group-hover:bg-amber-600 group-hover:text-white group-hover:shadow-neon-gold transition-all duration-300 mr-4 shrink-0">
+          <div className="h-11 w-11 bg-amber-500/10 text-amber-800 rounded-xl flex items-center justify-center border border-amber-500/20 group-hover:bg-amber-655 group-hover:bg-amber-600 group-hover:text-white group-hover:shadow-neon-gold transition-all duration-300 mr-4 shrink-0">
             <TrendingUp className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1 relative z-10">
             <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-amber-800 block mb-0.5">MONTHLY_INFLOW_RATE</span>
-            <p className="text-xl sm:text-2xl font-black text-amber-900 truncate font-sans">
+            <p className="text-xl sm:text-2xl font-black text-slate-950 truncate font-sans">
               Rp {financialProfile?.monthly_income ? financialProfile.monthly_income.toLocaleString('id-ID') : '0'}
             </p>
             <div className="flex items-center gap-1 mt-1">
@@ -154,7 +154,7 @@ export const Dashboard: React.FC = () => {
                 <span className="text-[7px] font-mono font-black uppercase bg-rose-100 text-rose-800 border border-rose-400/40 px-1.5 py-0.5 rounded leading-none animate-pulse">EXPOSED</span>
               )}
             </div>
-            <p className={`text-xl sm:text-2xl font-black truncate font-sans ${financialProfile?.conventional_debts > 0 ? 'text-rose-900' : 'text-emerald-950'}`}>
+            <p className={`text-xl sm:text-2xl font-black truncate font-sans ${financialProfile?.conventional_debts > 0 ? 'text-rose-800 font-bold' : 'text-slate-950'}`}>
               Rp {financialProfile?.conventional_debts ? financialProfile.conventional_debts.toLocaleString('id-ID') : '0'}
             </p>
             <div className="flex items-center gap-1 mt-1">
@@ -204,17 +204,17 @@ export const Dashboard: React.FC = () => {
                 {/* Inner Rotating Tech Ring */}
                 <div className="absolute w-24 h-24 rounded-full border border-emerald-400/30 animate-orbit-fast"></div>
                 
-                {/* Core Sphere (Dark sphere - responsive score colors) */}
+                {/* Core Sphere (Dark background - Light Text conforms to standard) */}
                 <div className={`w-20 h-20 rounded-full border flex flex-col items-center justify-center bg-emerald-950/90 z-10 ${getScoreColor(financialProfile.health_score)}`}>
-                  <span className="text-2xl font-black tracking-tight">{financialProfile.health_score}</span>
-                  <span className="text-[7px] font-mono font-bold uppercase tracking-widest leading-none mt-0.5">COMPLIANCE</span>
+                  <span className="text-2xl font-black tracking-tight text-white">{financialProfile.health_score}</span>
+                  <span className="text-[7px] font-mono font-bold text-emerald-300 uppercase tracking-widest leading-none mt-0.5">COMPLIANCE</span>
                 </div>
               </div>
               
               <div className="flex-1 flex flex-col justify-center">
                 <span className="text-[9px] font-mono font-black tracking-widest text-amber-700 uppercase">SHARIA COMPLIANCE RADAR</span>
-                <h3 className="font-extrabold text-emerald-950 text-base mt-1 font-bold">{getScoreMessage(financialProfile.health_score).title}</h3>
-                <p className="text-emerald-800/80 text-[11px] mt-1.5 leading-relaxed font-sans">{getScoreMessage(financialProfile.health_score).desc}</p>
+                <h3 className="font-extrabold text-slate-950 text-base mt-1 font-bold">{getScoreMessage(financialProfile.health_score).title}</h3>
+                <p className="text-[#047857] text-[11px] mt-1.5 leading-relaxed font-sans font-medium">{getScoreMessage(financialProfile.health_score).desc}</p>
                 <Link to="/health-check" className="inline-flex items-center mt-3 text-xs text-emerald-700 font-bold hover:text-[#064E3B] transition-colors font-sans">
                   Ulangi Diagnosis <ArrowRight className="ml-1 h-3.5 w-3.5 animate-pulse" />
                 </Link>
@@ -271,7 +271,7 @@ export const Dashboard: React.FC = () => {
                       </div>
                       <div className="min-w-0">
                         <p className="font-bold text-emerald-950 text-xs truncate capitalize">Zakat {item.zakat_type}</p>
-                        <p className="text-[10px] text-emerald-700/60 mt-0.5 font-mono">
+                        <p className="text-[10px] text-emerald-700/65 mt-0.5 font-mono">
                           {new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>
@@ -279,7 +279,7 @@ export const Dashboard: React.FC = () => {
                     <div className="text-right shrink-0">
                       {item.zakat_obligation > 0 ? (
                         <>
-                          <p className="font-extrabold text-amber-750 text-xs sm:text-sm font-mono font-bold">Rp {Math.round(item.zakat_obligation).toLocaleString('id-ID')}</p>
+                          <p className="font-extrabold text-amber-800 text-xs sm:text-sm font-mono font-bold">Rp {Math.round(item.zakat_obligation).toLocaleString('id-ID')}</p>
                           <p className="text-[8px] text-emerald-700/60 font-mono">OBLIGATION</p>
                         </>
                       ) : (
@@ -306,7 +306,7 @@ export const Dashboard: React.FC = () => {
               </p>
               <Link 
                 to="/zakat" 
-                className="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg font-bold text-xs shadow-neon-gold cursor-pointer transition-all duration-300"
+                className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-lg font-bold text-xs shadow-neon-gold cursor-pointer transition-all duration-300"
               >
                 Kalkulator Zakat
               </Link>
@@ -318,7 +318,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Cybernetic Sharia Quick Actions Suite */}
       <div className="mt-8">
-        <h2 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-widest mb-4 flex items-center">
+        <h2 className="text-xs font-mono font-black text-[#064E3B] uppercase tracking-widest mb-4 flex items-center">
           <CircleDot className="h-3 w-3 text-amber-500 mr-2.5 animate-pulse" />
           INTEGRATED_SHARIA_SERVICES_SUITE
         </h2>
@@ -334,7 +334,7 @@ export const Dashboard: React.FC = () => {
             <Link 
               key={i} 
               to={action.path}
-              className="interactive-teleport glass-hud-emerald p-4 rounded-2xl text-center flex flex-col items-center justify-center group cursor-pointer border border-emerald-500/25 relative overflow-hidden"
+              className="interactive-teleport glass-hud-emerald p-4 rounded-2xl text-center flex flex-col items-center justify-center group cursor-pointer border border-emerald-500/25 relative overflow-hidden shadow-xs"
             >
               {/* Telemetry border corners */}
               <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-emerald-500/40"></div>

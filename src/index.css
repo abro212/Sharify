@@ -30,10 +30,15 @@
     color: #047857 !important; /* Forest emerald green */
     opacity: 0.9;
   }
-  .text-gray-400, .text-slate-400 {
-    color: #10B981 !important; /* Emerald green */
-    opacity: 0.8;
+  
+  /* Safety Overrides: Maps faint light green/grey classes to highly readable forest green */
+  .text-emerald-100, .text-emerald-200, .text-emerald-300, .text-emerald-400, .text-emerald-450 {
+    color: #047857 !important; /* Rich forest green */
   }
+  .text-gray-300, .text-slate-300, .text-gray-400, .text-slate-400 {
+    color: #0b664d !important;
+  }
+
   .bg-white {
     background-color: rgba(255, 255, 255, 0.78) !important;
     backdrop-filter: blur(16px);
