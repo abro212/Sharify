@@ -7,70 +7,70 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #F4FAF7;
+    background-color: #FFFFFF;
   }
   body {
-    background-color: #F4FAF7;
-    @apply text-emerald-950/90 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden;
+    background-color: #FFFFFF;
+    @apply text-slate-900 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', 'Inter', sans-serif;
-    @apply tracking-tight text-emerald-950 font-bold;
+    @apply tracking-tight text-slate-900 font-bold;
   }
 
-  /* Cybernetic High-Contrast Soft Light Mapping Overrides */
-  /* Maps standard colors to gorgeous, high-contrast forest-green and light-glass variants globally */
+  /* Ultra-Clean Modern Mapping Overrides */
+  /* Maps text classes to high-contrast pristine charcoal/slate shades */
   .text-gray-900, .text-slate-900, .text-slate-950, .text-gray-950 {
-    color: #064E3B !important; /* Deep forest green */
+    color: #111827 !important; /* Deep charcoal black */
   }
   .text-gray-800, .text-slate-800, .text-gray-700, .text-slate-700 {
-    color: #0B664D !important; /* Slightly lighter deep forest */
+    color: #1F2937 !important; /* Clean slate-charcoal */
   }
   .text-gray-600, .text-slate-600, .text-gray-500, .text-slate-500 {
-    color: #047857 !important; /* Forest emerald green */
+    color: #4B5563 !important; /* Professional medium gray */
     opacity: 0.9;
   }
   
-  /* Safety Overrides: Maps faint light green/grey classes to highly readable forest green */
-  .text-emerald-100, .text-emerald-200, .text-emerald-300, .text-emerald-400, .text-emerald-450 {
-    color: #047857 !important; /* Rich forest green */
+  /* Vibrant Grass-Green Accents mapping */
+  .text-emerald-100, .text-emerald-200, .text-emerald-300 {
+    color: #A7F3D0 !important;
+  }
+  .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700 {
+    color: #10B981 !important; /* Vibrant green accent */
   }
   .text-gray-300, .text-slate-300, .text-gray-400, .text-slate-400 {
-    color: #0b664d !important;
+    color: #9CA3AF !important;
   }
 
   .bg-white {
-    background-color: rgba(255, 255, 255, 0.78) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-color: rgba(16, 185, 129, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-color: rgba(229, 231, 235, 0.6) !important;
   }
   .bg-gray-50, .bg-slate-50, .bg-slate-50\/20, .bg-slate-50\/50, .bg-gray-50\/20, .bg-gray-50\/50 {
-    background-color: rgba(240, 253, 244, 0.6) !important;
+    background-color: rgba(249, 250, 251, 0.8) !important;
   }
   .border-gray-100, .border-gray-200, .border-slate-100, .border-slate-200, .border-slate-200\/60, .border-slate-200\/50, .border-slate-200\/40 {
-    border-color: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(229, 231, 235, 0.6) !important;
   }
   .hover\:bg-gray-50:hover, .hover\:bg-slate-50:hover {
-    background-color: rgba(16, 185, 129, 0.06) !important;
+    background-color: rgba(16, 185, 129, 0.04) !important;
   }
   .bg-primary\/10 {
-    background-color: rgba(16, 185, 129, 0.08) !important;
+    background-color: rgba(16, 185, 129, 0.06) !important;
   }
   .text-primary, .text-primary-dark {
-    color: #059669 !important;
+    color: #10B981 !important; /* Vibrant primary green */
   }
 }
 
 @layer utilities {
-  /* Dynamic Soft Cyber-Grid Backdrop */
+  /* Pristine Soft White-to-Gray Radial Gradient Backdrop */
   .bg-cyber-grid {
-    background-color: #F4FAF7;
+    background-color: #FFFFFF;
     background-image: 
-      radial-gradient(circle at 50% 50%, #f9fcfb 0%, #edf6f2 80%),
-      linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px), 
-      linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
-    background-size: 100% 100%, 36px 36px, 36px 36px;
+      radial-gradient(circle at 50% 50%, #FFFFFF 0%, #F9FAFB 100%);
     background-attachment: fixed;
   }
 
