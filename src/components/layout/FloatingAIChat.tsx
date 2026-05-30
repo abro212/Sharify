@@ -41,7 +41,8 @@ export const FloatingAIChat: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // ── Touch & Mouse Pointer Dragging Logic ─────────────────────────
-  const [position, setPosition] = useState({ x: 0, y: -60 });
+  const positionRef = useRef({ x: 0, y: -60 });
+  const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const dragStartCoords = useRef({ x: 0, y: 0 });
@@ -162,8 +163,8 @@ export const FloatingAIChat: React.FC = () => {
     totalDragDistance.current = 0;
     
     dragStart.current = {
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
+      x: e.clientX - positionRef.current.x,
+      y: e.clientY - positionRef.current.y
     };
     
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -193,7 +194,10 @@ export const FloatingAIChat: React.FC = () => {
     const cappedX = Math.min(maxRightDrag, Math.max(maxLeftDrag, moveX));
     const cappedY = Math.min(maxDownDrag, Math.max(maxUpDrag, moveY));
 
-    setPosition({ x: cappedX, y: cappedY });
+    positionRef.current = { x: cappedX, y: cappedY };
+    if (containerRef.current) {
+      containerRef.current.style.transform = `translate(${cappedX}px, ${cappedY}px)`;
+    }
     e.stopPropagation();
   };
 
@@ -214,9 +218,10 @@ export const FloatingAIChat: React.FC = () => {
 
   return (
     <div 
-      className="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-[9990] font-sans transition-all duration-300 select-none"
+      ref={containerRef}
+      className="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-[9990] font-sans select-none"
       style={{
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        transform: `translate(${positionRef.current.x}px, ${positionRef.current.y}px)`,
         touchAction: 'none'
       }}
     >

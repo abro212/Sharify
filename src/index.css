@@ -114,27 +114,32 @@
   }
 
   .shimmer-gold-text {
-    background: linear-gradient(to right, #B45309 20%, #D97706 40%, #F59E0B 50%, #D97706 60%, #B45309 80%);
-    background-size: 200% auto;
+    background: linear-gradient(to right, #B45309 10%, #D97706 50%, #B45309 90%);
+    background-size: 100% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    animation: goldShimmer 3.5s linear infinite;
+    transition: filter 0.3s ease;
+  }
+  .shimmer-gold-text:hover {
+    filter: brightness(1.12);
   }
 
   .shimmer-emerald-text {
-    background: linear-gradient(to right, #047857 20%, #059669 40%, #10B981 50%, #059669 60%, #047857 80%);
-    background-size: 200% auto;
+    background: linear-gradient(to right, #047857 10%, #10B981 50%, #047857 90%);
+    background-size: 100% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    animation: goldShimmer 3.5s linear infinite;
+    transition: filter 0.3s ease;
+  }
+  .shimmer-emerald-text:hover {
+    filter: brightness(1.08);
   }
 
-  /* Teleporter Scale interactions */
+  /* Teleporter Scale interactions - Optimised to prevent transition-all layout repaints */
   .interactive-teleport {
-    @apply transition-all duration-300;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.3s ease;
   }
   .interactive-teleport:hover {
     @apply transform scale-[1.025] -translate-y-[3px] border-emerald-400/40;
