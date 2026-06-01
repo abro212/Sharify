@@ -5,7 +5,7 @@ import {
   Crown, Target, RefreshCcw, Search, FileText, Users, Sparkles, Star, Heart, Coins, X 
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import { useSettingsStore } from '../../store/settingsStore';
+import { useSettingsStore, bustCache } from '../../store/settingsStore';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -17,7 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { settings } = useSettingsStore();
   const navigate = useNavigate();
   const userRole = profile?.role?.toLowerCase() || 'free';
-  const resolvedLogoUrl = settings?.logo_url;
+  const resolvedLogoUrl = settings?.logo_url ? bustCache(settings.logo_url) : '';
   
   const baseItems = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },

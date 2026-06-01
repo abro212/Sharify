@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Menu, ShieldCheck } from 'lucide-react';
 import { Sidebar } from './Sidebar';
-import { BottomNavigationBar } from './BottomNavigationBar';
 import { FloatingAIChat } from './FloatingAIChat';
+import { useSettingsStore, bustCache } from '../../store/settingsStore';
 
 interface DashboardContainerProps {
   children: React.ReactNode;
@@ -10,6 +10,8 @@ interface DashboardContainerProps {
 
 export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { settings } = useSettingsStore();
+  const resolvedLogoUrl = settings?.logo_url ? bustCache(settings.logo_url) : '';
 
   return (
     <div className="min-h-screen bg-cyber-grid flex flex-col lg:flex-row relative">
@@ -20,8 +22,18 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       {/* Mobile Top Header (Sticky, only visible on lg:hidden) */}
       <header className="lg:hidden bg-[#F4FAF7]/85 backdrop-blur-md border-b border-[#10B981]/20 sticky top-0 z-30 px-4 h-16 flex items-center justify-between shadow-xs relative z-30">
         <div className="flex items-center">
-          <ShieldCheck className="w-7 h-7 text-[#34D399] drop-shadow-[0_0_6px_rgba(52,211,153,0.3)] mr-2" />
-          <span className="text-base font-black tracking-widest bg-gradient-to-r from-emerald-400 to-amber-300 bg-clip-text text-transparent font-sans uppercase">Sharify</span>
+          {resolvedLogoUrl ? (
+            <img
+              src={resolvedLogoUrl}
+              alt="Sharify Logo"
+              className="h-8 object-contain"
+            />
+          ) : (
+            <>
+              <ShieldCheck className="w-7 h-7 text-[#34D399] drop-shadow-[0_0_6px_rgba(52,211,153,0.3)] mr-2" />
+              <span className="text-base font-black tracking-widest bg-gradient-to-r from-emerald-400 to-amber-300 bg-clip-text text-transparent font-sans uppercase">Sharify</span>
+            </>
+          )}
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(true)}
@@ -49,9 +61,6 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
           {children}
         </div>
       </main>
-
-      {/* Mobile Bottom Navigation */}
-      <BottomNavigationBar />
 
       {/* Touch-Draggable Floating AI Co-Pilot */}
       <FloatingAIChat />
