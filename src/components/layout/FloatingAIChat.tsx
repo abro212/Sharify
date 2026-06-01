@@ -25,7 +25,7 @@ export const FloatingAIChat: React.FC = () => {
     {
       id: '1',
       role: 'model',
-      content: 'Assalamu alaikum! Saya Sharify, Asisten Finansial Syariah AI Anda. Ada yang bisa saya bantu untuk mengelola aset, zakat, atau detoks riba Anda hari ini?',
+      content: 'Assalamu alaikum! Saya Sharify, Asisten AI Finansial Syariah Anda. Ada yang bisa saya bantu untuk mengelola zakat, merencanakan waris, atau mendetoks riba hari ini?',
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -78,7 +78,7 @@ export const FloatingAIChat: React.FC = () => {
 
     // Strict Gating check
     if (isFreeUser && messageCount >= maxFreeMessages) {
-      return; // Do not send if limit exceeded
+      return;
     }
 
     const userMessageContent = inputValue.trim();
@@ -102,11 +102,9 @@ export const FloatingAIChat: React.FC = () => {
     }
 
     try {
-      // Send message to Gemini
       const result = await chatSession.sendMessage(userMessageContent);
       const responseText = result.response.text();
 
-      // Add model response to UI
       setMessages((prev) => [
         ...prev,
         {
@@ -133,7 +131,6 @@ export const FloatingAIChat: React.FC = () => {
 
   const handleResetCountMock = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Hidden developer shortcut to reset messages limit for testing
     localStorage.setItem('sharify_free_chat_count', '0');
     setMessageCount(0);
   };
@@ -143,14 +140,14 @@ export const FloatingAIChat: React.FC = () => {
     const iconName = settings.ai_widget_icon?.toLowerCase() || 'sparkles';
     switch (iconName) {
       case 'messagecircle':
-        return <MessageCircle className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform" />;
+        return <MessageCircle className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />;
       case 'messagesquare':
-        return <MessageSquare className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform" />;
+        return <MessageSquare className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />;
       case 'helpcircle':
-        return <HelpCircle className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform" />;
+        return <HelpCircle className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />;
       case 'sparkles':
       default:
-        return <Sparkles className="w-6 h-6 text-amber-400 group-hover:rotate-12 transition-transform" />;
+        return <Sparkles className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />;
     }
   };
 
@@ -201,13 +198,6 @@ export const FloatingAIChat: React.FC = () => {
     e.stopPropagation();
   };
 
-  const handlePointerUp = (e: React.PointerEvent<any>) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    e.currentTarget.releasePointerCapture(e.pointerId);
-    e.stopPropagation();
-  };
-
   const handleFabClick = (e: React.MouseEvent) => {
     if (totalDragDistance.current > 6) {
       e.preventDefault();
@@ -226,64 +216,68 @@ export const FloatingAIChat: React.FC = () => {
       }}
     >
       
-      {/* 1. Floating Action Button (FAB) */}
+      {/* 1. Floating Action Button (FAB) - Solid Green Clean Pill style */}
       {!isOpen && (
         <button
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
+          onPointerUp={(e) => {
+            isDragging.current = false;
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            e.stopPropagation();
+          }}
           onClick={handleFabClick}
           title="Geser & Klik Asisten AI Syariah"
-          className="h-14 w-14 rounded-full bg-emerald-950/90 hover:bg-emerald-900/90 text-emerald-400 flex items-center justify-center shadow-neon-emerald transition-all hover:scale-105 active:scale-95 group relative border border-emerald-400/50 cursor-grab active:cursor-grabbing hover:shadow-emerald-400/30 active:animate-none duration-300 animate-pulse"
+          className="h-14 w-14 rounded-full bg-[#10B981] hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 group relative border border-white/20 cursor-grab active:cursor-grabbing hover:shadow-emerald-500/30 active:animate-none duration-300"
         >
-          <div className="absolute inset-0 bg-emerald-400/5 opacity-0 group-hover:opacity-100 rounded-full transition-opacity"></div>
-          
-          <div className="absolute top-1 left-1/2 -translate-x-1/2 flex space-x-0.5 opacity-60">
-            <span className="w-0.5 h-0.5 rounded-full bg-amber-400"></span>
-            <span className="w-0.5 h-0.5 rounded-full bg-amber-400"></span>
-            <span className="w-0.5 h-0.5 rounded-full bg-amber-400"></span>
+          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 flex space-x-0.5 opacity-60">
+            <span className="w-0.5 h-0.5 rounded-full bg-white"></span>
+            <span className="w-0.5 h-0.5 rounded-full bg-white"></span>
+            <span className="w-0.5 h-0.5 rounded-full bg-white"></span>
           </div>
 
           {renderWidgetIcon()}
           
           {isFreeUser && messageCount < maxFreeMessages && (
-            <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 bg-rose-500 rounded-full border-2 border-emerald-950 flex items-center justify-center text-[7px] font-black text-white">
+            <span className="absolute -top-0.5 -right-0.5 h-4 w-4 bg-rose-500 rounded-full border-2 border-white flex items-center justify-center text-[7px] font-black text-white">
               !
             </span>
           )}
         </button>
       )}
 
-      {/* 2. Cybernetic Draggable Chat Window */}
+      {/* 2. Pristine Minimalist Chat Window (Matches reference layout) */}
       {isOpen && (
-        <div className="glass-hud-dark w-[340px] sm:w-[370px] h-[510px] rounded-2xl shadow-2xl border border-emerald-500/30 overflow-hidden flex flex-col animate-zoom-in relative">
+        <div className="w-[340px] sm:w-[370px] h-[510px] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col animate-zoom-in relative">
           
-          {/* Drag Header handle */}
+          {/* Solid Green Clean Header */}
           <div 
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            className="p-3.5 bg-gradient-to-r from-[#03130d] to-[#010604] border-b border-emerald-500/25 text-emerald-100 flex justify-between items-center relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
+            onPointerUp={(e) => {
+              isDragging.current = false;
+              e.currentTarget.releasePointerCapture(e.pointerId);
+              e.stopPropagation();
+            }}
+            className="p-4 bg-[#10B981] text-white flex justify-between items-center relative cursor-grab active:cursor-grabbing select-none"
           >
-            <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl pointer-events-none"></div>
-            
-            <div className="flex items-center space-x-2 relative z-10">
-              <div className="text-emerald-400 opacity-60 shrink-0">
+            <div className="flex items-center space-x-3.5 relative z-10">
+              <div className="text-white/50 shrink-0">
                 <GripVertical className="w-4 h-4" />
               </div>
-              <div className="h-7 w-7 rounded-full bg-emerald-950/80 flex items-center justify-center border border-emerald-500/30 overflow-hidden shrink-0">
+              <div className="h-8 w-8 rounded-full bg-white/15 flex items-center justify-center border border-white/25 overflow-hidden shrink-0">
                 {settings.chat_avatar_url ? (
                   <img src={settings.chat_avatar_url} alt="Bot" className="w-full h-full object-cover" />
                 ) : (
-                  <Bot className="w-4.5 h-4.5 text-amber-400 animate-pulse" />
+                  <Bot className="w-5 h-5 text-white animate-pulse" />
                 )}
               </div>
               <div>
-                <h3 className="font-extrabold text-[11px] tracking-tight flex items-center text-emerald-50 font-bold">
+                <h3 className="font-extrabold text-[12px] tracking-tight flex items-center text-white leading-none">
                   Sharify AI Co-Pilot
-                  <span className="ml-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="ml-1.5 h-1.5 w-1.5 rounded-full bg-white animate-ping"></span>
                 </h3>
-                <span className="text-[8px] text-emerald-400/70 block mt-0.5 font-mono">FIQH_MUAMALAH_SYSTEM</span>
+                <span className="text-[8px] text-emerald-100 block mt-1 font-bold uppercase tracking-wider">Sharia Advisor</span>
               </div>
             </div>
 
@@ -293,7 +287,7 @@ export const FloatingAIChat: React.FC = () => {
                   onClick={handleResetCountMock}
                   onPointerDown={(e) => e.stopPropagation()}
                   title="Reset Sesi (Dev)"
-                  className="text-[7px] bg-emerald-900/40 hover:bg-emerald-900/60 border border-emerald-500/20 px-1.5 py-0.5 rounded font-mono text-amber-400 font-bold shrink-0 cursor-pointer"
+                  className="text-[8px] bg-white/20 hover:bg-white/30 border border-white/10 px-2 py-0.5 rounded-full font-bold text-white shrink-0 cursor-pointer"
                 >
                   Reset
                 </button>
@@ -303,33 +297,33 @@ export const FloatingAIChat: React.FC = () => {
                 onClick={() => setIsOpen(false)}
                 onPointerDown={(e) => e.stopPropagation()}
                 title="Tutup Chat"
-                className="text-emerald-400 hover:text-emerald-200 bg-emerald-900/30 hover:bg-emerald-900/50 p-1.5 rounded-lg border border-emerald-500/20 transition-colors cursor-pointer shrink-0"
+                className="text-white hover:text-slate-100 bg-white/15 hover:bg-white/25 p-1.5 rounded-full border border-white/10 transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* Subscription pricing indicator row */}
-          <div className="px-4 py-1.5 border-b border-emerald-500/10 bg-emerald-950/40 flex items-center justify-between text-[9px] font-mono">
+          {/* Clean Slate Quota Row */}
+          <div className="px-4 py-2 border-b border-slate-100 bg-slate-50 flex items-center justify-between text-[9px] font-semibold text-slate-500">
             {isFreeUser ? (
-              <span className={`font-bold ${messageCount >= maxFreeMessages ? 'text-rose-400 font-black' : 'text-emerald-400/80'}`}>
+              <span className={messageCount >= maxFreeMessages ? 'text-rose-500 font-extrabold' : 'text-slate-500'}>
                 {messageCount >= maxFreeMessages 
-                  ? 'FREE_LIMIT_REACHED (5/5)' 
-                  : `FREE_TIER_QUOTA: ${messageCount}/${maxFreeMessages} MESSAGES`
+                  ? 'KONSULTASI GRATIS HABIS (5/5)' 
+                  : `KUOTA GRATIS: ${messageCount}/${maxFreeMessages} PESAN`
                 }
               </span>
             ) : (
-              <span className="text-amber-400 font-extrabold flex items-center">
-                <Crown className="w-3 h-3 mr-1 text-amber-400 animate-pulse" />
-                PREMIUM_ADVISOR ({userRole.toUpperCase()})
+              <span className="text-[#10B981] font-extrabold flex items-center">
+                <Crown className="w-3.5 h-3.5 mr-1 text-[#10B981]" />
+                PREMIUM ADVISOR ({userRole.toUpperCase()})
               </span>
             )}
-            <span className="text-emerald-400/40 text-[8px] tracking-wider">SSL_SECURED</span>
+            <span className="text-slate-400 font-semibold tracking-wider">SECURE SHARIA CONNECT</span>
           </div>
 
-          {/* Chat content stream */}
-          <div className="flex-1 p-3.5 overflow-y-auto bg-emerald-950/15 space-y-3.5 select-text font-sans text-emerald-200">
+          {/* Chat Bubble List Container - Fiqh advice stream */}
+          <div className="flex-1 p-4 overflow-y-auto bg-slate-50/50 space-y-4 select-text font-sans text-slate-700">
             {messages.map((msg) => (
               <div 
                 key={msg.id} 
@@ -337,29 +331,30 @@ export const FloatingAIChat: React.FC = () => {
               >
                 <div className={`flex max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   
-                  {/* Avatar bubble */}
-                  <div className={`flex-shrink-0 h-6.5 w-6.5 rounded-full flex items-center justify-center overflow-hidden border ${
+                  {/* Avatar wrapper */}
+                  <div className={`flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden border ${
                     msg.role === 'model' 
-                      ? 'bg-emerald-950 text-emerald-400 border-emerald-500/20' 
-                      : 'bg-emerald-900/30 text-emerald-300 border-emerald-500/10'
+                      ? 'bg-emerald-50 text-[#10B981] border-emerald-100' 
+                      : 'bg-slate-100 text-slate-500 border-slate-200'
                   } ${msg.role === 'user' ? 'ml-2' : 'mr-2'}`}>
                     {msg.role === 'model' ? (
                       settings.chat_avatar_url ? (
                         <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover" />
                       ) : (
-                        <Bot size={13} />
+                        <Bot size={14} />
                       )
                     ) : (
-                      <UserIcon size={12} />
+                      <UserIcon size={13} />
                     )}
                   </div>
 
-                  <div className={`px-3 py-2.5 rounded-2xl text-[11px] leading-relaxed shadow-xs border ${
+                  {/* Clean Message bubbles */}
+                  <div className={`px-4 py-3 rounded-2xl text-xs leading-relaxed shadow-sm border ${
                     msg.role === 'user' 
-                      ? 'bg-[#064E3B] border-[#043E2F] text-white rounded-tr-none shadow-sm' 
-                      : 'bg-white border-emerald-500/20 text-emerald-950 rounded-tl-none'
+                      ? 'bg-[#10B981] border-[#0ea572] text-white rounded-tr-none' 
+                      : 'bg-white border-slate-100 text-slate-800 rounded-tl-none'
                   }`}>
-                    <div className={`prose prose-sm max-w-none break-words ${msg.role === 'user' ? 'prose-invert text-white' : 'text-emerald-950 font-medium'}`}>
+                    <div className={`prose prose-sm max-w-none break-words ${msg.role === 'user' ? 'prose-invert text-white' : 'text-slate-800 font-medium'}`}>
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {msg.content}
                       </ReactMarkdown>
@@ -374,17 +369,17 @@ export const FloatingAIChat: React.FC = () => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="flex max-w-[80%] flex-row">
-                  <div className="flex-shrink-0 h-6.5 w-6.5 rounded-full flex items-center justify-center overflow-hidden bg-emerald-950 text-emerald-400 border border-emerald-500/20 mr-2">
+                  <div className="flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden bg-emerald-50 text-[#10B981] border border-emerald-100 mr-2">
                     {settings.chat_avatar_url ? (
                       <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover" />
                     ) : (
-                      <Bot size={13} />
+                      <Bot size={14} />
                     )}
                   </div>
-                  <div className="px-3 py-2.5 rounded-2xl bg-emerald-950/70 border border-emerald-500/20 rounded-tl-none flex items-center space-x-1.5 shadow-xs">
-                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                  <div className="px-3.5 py-2.5 rounded-2xl bg-white border border-slate-100 rounded-tl-none flex items-center space-x-1.5 shadow-sm">
+                    <div className="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                    <div className="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                   </div>
                 </div>
               </div>
@@ -392,17 +387,17 @@ export const FloatingAIChat: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Form container input */}
-          <div className="p-3 border-t border-emerald-500/25 bg-emerald-950/45 select-text">
+          {/* Form input - Spacious White Panel */}
+          <div className="p-3.5 border-t border-slate-100 bg-white select-text">
             {isFreeUser && messageCount >= maxFreeMessages ? (
               
-              /* Lock overlay at limit count */
-              <div className="space-y-2.5 py-1">
-                <div className="bg-rose-950/80 border border-rose-500/30 p-2.5 rounded-xl flex items-start space-x-2 text-rose-300">
-                  <Lock className="w-4 h-4 text-rose-400 mt-0.5 shrink-0 animate-pulse" />
+              /* Clean Lock Alert Overlay */
+              <div className="space-y-3 py-1">
+                <div className="bg-rose-50 border border-rose-100 p-3 rounded-2xl flex items-start space-x-2.5 text-rose-700">
+                  <Lock className="w-4 h-4 text-rose-500 mt-0.5 shrink-0 animate-pulse" />
                   <div>
-                    <h4 className="text-[10px] font-mono font-black uppercase tracking-wider">Konsultasi AI Terkunci</h4>
-                    <p className="text-[9px] mt-0.5 leading-relaxed text-rose-300/80 font-sans">Anda telah menggunakan batas **5 pesan gratis**. Konsultasi hukum muamalah premium tanpa batas dengan Sharify Plus.</p>
+                    <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-rose-950">Konsultasi AI Terkunci</h4>
+                    <p className="text-[10px] mt-0.5 leading-relaxed text-rose-600 font-semibold">Anda telah menghabiskan batas **5 pesan gratis**. Konsultasi hukum muamalah premium tanpa batas dengan Sharify Plus.</p>
                   </div>
                 </div>
 
@@ -411,32 +406,32 @@ export const FloatingAIChat: React.FC = () => {
                     setIsOpen(false);
                     navigate('/upgrade');
                   }}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-emerald-950 font-extrabold py-2 px-3 rounded-xl text-[10px] shadow-neon-gold flex items-center justify-center space-x-1 transition-all active:scale-[0.98] cursor-pointer"
+                  className="w-full bg-[#10B981] hover:bg-emerald-600 text-white font-extrabold py-3 px-4 rounded-full text-xs shadow-md shadow-emerald-500/10 flex items-center justify-center space-x-1 transition-all active:scale-[0.98] cursor-pointer"
                 >
-                  <Crown className="w-3.5 h-3.5 text-emerald-950 mr-1" />
+                  <Crown className="w-4 h-4 text-white mr-1.5" />
                   <span>Upgrade ke Plus / Pro Sekarang</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
 
             ) : (
 
-              /* Dynamic input typing */
+              /* Clean Text Input Form */
               <form onSubmit={handleSendMessage} className="flex space-x-2">
                 <input 
                   type="text" 
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Tanyakan akad, zakat, atau investasi halal..." 
-                  className="flex-1 px-3 py-2 border border-emerald-500/30 rounded-xl text-[11px] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 bg-[#E6F4ED]/50 text-emerald-950 focus:bg-white transition-all select-text font-sans"
+                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-[#10B981] bg-slate-50 text-slate-800 focus:bg-white transition-all select-text font-sans font-semibold"
                   disabled={isLoading}
                 />
                 <button 
                   type="submit"
                   disabled={isLoading || !inputValue.trim()}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 px-3.5 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center disabled:opacity-50 disabled:hover:bg-emerald-500 cursor-pointer shadow-neon-emerald duration-300 shrink-0"
+                  className="bg-[#10B981] hover:bg-emerald-600 text-white p-2.5 rounded-full transition-all flex items-center justify-center disabled:opacity-50 disabled:hover:bg-[#10B981] cursor-pointer shadow-md shadow-emerald-500/10 shrink-0"
                 >
-                  <Send size={12} />
+                  <Send size={13} />
                 </button>
               </form>
 
