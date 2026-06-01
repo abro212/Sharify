@@ -440,15 +440,15 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. The Problem */}
-      <section className="py-24 bg-white">
+      {/* 4. The Problem / Sharia Challenges */}
+      <section id="solusi" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              {settings.fitur_title}
+              Tantangan Finansial Muslim Modern
             </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium">
-              {settings.fitur_subtitle}
+            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
+              Masalah nyata yang dihadapi umat dalam mengelola keuangan harian, menuntut solusi cerdas yang sesuai syariat.
             </p>
           </div>
           
@@ -477,18 +477,18 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 5. The Solution (Features Grid) */}
-      <section id="solusi" className="py-24 bg-slate-50/30">
+      <section id="features" className="py-24 bg-slate-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              {settings.solusi_title}
+              {settings.fitur_title}
             </h2>
             <p className="text-base lg:text-lg text-slate-500 font-medium">
-              {settings.solusi_subtitle}
+              {settings.fitur_subtitle}
             </p>
           </div>
 
-          <div id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { icon: HeartPulse, title: 'Health Check Syariah', desc: 'Skoring kesehatan keuangan berbasis rasio utang dan paparan riba secara komprehensif.' },
               { icon: MessageSquare, title: 'AI Assistant (Gemini)', desc: 'Konsultasi Fiqh Muamalah instan 24/7 untuk menjawab keraguan transaksi Anda.' },
@@ -598,12 +598,14 @@ export const LandingPage: React.FC = () => {
             {tiers.map((tier) => (
               <div 
                 key={tier.name} 
-                className={`relative bg-white rounded-[2rem] border ${
-                  tier.popular ? 'border-[#F59E0B] shadow-xl scale-102 lg:scale-105 z-10' : 'border-slate-100 shadow-sm'
-                } p-6 flex flex-col transition-all duration-300 hover:shadow-md`}
+                className={`relative bg-white rounded-[2rem] border p-6 flex flex-col transition-all duration-500 group ${
+                  tier.popular 
+                    ? 'border-[#F59E0B] shadow-xl scale-102 lg:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-[#F59E0B]/25 hover:border-amber-400' 
+                    : 'border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-[#10B981]/15 hover:border-[#10B981]/30'
+                }`}
               >
                 {tier.popular && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105">
                     <span className="bg-[#F59E0B] text-white text-[9px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm">
                       MOST POPULAR
                     </span>
@@ -612,22 +614,22 @@ export const LandingPage: React.FC = () => {
                 
                 <div className="mb-6 flex justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 leading-tight">{tier.name}</h3>
+                    <h3 className="text-lg font-black text-slate-900 leading-tight transition-colors duration-300 group-hover:text-[#10B981]">{tier.name}</h3>
                     <p className="text-xs text-slate-400 mt-1 h-10 leading-relaxed font-semibold">{tier.description}</p>
                   </div>
-                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ml-2 shadow-xs ${tier.iconClass}`}>
+                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ml-2 shadow-xs transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 ${tier.iconClass}`}>
                     {tier.icon}
                   </div>
                 </div>
 
                 <div className="my-5 flex items-baseline">
-                  <span className="text-3xl font-black text-slate-900 tracking-tight leading-none">{tier.price}</span>
+                  <span className="text-3xl font-black text-slate-900 tracking-tight leading-none transition-transform duration-300 group-hover:scale-102">{tier.price}</span>
                   {tier.period && <span className="text-xs text-slate-400 font-bold lowercase ml-1.5 leading-none">{tier.period}</span>}
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-1">
                   {tier.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start">
+                    <li key={idx} className="flex items-start transform transition-transform duration-300 group-hover:translate-x-0.5">
                       <Check className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-[#10B981]" />
                       <span className="text-xs text-slate-600 font-semibold leading-normal">{feature}</span>
                     </li>
@@ -637,7 +639,7 @@ export const LandingPage: React.FC = () => {
                 <button
                   onClick={() => handlePlanClick()}
                   disabled={session !== null && currentRole === tier.role}
-                  className={`w-full py-3.5 px-4 rounded-full font-black text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center shadow-xs cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
+                  className={`w-full py-3.5 px-4 rounded-full font-black text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center shadow-xs cursor-pointer hover:scale-[1.03] hover:shadow-lg active:scale-[0.97] ${
                     (session !== null && currentRole === tier.role) 
                       ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none' 
                       : tier.buttonStyle
