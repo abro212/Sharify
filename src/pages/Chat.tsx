@@ -28,6 +28,11 @@ export const Chat: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chatSession, setChatSession] = useState<any>(null);
+  const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [settings.chat_avatar_url]);
   
   // Free Tier Message Gating States
   const [messageCount, setMessageCount] = useState<number>(0);
@@ -190,14 +195,22 @@ export const Chat: React.FC = () => {
             >
               <div className={`flex max-w-[80%] ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                 {/* Avatar */}
-                <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center border ${
-                  message.role === 'model' 
-                    ? 'bg-emerald-950 text-emerald-400 border-emerald-500/20' 
-                    : 'bg-emerald-900/30 text-emerald-300 border-emerald-500/10'
-                } ${message.role === 'user' ? 'ml-3' : 'mr-3'}`}>
+                <div 
+                  className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center border ${
+                    message.role === 'model' 
+                      ? 'bg-emerald-950 text-emerald-400 border-emerald-500/20' 
+                      : 'bg-emerald-900/30 text-emerald-300 border-emerald-500/10'
+                  } ${message.role === 'user' ? 'ml-3' : 'mr-3'}`}
+                  style={{ minWidth: '32px', maxWidth: '32px', minHeight: '32px', maxHeight: '32px' }}
+                >
                   {message.role === 'model' ? (
-                    settings.chat_avatar_url ? (
-                      <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover rounded-full" />
+                    settings.chat_avatar_url && !avatarError ? (
+                      <img 
+                        src={settings.chat_avatar_url} 
+                        alt="Bot Avatar" 
+                        className="w-full h-full object-cover rounded-full" 
+                        onError={() => setAvatarError(true)}
+                      />
                     ) : (
                       <Bot size={16} />
                     )
@@ -225,9 +238,17 @@ export const Chat: React.FC = () => {
           {isLoading && (
             <div className="flex justify-start">
               <div className="flex max-w-[80%] flex-row">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-emerald-950 text-emerald-400 border border-emerald-500/20 mr-3">
-                  {settings.chat_avatar_url ? (
-                    <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover rounded-full" />
+                <div 
+                  className="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-emerald-950 text-emerald-400 border border-emerald-500/20 mr-3"
+                  style={{ minWidth: '32px', maxWidth: '32px', minHeight: '32px', maxHeight: '32px' }}
+                >
+                  {settings.chat_avatar_url && !avatarError ? (
+                    <img 
+                      src={settings.chat_avatar_url} 
+                      alt="Bot Avatar" 
+                      className="w-full h-full object-cover rounded-full" 
+                      onError={() => setAvatarError(true)}
+                    />
                   ) : (
                     <Bot size={16} />
                   )}

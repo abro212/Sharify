@@ -4,8 +4,10 @@ import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { useAuthStore } from '../store/authStore';
 import { 
   User, Mail, Calendar, Shield, LogOut, Bell, Key, 
-  Download, CheckCircle2, CreditCard, ChevronRight, Sparkles 
+  Download, CheckCircle2, CreditCard, ChevronRight, Sparkles,
+  Camera, Loader2
 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export const Profile: React.FC = () => {
   const { user, profile, signOut } = useAuthStore();
@@ -17,6 +19,110 @@ export const Profile: React.FC = () => {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+
+    try {
+      const fileExt = file.name.split('.').pop() || 'png';
+      const filePath = `avatars/${user.id}.${fileExt}`;
+
+      // Try uploading to Supabase Storage first
+      let finalUrl = '';
+      try {
+        const { error: uploadErr } = await supabase.storage
+          .from('assets')
+          .upload(filePath, file, { cacheControl: '0', upsert: true });
+
+        if (uploadErr) {
+          console.warn("Storage upload failed, falling back to base64 canvas compression:", uploadErr.message);
+          throw uploadErr;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('assets')
+          .getPublicUrl(filePath);
+
+        // Append bustCache param to prevent caching issues
+        finalUrl = `${publicUrl}?t=${Date.now()}`;
+      } catch (storageErr) {
+        // Fallback: Base64 canvas compression
+        finalUrl = await compressAndResizeImage(file);
+      }
+
+      // Update Supabase Auth User Metadata
+      const { data: { user: updatedUser }, error: authErr } = await supabase.auth.updateUser({
+        data: { avatar_url: finalUrl }
+      });
+
+      if (authErr) throw authErr;
+
+      if (updatedUser) {
+        // Force-update Zustand authStore state so UI updates everywhere instantly
+        useAuthStore.setState({ user: updatedUser });
+      }
+
+      setUploadSuccess(true);
+      setTimeout(() => setUploadSuccess(false), 3000);
+    } catch (err: any) {
+      console.error("Avatar upload failed:", err);
+      setUploadError(err.message || "Gagal mengunggah foto profil");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const compressAndResizeImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 150;
+          const MAX_HEIGHT = 150;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Canvas context is null'));
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          resolve(dataUrl);
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (err) => reject(err);
+    });
+  };
 
   const handleSignOut = async () => {
     try {
@@ -112,10 +218,47 @@ export const Profile: React.FC = () => {
             {/* Avatar & Core Meta */}
             <div className="px-6 pb-6 relative">
               <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 mb-6">
-                <div className="h-28 w-28 bg-white p-2 rounded-full shadow-md flex items-center justify-center">
-                  <div className="h-full w-full bg-gradient-to-tr from-[#0F4C3A] to-[#10B981] rounded-full flex items-center justify-center text-white text-3xl font-extrabold border border-white uppercase shadow-inner">
-                    {initialLetter}
+                <div className="relative group h-28 w-28 bg-white p-1 rounded-full shadow-lg border border-emerald-500/10 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:border-emerald-500/30">
+                  {/* Profile Picture */}
+                  <div className="h-full w-full rounded-full overflow-hidden flex items-center justify-center bg-gray-50 relative">
+                    {isUploading ? (
+                      <div className="absolute inset-0 bg-[#0F4C3A]/70 flex flex-col items-center justify-center text-white z-10">
+                        <Loader2 className="w-6 h-6 animate-spin text-amber-300" />
+                        <span className="text-[9px] mt-1 font-bold tracking-wider uppercase text-white">Uploading</span>
+                      </div>
+                    ) : null}
+                    
+                    {user?.user_metadata?.avatar_url ? (
+                      <img 
+                        src={user.user_metadata.avatar_url} 
+                        alt="Profile Avatar" 
+                        className="h-full w-full object-cover shadow-inner"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-tr from-[#0F4C3A] to-[#10B981] rounded-full flex items-center justify-center text-white text-3xl font-black uppercase shadow-inner">
+                        {initialLetter}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Camera Upload Button Overlay */}
+                  <label 
+                    htmlFor="avatar-file-input" 
+                    title="Ubah Foto Profil"
+                    className="absolute inset-0 rounded-full bg-slate-900/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white cursor-pointer transition-all duration-300 z-10 backdrop-blur-[1px] hover:scale-102"
+                  >
+                    <Camera className="w-5 h-5 text-amber-300 mb-1 drop-shadow-sm transform group-hover:scale-105 transition-transform" />
+                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-100">Ubah Foto</span>
+                  </label>
+
+                  <input 
+                    id="avatar-file-input" 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleAvatarChange}
+                    className="hidden" 
+                    disabled={isUploading}
+                  />
                 </div>
                 <div className="mt-4 sm:mt-0 text-center sm:text-right">
                   {renderRoleBadge(profile?.role)}
@@ -130,6 +273,18 @@ export const Profile: React.FC = () => {
                   <Mail className="w-4 h-4 mr-2 text-gray-400" />
                   {user?.email}
                 </p>
+
+                {/* Upload Status Indicators */}
+                {uploadError && (
+                  <p className="text-xs text-rose-500 font-bold mt-2 text-center sm:text-left bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg inline-block">
+                    ⚠️ {uploadError}
+                  </p>
+                )}
+                {uploadSuccess && (
+                  <p className="text-xs text-emerald-600 font-bold mt-2 text-center sm:text-left bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-lg inline-block">
+                    ✓ Foto profil berhasil diperbarui!
+                  </p>
+                )}
               </div>
 
               {/* Account Details Form */}

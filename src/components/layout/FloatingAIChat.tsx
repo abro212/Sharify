@@ -31,6 +31,11 @@ export const FloatingAIChat: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chatSession, setChatSession] = useState<any>(null);
+  const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [settings.chat_avatar_url]);
   
   // Free Tier Message Gating States
   const [messageCount, setMessageCount] = useState<number>(0);
@@ -266,8 +271,13 @@ export const FloatingAIChat: React.FC = () => {
                 <GripVertical className="w-4 h-4" />
               </div>
               <div className="h-8 w-8 rounded-full bg-white/15 flex items-center justify-center border border-white/25 overflow-hidden shrink-0">
-                {settings.chat_avatar_url ? (
-                  <img src={settings.chat_avatar_url} alt="Bot" className="w-full h-full object-cover" />
+                {settings.chat_avatar_url && !avatarError ? (
+                  <img 
+                    src={settings.chat_avatar_url} 
+                    alt="Bot" 
+                    className="w-full h-full object-cover" 
+                    onError={() => setAvatarError(true)}
+                  />
                 ) : (
                   <Bot className="w-5 h-5 text-white animate-pulse" />
                 )}
@@ -332,14 +342,22 @@ export const FloatingAIChat: React.FC = () => {
                 <div className={`flex max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   
                   {/* Avatar wrapper */}
-                  <div className={`flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden border ${
-                    msg.role === 'model' 
-                      ? 'bg-emerald-50 text-[#10B981] border-emerald-100' 
-                      : 'bg-slate-100 text-slate-500 border-slate-200'
-                  } ${msg.role === 'user' ? 'ml-2' : 'mr-2'}`}>
+                  <div 
+                    className={`flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden border ${
+                      msg.role === 'model' 
+                        ? 'bg-emerald-50 text-[#10B981] border-emerald-100' 
+                        : 'bg-slate-100 text-slate-500 border-slate-200'
+                    } ${msg.role === 'user' ? 'ml-2' : 'mr-2'}`}
+                    style={{ minWidth: '28px', maxWidth: '28px', minHeight: '28px', maxHeight: '28px' }}
+                  >
                     {msg.role === 'model' ? (
-                      settings.chat_avatar_url ? (
-                        <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover" />
+                      settings.chat_avatar_url && !avatarError ? (
+                        <img 
+                          src={settings.chat_avatar_url} 
+                          alt="Bot Avatar" 
+                          className="w-full h-full object-cover" 
+                          onError={() => setAvatarError(true)}
+                        />
                       ) : (
                         <Bot size={14} />
                       )
@@ -369,9 +387,17 @@ export const FloatingAIChat: React.FC = () => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="flex max-w-[80%] flex-row">
-                  <div className="flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden bg-emerald-50 text-[#10B981] border border-emerald-100 mr-2">
-                    {settings.chat_avatar_url ? (
-                      <img src={settings.chat_avatar_url} alt="Bot Avatar" className="w-full h-full object-cover" />
+                  <div 
+                    className="flex-shrink-0 h-7 w-7 rounded-full flex items-center justify-center overflow-hidden bg-emerald-50 text-[#10B981] border border-emerald-100 mr-2"
+                    style={{ minWidth: '28px', maxWidth: '28px', minHeight: '28px', maxHeight: '28px' }}
+                  >
+                    {settings.chat_avatar_url && !avatarError ? (
+                      <img 
+                        src={settings.chat_avatar_url} 
+                        alt="Bot Avatar" 
+                        className="w-full h-full object-cover" 
+                        onError={() => setAvatarError(true)}
+                      />
                     ) : (
                       <Bot size={14} />
                     )}

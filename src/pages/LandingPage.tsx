@@ -91,7 +91,7 @@ export const LandingPage: React.FC = () => {
             <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
             <a href="#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
             <a href="#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
-            <Link to="/upgrade" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</Link>
+            <a href="#harga" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</a>
           </div>
           
           {/* Desktop CTAs - Using Fully Rounded Pill Buttons (like screenshot) */}
@@ -140,13 +140,13 @@ export const LandingPage: React.FC = () => {
               >
                 Teknologi
               </a>
-              <Link 
-                to="/upgrade" 
+              <a 
+                href="#harga" 
                 onClick={() => setIsMenuOpen(false)}
                 className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
               >
                 Harga
-              </Link>
+              </a>
             </div>
             
             <div className="pt-2 flex flex-col space-y-3">
@@ -497,7 +497,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 7. Clean Comparison Table */}
-      <section className="py-24 bg-white">
+      <section id="harga" className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
@@ -619,7 +619,7 @@ export const LandingPage: React.FC = () => {
             <div>
               <h4 className="font-extrabold text-slate-900 mb-4 text-sm tracking-tight">Produk</h4>
               <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/upgrade" className="hover:text-[#10B981] transition-colors">Harga Layanan</Link></li>
+                <li><a href="#harga" className="hover:text-[#10B981] transition-colors">Harga Layanan</a></li>
                 <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check</Link></li>
                 <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
               </ul>

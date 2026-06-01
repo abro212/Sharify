@@ -12,6 +12,11 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { settings } = useSettingsStore();
   const resolvedLogoUrl = settings?.logo_url ? bustCache(settings.logo_url) : '';
+  const [logoError, setLogoError] = useState(false);
+
+  React.useEffect(() => {
+    setLogoError(false);
+  }, [settings?.logo_url]);
 
   return (
     <div className="min-h-screen bg-cyber-grid flex flex-col lg:flex-row relative">
@@ -22,11 +27,12 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       {/* Mobile Top Header (Sticky, only visible on lg:hidden) */}
       <header className="lg:hidden bg-[#F4FAF7]/85 backdrop-blur-md border-b border-[#10B981]/20 sticky top-0 z-30 px-4 h-16 flex items-center justify-between shadow-xs relative z-30">
         <div className="flex items-center">
-          {resolvedLogoUrl ? (
+          {resolvedLogoUrl && !logoError ? (
             <img
               src={resolvedLogoUrl}
               alt="Sharify Logo"
               className="h-8 object-contain"
+              onError={() => setLogoError(true)}
             />
           ) : (
             <>

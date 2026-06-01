@@ -18,6 +18,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const userRole = profile?.role?.toLowerCase() || 'free';
   const resolvedLogoUrl = settings?.logo_url ? bustCache(settings.logo_url) : '';
+  const [logoError, setLogoError] = React.useState(false);
+
+  React.useEffect(() => {
+    setLogoError(false);
+  }, [settings?.logo_url]);
   
   const baseItems = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },
@@ -51,11 +56,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     }`}>
       <div className="flex items-center justify-between lg:justify-center h-16 border-b border-[#10B981]/20 px-4 bg-[#E6F4ED]/60">
         <div className="flex items-center">
-          {resolvedLogoUrl ? (
+          {resolvedLogoUrl && !logoError ? (
             <img
               src={resolvedLogoUrl}
               alt="Sharify Logo"
               className="h-8 object-contain"
+              onError={() => setLogoError(true)}
             />
           ) : (
             <>
