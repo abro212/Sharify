@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, HeartPulse, Calculator, RefreshCcw, CheckCircle2, 
   Lock, AlertTriangle, BookOpen, MessageSquare, Briefcase, BrainCircuit,
-  TrendingUp, Users, User, Star, Quote, Menu, X, Search, Coins
+  TrendingUp, Users, Star, Quote, Menu, X, Search, Coins
 } from 'lucide-react';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
@@ -330,15 +330,7 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Clean Bottom Navigation Bar */}
-                <div className="bg-white border-t border-slate-100 h-11 flex items-center justify-around px-4 mt-auto">
-                  <ShieldCheck className="h-4 w-4 text-[#10B981]" />
-                  <Coins className="h-4 w-4 text-slate-400" />
-                  <User className="h-4 w-4 text-slate-400" />
-                </div>
               </div>
-
             </div>
           </div>
         </div>
