@@ -54,6 +54,7 @@ export const AdminDashboard: React.FC = () => {
     favicon_url: settings.favicon_url,
     ai_widget_icon: settings.ai_widget_icon,
     chat_avatar_url: settings.chat_avatar_url,
+    whatsapp_number: settings.whatsapp_number || '',
   });
   const [isSavingBranding, setIsSavingBranding] = useState(false);
 
@@ -63,6 +64,7 @@ export const AdminDashboard: React.FC = () => {
       favicon_url: settings.favicon_url,
       ai_widget_icon: settings.ai_widget_icon,
       chat_avatar_url: settings.chat_avatar_url,
+      whatsapp_number: settings.whatsapp_number || '',
     });
   }, [settings]);
 
@@ -653,6 +655,23 @@ export const AdminDashboard: React.FC = () => {
                   )}
                 </div>
 
+                {/* 5. WhatsApp Admin Support Number */}
+                <div className="bg-gray-50/50 p-4 border border-gray-150 rounded-2xl flex flex-col justify-between space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">WhatsApp Admin Support Number</label>
+                    <span className="text-[9px] text-gray-400 block mb-2">Format nomor internasional tanpa + atau spasi</span>
+                  </div>
+                  <div className="space-y-2">
+                    <input 
+                      type="text" 
+                      placeholder="Contoh: 628123456789"
+                      value={brandingForm.whatsapp_number}
+                      onChange={e => setBrandingForm(prev => ({ ...prev, whatsapp_number: e.target.value.replace(/[^0-9]/g, '') }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white font-bold text-gray-700"
+                    />
+                  </div>
+                </div>
+
               </div>
 
               <div className="pt-4 border-t border-gray-100 flex justify-end">
@@ -707,7 +726,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Avatar Mockup */}
-                <div className="border border-gray-100 rounded-xl p-3 bg-gray-50 flex items-center space-x-3">
+                <div className="border border-gray-150 rounded-xl p-3 bg-gray-50 flex items-center space-x-3">
                   <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center border border-[#0F4C3A]/20 overflow-hidden text-[#0F4C3A]">
                     {brandingForm.chat_avatar_url ? (
                       <img src={brandingForm.chat_avatar_url} alt="Avatar" className="w-full h-full object-cover" />
@@ -718,6 +737,21 @@ export const AdminDashboard: React.FC = () => {
                   <div>
                     <span className="text-[10px] text-gray-400 block">Chat Assistant Avatar</span>
                     <span className="text-xs font-bold text-gray-800">Sharify Co-Pilot</span>
+                  </div>
+                </div>
+
+                {/* WhatsApp Floating Button Mockup */}
+                <div className="border border-gray-150 rounded-xl p-3 bg-gray-50 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-gray-400 block mb-1">WhatsApp Support Preview</span>
+                    <span className="text-xs font-bold text-gray-800 truncate max-w-[140px] block">
+                      {brandingForm.whatsapp_number ? `+${brandingForm.whatsapp_number}` : 'Belum Diatur (Hidden)'}
+                    </span>
+                  </div>
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white shadow-xs transition-all ${brandingForm.whatsapp_number ? 'bg-[#25D366] hover:bg-[#20ba5a]' : 'bg-gray-300'}`}>
+                    <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.968C16.588 2.012 14.117.99 11.5 1.018 6.062 1.018 1.637 5.39 1.634 10.82c-.001 1.684.453 3.328 1.318 4.77l-.996 3.637 3.738-.981c1.44.863 2.99 1.317 4.568 1.318h-.007zM17.43 14.38c-.32-.16-1.89-.93-2.18-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.38.24-.7.08-.32-.16-1.34-.49-2.56-1.58-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.31.32-.51.11-.2.05-.38-.03-.54-.08-.16-.72-1.73-.99-2.38-.26-.63-.53-.54-.72-.55-.19-.01-.41-.01-.62-.01-.21 0-.55.08-.84.4-.29.32-1.12 1.1-1.12 2.68s1.15 3.1 1.31 3.32c.16.22 2.26 3.45 5.48 4.84.76.33 1.36.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.13-.29-.21-.61-.37z"/>
+                    </svg>
                   </div>
                 </div>
 

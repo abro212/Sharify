@@ -51,9 +51,9 @@ export const Dashboard: React.FC = () => {
   };
 
   const getScoreMessage = (score: number) => {
-    if (score >= 80) return { title: 'Kondisi Prima (Halal)', desc: 'Skor kepatuhan Syariah Anda sangat baik. Pengelolaan aset dan kewajiban sangat bersih dari unsur riba.' };
-    if (score >= 50) return { title: 'Butuh Perhatian', desc: 'Terdapat paparan Riba atau utang konvensional minor. Kami sarankan bertransisi ke alternatif Syariah.' };
-    return { title: 'Paparan Kritis', desc: 'Terdeteksi paparan Riba yang sangat tinggi. Kami sangat menyarankan segera menggunakan Rencana Riba Detox.' };
+    if (score >= 80) return { title: 'Era Riba-Free! 😎', desc: 'Skor kepatuhan Syariah Anda literally mantap banget. Aset dan cicilan Anda bersih total dari unsur riba. Slay, no cap! 🍃' };
+    if (score >= 50) return { title: 'Butuh Perhatian, Bestie', desc: 'Terdeteksi paparan riba konvensional minor. Yuk bertransisi perlahan ke alternatif Syariah biar hati makin tenang.' };
+    return { title: 'Paparan Riba Kritis! 🚨', desc: 'Wah, terdeteksi paparan riba konvensional yang tinggi nih. Kami sangat menyarankan segera ambil program Riba Detox sekarang juga.' };
   };
 
   return (
@@ -77,10 +77,10 @@ export const Dashboard: React.FC = () => {
             </div>
             
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans text-slate-950 font-bold">
-              Assalamu alaikum, <span className="shimmer-gold-text font-black">{profile?.full_name?.split(' ')[0] || 'User'}</span>!
+              Assalamu alaikum, <span className="shimmer-gold-text font-black">{profile?.full_name?.split(' ')[0] || 'Bestie'}</span>! 🌟
             </h1>
             <p className="text-[#047857] text-xs mt-2 max-w-2xl leading-relaxed font-sans font-medium">
-              Selamat datang kembali di pusat kendali keuangan berkah Anda. Mari senantiasa menjaga kesucian harta dengan prinsip Syariah & Fiqh Muamalah modern melalui visualisasi telemetri futuristik.
+              Selamat datang kembali di pusat kendali keuangan berkah Anda, Bestie! Mari senantiasa sat-set menjaga kesucian harta kita dengan prinsip Syariah & Fiqh Muamalah modern biar makin berkah dan glow up!
             </p>
           </div>
           
@@ -225,7 +225,7 @@ export const Dashboard: React.FC = () => {
               <ShieldCheck className="h-11 w-11 text-emerald-500/30 mb-3" />
               <h3 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-wider mb-1">NO_DIAGNOSTIC_HISTORY_FOUND</h3>
               <p className="text-xs text-emerald-700/60 mb-4 max-w-xs leading-normal">
-                Ukur kepatuhan muamalah dan paparan riba pada kekayaan Anda untuk pertama kalinya.
+                Yuk cek seberapa clean aset kamu dari riba biar financial goals kamu makin glow up, Bestie!
               </p>
               <Link 
                 to="/health-check" 

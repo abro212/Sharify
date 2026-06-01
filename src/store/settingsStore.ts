@@ -26,6 +26,7 @@ export interface SystemSettings {
   favicon_url: string;
   ai_widget_icon: string;
   chat_avatar_url: string;
+  whatsapp_number: string;
 
   // Hero Section CMS
   hero_title: string;
@@ -55,27 +56,28 @@ const DEFAULT_SETTINGS: SystemSettings = {
   favicon_url: '/favicon.ico',
   ai_widget_icon: 'Sparkles',
   chat_avatar_url: '',
+  whatsapp_number: '',
 
-  hero_title: 'Navigasi Finansial Syariah Masa Depan Anda',
+  hero_title: 'Navigasi Finansial Syariah yang Literally Masa Depan Banget',
   hero_subtitle:
-    'Konsultan keuangan pintar berbasis AI untuk menghitung zakat, merancang goals, membersihkan riba, dan merencanakan waris fardh secara berkah.',
-  hero_cta_primary: 'Mulai Konsultasi Gratis',
-  hero_cta_secondary: 'Pelajari Fitur',
+    'Konsultan keuangan pintar berbasis AI buat bantu kamu hitung zakat, rancang financial goals, Riba detox, dan hitung waris faraidh secara berkah. Honestly, berkah itu nomor satu, no cap! 🍃✨',
+  hero_cta_primary: 'Mulai Konsultasi Gratis, Bestie! ✨',
+  hero_cta_secondary: 'Spill Fitur Keren',
 
-  solusi_title: 'Solusi Pengelolaan Finansial Islami Modern',
+  solusi_title: 'Solusi Finansial Syariah Era Modern',
   solusi_subtitle:
-    'Sharify menghadirkan integrasi AI dengan hukum fiqh muamalah komprehensif guna menjaga ketenteraman finansial keluarga.',
+    'Sharify gabungin AI super pintar dengan hukum Fiqh Muamalah terlengkap biar financial peace of mind keluarga kamu tetap terjaga.',
 
-  fitur_title: 'Fitur Utama Pilihan Pengguna',
+  fitur_title: 'Fitur Utama buat Glow Up Finansialmu',
   fitur_subtitle:
-    'Akses mudah ke berbagai kalkulator Fiqh, tracker bebas riba, hingga AI co-pilot interaktif.',
+    'Akses sat-set ke berbagai kalkulator Fiqh otomatis, tracker Riba Detox, sampai AI Co-Pilot yang slay dan interaktif!',
 
-  harga_title: 'Pilihan Rencana Investasi Finansial Anda',
+  harga_title: 'Pilih Era Finansial Kamu Sekarang',
   harga_subtitle:
-    'Mulai dari Rp 0 untuk akses dasar atau nikmati layanan penasihat premium Fiqh yang personal.',
+    'Honestly, mulai dari Rp 0 buat akses dasar atau upgrade ke penasihat premium Fiqh personal biar makin lancar jaya!',
 
-  footer_desc: 'Asisten Keuangan Syariah Masa Depan Anda berlandaskan AI.',
-  footer_copyright: '© 2026 Sharify Indonesia. Semua Hak Dilindungi.',
+  footer_desc: 'Asisten Keuangan Syariah Masa Depan berbasis AI buat nemani era glow up kamu.',
+  footer_copyright: '© 2026 Sharify Indonesia. All Rights Reserved, Bestie! 🫶',
 };
 
 interface SettingsState {

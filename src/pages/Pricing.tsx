@@ -5,6 +5,7 @@ import { Check, Crown, Zap, Shield, Users, ShieldCheck, Menu, X } from 'lucide-r
 import { useAuthStore } from '../store/authStore';
 import { bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
+import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
 
 export const Pricing: React.FC = () => {
   const { profile, session, fetchProfile } = useAuthStore();
@@ -167,7 +168,7 @@ export const Pricing: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 pt-8 max-w-7xl mx-auto">
         {tiers.map((tier) => (
           <div 
             key={tier.name} 
@@ -176,7 +177,7 @@ export const Pricing: React.FC = () => {
             } p-6 flex flex-col transition-transform`}
           >
             {tier.popular && (
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                 <span className="bg-accent text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full">
                   Most Popular
                 </span>
@@ -360,6 +361,9 @@ export const Pricing: React.FC = () => {
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-gray-200 py-12 text-center text-sm text-gray-400">
         &copy; {new Date().getFullYear()} Sharify App. Hak Cipta Dilindungi.
       </footer>
+
+      {/* Floating WhatsApp Support Button */}
+      <FloatingWhatsApp />
     </div>
   );
 };

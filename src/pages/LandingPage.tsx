@@ -9,6 +9,7 @@ import {
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { supabase } from '../lib/supabase';
+import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
 
 export const LandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -594,7 +595,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Pricing Tiers Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 mb-20 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 pt-8 mb-20 max-w-7xl mx-auto">
             {tiers.map((tier) => (
               <div 
                 key={tier.name} 
@@ -605,7 +606,7 @@ export const LandingPage: React.FC = () => {
                 }`}
               >
                 {tier.popular && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105">
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105 z-20">
                     <span className="bg-[#F59E0B] text-white text-[9px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm">
                       MOST POPULAR
                     </span>
@@ -790,6 +791,8 @@ export const LandingPage: React.FC = () => {
         </footer>
       </section>
 
+      {/* Floating WhatsApp Support Button */}
+      <FloatingWhatsApp />
     </div>
   );
 };
