@@ -1,16 +1,97 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   ShieldCheck, HeartPulse, Calculator, RefreshCcw, CheckCircle2, 
   Lock, AlertTriangle, BookOpen, MessageSquare, Briefcase, BrainCircuit,
-  TrendingUp, Users, Star, Quote, Menu, X, Search, Coins
+  TrendingUp, Users, Star, Quote, Menu, X, Search, Coins,
+  Shield, Zap, Crown, Check
 } from 'lucide-react';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
+import { useAuthStore } from '../store/authStore';
 import { supabase } from '../lib/supabase';
 
 export const LandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { settings } = useSettingsStore();
+  const { session, profile } = useAuthStore();
+  const currentRole = profile?.role || 'free';
+  const navigate = useNavigate();
+
+  const handlePlanClick = () => {
+    if (!session) {
+      navigate('/signup');
+    } else {
+      navigate('/upgrade');
+    }
+  };
+
+  const tiers = [
+    {
+      name: 'Free',
+      role: 'free',
+      price: 'Rp 0',
+      description: 'Essential tools for personal Sharia compliance.',
+      icon: <Shield className="w-6 h-6 text-slate-400" />,
+      features: [
+        'Zakat Calculator',
+        'Basic Financial Health Check',
+        'Limited AI Assistant Queries',
+      ],
+      buttonText: !session ? 'Daftar Gratis' : currentRole === 'free' ? 'Plan Aktif' : 'Downgrade',
+      buttonStyle: 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+    },
+    {
+      name: 'Sharify Plus',
+      role: 'plus',
+      price: 'Rp 49.000',
+      period: '/mo',
+      description: 'Advanced tools for active financial management.',
+      icon: <Zap className="w-6 h-6 text-[#10B981]" />,
+      features: [
+        'Everything in Free',
+        'Unlimited AI Assistant Queries',
+        'Full Riba Detox Action Plan',
+        'Detailed Analytics'
+      ],
+      buttonText: !session ? 'Upgrade ke Plus' : currentRole === 'plus' ? 'Plan Aktif' : 'Upgrade to Plus',
+      buttonStyle: 'bg-[#10B981] text-white hover:bg-emerald-600',
+      popular: false
+    },
+    {
+      name: 'Sharify Pro',
+      role: 'pro',
+      price: 'Rp 149.000',
+      period: '/mo',
+      description: 'Expert guidance and complex portfolio management.',
+      icon: <Crown className="w-6 h-6 text-amber-500" />,
+      features: [
+        'Everything in Plus',
+        '1-on-1 Human Scholar Consultations',
+        'Direct Chat with Ustadz',
+        'Priority Support'
+      ],
+      buttonText: !session ? 'Upgrade ke Pro' : currentRole === 'pro' ? 'Plan Aktif' : 'Upgrade to Pro',
+      buttonStyle: 'bg-[#F59E0B] text-white hover:bg-[#d97706]',
+      popular: true
+    },
+    {
+      name: 'Family Plan',
+      role: 'family',
+      price: 'Rp 199.000',
+      period: '/mo',
+      description: 'Comprehensive Sharia planning for the whole household.',
+      icon: <Users className="w-6 h-6 text-[#0F4C3A]" />,
+      features: [
+        'Up to 4 Pro Accounts',
+        'Faraidh (Inheritance) Simulator',
+        'Wakaf Planning Tools',
+        'Shared Family Dashboards'
+      ],
+      buttonText: !session ? 'Mulai Family' : currentRole === 'family' ? 'Plan Aktif' : 'Upgrade to Family',
+      buttonStyle: 'bg-[#0F4C3A] text-white hover:bg-[#0c3d2e]',
+      popular: false
+    }
+  ];
 
   // ── Direct logo fetch ──────────────────────────────────────────
   // The logo is fetched directly from Supabase here in the component
@@ -498,17 +579,83 @@ export const LandingPage: React.FC = () => {
 
       {/* 7. Clean Comparison Table */}
       <section id="harga" className="py-24 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               {settings.harga_title}
             </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium">
+            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
               {settings.harga_subtitle}
             </p>
           </div>
+
+          {/* Pricing Tiers Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 mb-20 max-w-7xl mx-auto">
+            {tiers.map((tier) => (
+              <div 
+                key={tier.name} 
+                className={`relative bg-white rounded-[2rem] border ${
+                  tier.popular ? 'border-[#F59E0B] shadow-xl scale-102 lg:scale-105 z-10' : 'border-slate-100 shadow-sm'
+                } p-6 flex flex-col transition-all duration-300 hover:shadow-md`}
+              >
+                {tier.popular && (
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <span className="bg-[#F59E0B] text-white text-[9px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm">
+                      MOST POPULAR
+                    </span>
+                  </div>
+                )}
+                
+                <div className="mb-6 flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900 leading-tight">{tier.name}</h3>
+                    <p className="text-xs text-slate-400 mt-1 h-10 leading-relaxed font-semibold">{tier.description}</p>
+                  </div>
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 shrink-0 ml-2">
+                    {tier.icon}
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <span className="text-3xl font-black text-slate-900 tracking-tight">{tier.price}</span>
+                  {tier.period && <span className="text-xs text-slate-400 font-bold uppercase ml-1 tracking-wider">{tier.period}</span>}
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {tier.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <Check className={`w-4 h-4 mr-2 flex-shrink-0 mt-0.5 ${
+                        tier.name.includes('Plus') ? 'text-[#10B981]' : 
+                        tier.name.includes('Pro') ? 'text-[#F59E0B]' :
+                        tier.name.includes('Family') ? 'text-[#0F4C3A]' : 'text-slate-400'
+                      }`} />
+                      <span className="text-xs text-slate-600 font-semibold leading-normal">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handlePlanClick()}
+                  disabled={session !== null && currentRole === tier.role}
+                  className={`w-full py-3.5 px-4 rounded-full font-black text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center shadow-xs cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
+                    (session !== null && currentRole === tier.role) 
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none' 
+                      : tier.buttonStyle
+                  }`}
+                >
+                  {tier.buttonText}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Comparison Table Section Header (Subtle) */}
+          <div className="text-center mb-10">
+            <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Perbandingan Fitur Selengkapnya</h3>
+            <p className="text-xs text-slate-400 mt-1 font-semibold">Bandingkan kapabilitas teknis di setiap paket secara rinci</p>
+          </div>
           
-          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-lg overflow-hidden">
+          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-lg overflow-hidden max-w-5xl mx-auto">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
