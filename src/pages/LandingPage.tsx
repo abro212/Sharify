@@ -314,9 +314,9 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-black text-slate-900 text-center tracking-tight leading-none">Let's Get Started</h3>
+                  <h3 className="text-lg font-black text-slate-900 text-center tracking-tight leading-none">Mulai Era Baru, Bestie! ✨</h3>
                   <p className="text-[10px] text-slate-400 text-center mt-2 leading-relaxed px-2 font-medium">
-                    Sign Up Now And Enjoy Seamless Sharia Experience.
+                    Honestly, daftar sekarang biar financial goals kamu makin glow up & berkah, no cap!
                   </p>
                   
                   {/* Small Pagination Dots */}
@@ -330,10 +330,10 @@ export const LandingPage: React.FC = () => {
                 {/* Splash CTAs */}
                 <div className="space-y-2 mt-auto">
                   <Link to="/signup" className="block w-full bg-[#10B981] text-white text-[11px] font-extrabold py-3.5 rounded-full text-center shadow-sm shadow-emerald-500/5 hover:bg-emerald-600 transition-colors">
-                    Create Account
+                    Daftar Sat-Set
                   </Link>
                   <Link to="/login" className="block w-full border border-[#10B981] text-[#10B981] text-[11px] font-extrabold py-3.5 rounded-full text-center hover:bg-emerald-50/50 transition-colors bg-white">
-                    Login
+                    Masuk
                   </Link>
                 </div>
               </div>
@@ -364,17 +364,17 @@ export const LandingPage: React.FC = () => {
                   <div className="bg-[#10B981] p-3 rounded-2xl text-white relative overflow-hidden flex flex-col justify-between h-24">
                     <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-600 rounded-full opacity-50" />
                     <div>
-                      <p className="text-[8px] opacity-75 font-bold uppercase tracking-wider">Daily Charity Offer</p>
-                      <h4 className="text-[11px] font-bold leading-tight mt-0.5">Dapatkan 10% Berkah Cashback Sedekah</h4>
+                      <p className="text-[8px] opacity-75 font-bold uppercase tracking-wider">Sedekah Harian Era Baru</p>
+                      <h4 className="text-[11px] font-bold leading-tight mt-0.5">Aura Berkah: Cashback Sedekah 10% ✨</h4>
                     </div>
                     <button className="bg-white text-[#10B981] text-[8px] font-extrabold px-3 py-1 rounded-full w-max shadow-sm">
-                      See Now
+                      Klaim, Bestie
                     </button>
                   </div>
 
                   {/* Feature Grid */}
                   <div>
-                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Sharify Features</h5>
+                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Fitur Andalan</h5>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         { icon: Coins, text: 'Cashflow' },
@@ -391,11 +391,11 @@ export const LandingPage: React.FC = () => {
 
                   {/* Recent Transaction List */}
                   <div>
-                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Recent Transaction</h5>
+                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Transaksi Terkini</h5>
                     <div className="space-y-2">
                       {[
-                        { name: 'Mike Lyne', desc: 'Charity Deposit', val: 'Rp 100k', time: 'Just now' },
-                        { name: 'John Messi', desc: 'Zakat Maal', val: 'Rp 2.5jt', time: '1 hour ago' }
+                        { name: 'Abi Dan Ummi', desc: 'Sedekah Sat-Set', val: 'Rp 100k', time: 'Baru Aja' },
+                        { name: 'Zulkifli Sharia', desc: 'Zakat Maal', val: 'Rp 2.5jt', time: '1 Jam Lalu' }
                       ].map((item, idx) => (
                         <div key={idx} className="bg-slate-50/60 p-2.5 rounded-xl flex items-center justify-between border border-slate-100/50">
                           <div className="flex items-center space-x-2">
@@ -455,10 +455,10 @@ export const LandingPage: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: AlertTriangle, title: 'Jebakan Riba', desc: 'Tingginya paparan utang konvensional (Paylater, KTA) tanpa rencana pelunasan yang jelas.', color: 'red' },
-              { icon: BrainCircuit, title: 'Literasi Syariah Rendah', desc: 'Sulit membedakan produk keuangan halal dan haram di era digital.', color: 'amber' },
-              { icon: Briefcase, title: 'Penasihat Mahal', desc: 'Konsultasi dengan perencana keuangan syariah profesional seringkali tidak terjangkau.', color: 'emerald' },
-              { icon: RefreshCcw, title: 'Layanan Terpecah', desc: 'Zakat, investasi, dan waris dikelola secara terpisah membuat pusing.', color: 'blue' }
+              { icon: AlertTriangle, title: 'Jebakan Riba Era Lama 🚨', desc: 'Honestly, paparan paylater konvensional dan KTA tanpa pelunasan yang jelas itu bikin pusing, no cap!', color: 'red' },
+              { icon: BrainCircuit, title: 'Literasi Syariah Kurang Glow Up', desc: 'Literally bingung dan abu-abu membedakan mana produk keuangan halal dan haram di era modern.', color: 'amber' },
+              { icon: Briefcase, title: 'Penasihat Finansial Kurang Chill', desc: 'Mau konsultasi rencana keuangan syariah tapi harganya kurang bersahabat di kantong.', color: 'emerald' },
+              { icon: RefreshCcw, title: 'Platform Terlalu Terpecah', desc: 'Pusing banget karena hitung zakat, investasi, dan waris terpisah-pisah, bikin tidak sat-set.', color: 'blue' }
             ].map((problem, idx) => (
               <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center relative overflow-hidden group hover:shadow-md hover:border-emerald-500/10 transition-all duration-300">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 ${
@@ -491,12 +491,12 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: HeartPulse, title: 'Health Check Syariah', desc: 'Skoring kesehatan keuangan berbasis rasio utang dan paparan riba secara komprehensif.' },
-              { icon: MessageSquare, title: 'AI Assistant (Gemini)', desc: 'Konsultasi Fiqh Muamalah instan 24/7 untuk menjawab keraguan transaksi Anda.' },
-              { icon: ShieldCheck, title: 'Program Riba Detox', desc: 'Rencana aksi sistematis berbantuan AI untuk melunasi utang konvensional dengan tuntas.' },
-              { icon: TrendingUp, title: 'Halal Investment', desc: 'Rekomendasi instrumen investasi (Sukuk, Reksa Dana Syariah) yang disaring sesuai profil risiko Anda.' },
-              { icon: Calculator, title: 'Zakat & Wakaf Center', desc: 'Kalkulasi Nisab dinamis terhubung dengan API harga emas real-time untuk akurasi tinggi.' },
-              { icon: Users, title: 'Faraidh Simulator', desc: 'Edukasi dan simulasi pembagian waris Islam untuk mencegah konflik keluarga di masa depan.' }
+              { icon: HeartPulse, title: 'Health Check Syariah 🩺', desc: 'Cek skor kepatuhan syariah biar tabungan kamu aman, clean, dan berkah, bestie!' },
+              { icon: MessageSquare, title: 'AI Co-Pilot (Gemini) 🤖', desc: 'Tanya-tanya Fiqh Muamalah instan 24/7 secara sat-set biar transaksi makin mantap.' },
+              { icon: ShieldCheck, title: 'Rencana Riba Detox 🍃', desc: 'Roadmap pelunasan cicilan konvensional berbantuan AI agar bebas riba seutuhnya.' },
+              { icon: TrendingUp, title: 'Investasi Halal Era Baru 📈', desc: 'Rekomendasi Sukuk dan Reksa Dana Syariah yang pas buat profil risiko kamu.' },
+              { icon: Calculator, title: 'Zakat & Wakaf Hub 💰', desc: 'Kalkulasi Nisab otomatis terhubung harga emas real-time biar hitungan kamu akurat, no cap!' },
+              { icon: Users, title: 'Faraidh Simulator 👨‍👩‍👧‍👦', desc: 'Simulasi pembagian waris syariah biar masa depan keluarga makin tenteram.' }
             ].map((feature, idx) => (
               <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#10B981]/30 transition-all duration-300 group">
                 <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-6 border border-emerald-100 group-hover:scale-105 transition-transform duration-300">
