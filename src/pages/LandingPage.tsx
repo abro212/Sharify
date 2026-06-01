@@ -31,7 +31,8 @@ export const LandingPage: React.FC = () => {
       role: 'free',
       price: 'Rp 0',
       description: 'Essential tools for personal Sharia compliance.',
-      icon: <Shield className="w-6 h-6 text-slate-400" />,
+      icon: <Shield className="w-5 h-5 text-slate-400" />,
+      iconClass: 'bg-slate-50 border-slate-100 text-slate-400',
       features: [
         'Zakat Calculator',
         'Basic Financial Health Check',
@@ -46,7 +47,8 @@ export const LandingPage: React.FC = () => {
       price: 'Rp 49.000',
       period: '/mo',
       description: 'Advanced tools for active financial management.',
-      icon: <Zap className="w-6 h-6 text-[#10B981]" />,
+      icon: <Zap className="w-5 h-5 text-[#10B981]" />,
+      iconClass: 'bg-emerald-50 border-emerald-100/50 text-[#10B981]',
       features: [
         'Everything in Free',
         'Unlimited AI Assistant Queries',
@@ -63,7 +65,8 @@ export const LandingPage: React.FC = () => {
       price: 'Rp 149.000',
       period: '/mo',
       description: 'Expert guidance and complex portfolio management.',
-      icon: <Crown className="w-6 h-6 text-amber-500" />,
+      icon: <Crown className="w-5 h-5 text-amber-500" />,
+      iconClass: 'bg-amber-50 border-amber-100/50 text-amber-500',
       features: [
         'Everything in Plus',
         '1-on-1 Human Scholar Consultations',
@@ -80,7 +83,8 @@ export const LandingPage: React.FC = () => {
       price: 'Rp 199.000',
       period: '/mo',
       description: 'Comprehensive Sharia planning for the whole household.',
-      icon: <Users className="w-6 h-6 text-[#0F4C3A]" />,
+      icon: <Users className="w-5 h-5 text-[#0F4C3A]" />,
+      iconClass: 'bg-[#E6F4ED] border-[#10B981]/25 text-[#0F4C3A]',
       features: [
         'Up to 4 Pro Accounts',
         'Faraidh (Inheritance) Simulator',
@@ -611,24 +615,20 @@ export const LandingPage: React.FC = () => {
                     <h3 className="text-lg font-black text-slate-900 leading-tight">{tier.name}</h3>
                     <p className="text-xs text-slate-400 mt-1 h-10 leading-relaxed font-semibold">{tier.description}</p>
                   </div>
-                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 shrink-0 ml-2">
+                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ml-2 shadow-xs ${tier.iconClass}`}>
                     {tier.icon}
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{tier.price}</span>
-                  {tier.period && <span className="text-xs text-slate-400 font-bold uppercase ml-1 tracking-wider">{tier.period}</span>}
+                <div className="my-5 flex items-baseline">
+                  <span className="text-3xl font-black text-slate-900 tracking-tight leading-none">{tier.price}</span>
+                  {tier.period && <span className="text-xs text-slate-400 font-bold lowercase ml-1.5 leading-none">{tier.period}</span>}
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-1">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start">
-                      <Check className={`w-4 h-4 mr-2 flex-shrink-0 mt-0.5 ${
-                        tier.name.includes('Plus') ? 'text-[#10B981]' : 
-                        tier.name.includes('Pro') ? 'text-[#F59E0B]' :
-                        tier.name.includes('Family') ? 'text-[#0F4C3A]' : 'text-slate-400'
-                      }`} />
+                      <Check className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-[#10B981]" />
                       <span className="text-xs text-slate-600 font-semibold leading-normal">{feature}</span>
                     </li>
                   ))}
