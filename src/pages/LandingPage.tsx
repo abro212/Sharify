@@ -260,7 +260,7 @@ export const LandingPage: React.FC = () => {
                 AI-Powered Islamic Finance
               </div>
               
-              <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
+              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
                 {settings.hero_title.split(' ').map((word, i) => (
                   <span key={i} className={i >= 3 ? "text-[#10B981] inline-block mr-2" : "inline-block mr-2"}>
                     {word}
@@ -440,7 +440,7 @@ export const LandingPage: React.FC = () => {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               {settings.fitur_title}
             </h2>
             <p className="text-base lg:text-lg text-slate-500 font-medium">
@@ -476,7 +476,7 @@ export const LandingPage: React.FC = () => {
       <section id="solusi" className="py-24 bg-slate-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               {settings.solusi_title}
             </h2>
             <p className="text-base lg:text-lg text-slate-500 font-medium">
@@ -512,7 +512,7 @@ export const LandingPage: React.FC = () => {
         <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2">
             <span className="text-emerald-100 font-extrabold text-xs uppercase tracking-widest block mb-4">Sharia Intelligence Hub</span>
-            <h2 className="text-3xl lg:text-5xl font-black mb-6 leading-tight tracking-tight">Didukung Teknologi AI Terdepan</h2>
+            <h2 className="text-2xl sm:text-3.5xl lg:text-5xl font-black mb-6 leading-tight tracking-tight">Didukung Teknologi AI Terdepan</h2>
             <p className="text-emerald-50/80 mb-8 text-base lg:text-lg font-medium leading-relaxed">
               Sistem kami menggunakan arsitektur mutakhir untuk memastikan fatwa dan panduan yang akurat, aman, dan dapat diandalkan secara syariah.
             </p>
@@ -581,7 +581,7 @@ export const LandingPage: React.FC = () => {
       <section id="harga" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               {settings.harga_title}
             </h2>
             <p className="text-base lg:text-lg text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
@@ -617,7 +617,7 @@ export const LandingPage: React.FC = () => {
                 </div>
 
                 <div className="mb-6">
-                  <span className="text-3xl font-black text-slate-900 tracking-tight">{tier.price}</span>
+                  <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{tier.price}</span>
                   {tier.period && <span className="text-xs text-slate-400 font-bold uppercase ml-1 tracking-wider">{tier.period}</span>}
                 </div>
 
@@ -734,7 +734,7 @@ export const LandingPage: React.FC = () => {
       <section className="bg-white border-t border-slate-100 pt-24 pb-12">
         <div className="max-w-4xl mx-auto px-4 text-center mb-20 bg-[#10B981] text-white p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
           <div className="absolute -left-10 -top-10 w-32 h-32 bg-emerald-600 rounded-full opacity-40" />
-          <h2 className="text-3xl lg:text-5xl font-black mb-6 leading-tight tracking-tight relative z-10">
+          <h2 className="text-2xl sm:text-3.5xl lg:text-5xl font-black mb-6 leading-tight tracking-tight relative z-10">
             Mulai Perjalanan Finansial Syariah Anda Hari Ini.
           </h2>
           <p className="text-base lg:text-lg text-emerald-50 mb-10 max-w-2xl mx-auto font-medium relative z-10">

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ShieldCheck, ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
 
 export const SignUp: React.FC = () => {
@@ -11,6 +12,43 @@ export const SignUp: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchLogo = async () => {
+      setLogoLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'logo_url')
+          .maybeSingle();
+
+        if (!cancelled) {
+          if (error) {
+            console.error('[SignUp] Logo fetch error:', error.message);
+            setLogoUrl(null);
+          } else {
+            const rawUrl = data?.value;
+            setLogoUrl(rawUrl && rawUrl.trim() !== '' ? rawUrl.trim() : null);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[SignUp] Unexpected logo fetch error:', err);
+          setLogoUrl(null);
+        }
+      } finally {
+        if (!cancelled) setLogoLoading(false);
+      }
+    };
+
+    fetchLogo();
+    return () => { cancelled = true; };
+  }, []);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -70,9 +108,20 @@ export const SignUp: React.FC = () => {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
         <div className="flex justify-center">
-          <div className="h-16 w-16 bg-gradient-to-br from-[#0F4C3A] to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/10 border border-emerald-500/10">
-            <ShieldCheck className="h-9 w-9 text-[#D4AF37]" />
-          </div>
+          {logoLoading ? (
+            <div className="h-16 w-36 bg-slate-100/50 rounded-2xl animate-pulse" />
+          ) : logoUrl ? (
+            <img 
+              src={bustCache(logoUrl)} 
+              alt="Sharify Logo" 
+              className="h-16 object-contain" 
+              onError={() => setLogoUrl(null)}
+            />
+          ) : (
+            <div className="h-16 w-16 bg-gradient-to-br from-[#0F4C3A] to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/10 border border-emerald-500/10">
+              <ShieldCheck className="h-9 w-9 text-[#D4AF37]" />
+            </div>
+          )}
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 tracking-tight">
           Gabung Bersama <span className="bg-gradient-to-r from-emerald-800 to-amber-600 bg-clip-text text-transparent font-black">Sharify</span>

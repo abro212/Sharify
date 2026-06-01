@@ -161,7 +161,7 @@ export const Pricing: React.FC = () => {
   const pricingContent = (
     <>
       <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Choose Your Sharia Financial Journey</h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Choose Your Sharia Financial Journey</h1>
         <p className="text-gray-500 text-lg">
           Upgrade your plan to unlock powerful AI features, inheritance simulators, and direct access to certified Islamic Scholars.
         </p>
@@ -194,7 +194,7 @@ export const Pricing: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <span className="text-3xl font-bold text-gray-900">{tier.price}</span>
+              <span className="text-2xl sm:text-3xl font-bold text-gray-900">{tier.price}</span>
               {tier.period && <span className="text-gray-500">{tier.period}</span>}
             </div>
 
