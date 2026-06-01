@@ -28,7 +28,7 @@ import { supabase } from './lib/supabase';
 
 function App() {
   const { setSession } = useAuthStore();
-  const { fetchSettings, subscribeToRealtime, unsubscribeFromRealtime } = useSettingsStore();
+  const { settings, fetchSettings, subscribeToRealtime, unsubscribeFromRealtime } = useSettingsStore();
 
   useEffect(() => {
     // Fetch global configuration and CMS settings once on load
@@ -54,6 +54,29 @@ function App() {
       unsubscribeFromRealtime();
     };
   }, [setSession, fetchSettings, subscribeToRealtime, unsubscribeFromRealtime]);
+
+  // Dynamically update document favicon in the DOM
+  useEffect(() => {
+    if (settings.favicon_url) {
+      let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      
+      link.href = settings.favicon_url;
+      
+      const fileExt = settings.favicon_url.split('.').pop()?.split('?')[0]?.toLowerCase();
+      if (fileExt === 'svg') {
+        link.type = 'image/svg+xml';
+      } else if (fileExt === 'png') {
+        link.type = 'image/png';
+      } else {
+        link.type = 'image/x-icon';
+      }
+    }
+  }, [settings.favicon_url]);
 
   return (
     <Router>

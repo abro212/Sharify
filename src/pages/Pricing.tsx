@@ -1,14 +1,55 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
-import { Check, Crown, Zap, Shield, Users, ShieldCheck } from 'lucide-react';
+import { Check, Crown, Zap, Shield, Users, ShieldCheck, Menu, X } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
 
 export const Pricing: React.FC = () => {
   const { profile, session, fetchProfile } = useAuthStore();
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    const fetchLogo = async () => {
+      setLogoLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'logo_url')
+          .maybeSingle();
+
+        if (!cancelled) {
+          if (error) {
+            console.error('[Pricing] Logo fetch error:', error.message);
+            setLogoUrl(null);
+          } else {
+            const rawUrl = data?.value;
+            setLogoUrl(rawUrl && rawUrl.trim() !== '' ? rawUrl.trim() : null);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[Pricing] Unexpected logo fetch error:', err);
+          setLogoUrl(null);
+        }
+      } finally {
+        if (!cancelled) setLogoLoading(false);
+      }
+    };
+
+    fetchLogo();
+    return () => { cancelled = true; };
+  }, []);
+
+  const resolvedLogoUrl = React.useMemo(() => bustCache(logoUrl), [logoUrl]);
 
   const currentRole = profile?.role || 'free';
 
@@ -204,21 +245,110 @@ export const Pricing: React.FC = () => {
 
   // If anonymous public guest, wrap in landing page navbar and footer layouts
   return (
-    <div className="min-h-screen bg-gray-50 font-sans selection:bg-accent selection:text-white">
+    <div className="min-h-screen bg-gray-50 font-sans selection:bg-accent selection:text-white relative overflow-x-hidden">
       {/* Landing Navbar */}
-      <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <ShieldCheck className="h-8 w-8 text-[#0F4C3A]" />
-            <span className="ml-2 text-2xl font-bold text-gray-900 tracking-tight">Sharify</span>
+            {logoLoading ? (
+              <div className="h-8 w-24 bg-slate-100 rounded-full animate-pulse" />
+            ) : resolvedLogoUrl ? (
+              <img
+                src={resolvedLogoUrl}
+                alt="Sharify Logo"
+                className="h-8 object-contain"
+                onError={() => setLogoUrl(null)}
+              />
+            ) : (
+              <div className="flex items-center group">
+                <div className="h-9 w-9 rounded-xl bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10">
+                  <ShieldCheck className="h-5.5 w-5.5 text-white" />
+                </div>
+                <span className="ml-2.5 text-xl font-bold text-gray-900 tracking-tight">Sharify</span>
+              </div>
+            )}
           </Link>
-          <div className="flex items-center space-x-4">
+          
+          {/* Navigation Links for Public Pricing page */}
+          <div className="hidden md:flex items-center space-x-8">
+            <a href="/#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
+            <a href="/#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
+            <a href="/#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
+            <Link to="/upgrade" className="text-sm font-semibold text-[#10B981] transition-colors">Harga</Link>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-4">
             <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Masuk</Link>
-            <Link to="/signup" className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm">
+            <Link to="/signup" className="bg-[#10B981] hover:bg-[#0d9488] text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] active:scale-[0.98]">
               Daftar Gratis
             </Link>
           </div>
+
+          {/* Mobile Hamburger Button */}
+          <div className="flex md:hidden items-center">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              type="button"
+              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors border border-slate-100"
+              aria-label="Toggle Menu"
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-4 shadow-lg animate-fade-in z-50">
+            <div className="flex flex-col space-y-1">
+              <a 
+                href="/#features" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Fitur
+              </a>
+              <a 
+                href="/#solusi" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Solusi
+              </a>
+              <a 
+                href="/#teknologi" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Teknologi
+              </a>
+              <Link 
+                to="/upgrade" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Harga
+              </Link>
+            </div>
+            
+            <div className="pt-2 flex flex-col space-y-3">
+              <Link 
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full text-center text-sm font-bold text-slate-700 hover:text-slate-900 py-3 rounded-full border border-slate-200 bg-white"
+              >
+                Masuk
+              </Link>
+              <Link 
+                to="/signup"
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full text-center text-sm font-bold bg-[#10B981] hover:bg-[#0d9488] text-white py-3 rounded-full shadow-lg shadow-emerald-500/10"
+              >
+                Daftar Gratis
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Main Pricing Content Area */}
