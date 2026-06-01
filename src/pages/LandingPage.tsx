@@ -607,7 +607,7 @@ export const LandingPage: React.FC = () => {
               >
                 {tier.popular && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105 z-20">
-                    <span className="bg-[#F59E0B] text-white text-[9px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm">
+                    <span className="bg-[#F59E0B] text-slate-950 text-[10px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-md border border-amber-300">
                       MOST POPULAR
                     </span>
                   </div>
@@ -749,7 +749,7 @@ export const LandingPage: React.FC = () => {
         </div>
 
         <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2">
               <div className="flex items-center mb-4">
                 {settings.logo_url ? (
@@ -767,20 +767,34 @@ export const LandingPage: React.FC = () => {
             </div>
             
             <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-sm tracking-tight">Produk</h4>
+              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Dasar (Free)</h4>
               <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><a href="#harga" className="hover:text-[#10B981] transition-colors">Harga Layanan</a></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check Syariah</Link></li>
                 <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Cashflow & Sedekah</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">AI Co-Pilot Assistant</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Premium (Pro/Family)</h4>
+              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Rencana Riba Detox</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Halal Asset Screener</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Smart Akad Analyzer</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Qurban Auto-Saver</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Zakat-to-Tax Report</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Baitul Mal Keluarga</Link></li>
+                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Digital Wasiat Generator</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-sm tracking-tight">Kebijakan</h4>
+              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Kebijakan</h4>
               <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><a href="#" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</a></li>
-                <li><a href="#" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</a></li>
-                <li><a href="#" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</a></li>
+                <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
+                <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
+                <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
               </ul>
             </div>
           </div>

@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
-import { Check, Crown, Zap, Shield, Users, ShieldCheck, Menu, X } from 'lucide-react';
+import { ShieldCheck, Menu, X, FileText, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
 import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
-export const Pricing: React.FC = () => {
-  const { profile, session, fetchProfile } = useAuthStore();
+export const TermsPage: React.FC = () => {
+  const { session } = useAuthStore();
   const { settings } = useSettingsStore();
-  const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoLoading, setLogoLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let cancelled = false;
     const fetchLogo = async () => {
       setLogoLoading(true);
@@ -30,7 +29,7 @@ export const Pricing: React.FC = () => {
 
         if (!cancelled) {
           if (error) {
-            console.error('[Pricing] Logo fetch error:', error.message);
+            console.error('[TermsPage] Logo fetch error:', error.message);
             setLogoUrl(null);
           } else {
             const rawUrl = data?.value;
@@ -39,7 +38,7 @@ export const Pricing: React.FC = () => {
         }
       } catch (err) {
         if (!cancelled) {
-          console.error('[Pricing] Unexpected logo fetch error:', err);
+          console.error('[TermsPage] Unexpected logo fetch error:', err);
           setLogoUrl(null);
         }
       } finally {
@@ -53,201 +52,103 @@ export const Pricing: React.FC = () => {
 
   const resolvedLogoUrl = React.useMemo(() => bustCache(logoUrl), [logoUrl]);
 
-  const currentRole = profile?.role || 'free';
+  const termsContent = (
+    <div className="max-w-4xl mx-auto">
+      {/* Decorative Top Accent */}
+      <div className="h-2 w-full bg-gradient-to-r from-emerald-500 via-[#10B981] to-amber-400 rounded-t-3xl shadow-sm"></div>
 
-  const handleUpgrade = async (newRole: string) => {
-    if (!session?.user?.id) {
-      navigate('/signup');
-      return;
-    }
-    
-    // Prevent downgrading or upgrading to same tier
-    if (newRole === currentRole) return;
+      {/* Main Glass Card */}
+      <div className="bg-white rounded-b-3xl border-x border-b border-slate-100 shadow-2xl p-6 sm:p-12 relative overflow-hidden">
+        {/* Subtle Decorative Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#10B981_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
-    setIsProcessing(newRole);
-
-    try {
-      // Mock Payment Processing Delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Direct Supabase Role Update (Mock)
-      const { error } = await supabase
-        .from('users')
-        .update({ role: newRole })
-        .eq('id', session.user.id);
-
-      if (error) throw error;
-
-      // Fetch fresh profile data to update UI instantly
-      await fetchProfile(session.user.id);
-      
-      // Redirect to Dashboard on success
-      navigate('/dashboard');
-      
-    } catch (error) {
-      console.error("Upgrade failed:", error);
-      alert("Upgrade failed. Please ensure your user table policies allow updates.");
-    } finally {
-      setIsProcessing(null);
-    }
-  };
-
-  const tiers = [
-    {
-      name: 'Free',
-      role: 'free',
-      price: 'Rp 0',
-      description: 'Essential tools for personal Sharia compliance.',
-      icon: <Shield className="w-6 h-6 text-gray-400" />,
-      features: [
-        'Zakat Calculator',
-        'Basic Financial Health Check',
-        'Limited AI Assistant Queries',
-      ],
-      buttonText: currentRole === 'free' ? 'Current Plan' : 'Downgrade',
-      buttonStyle: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-    },
-    {
-      name: 'Sharify Plus',
-      role: 'plus',
-      price: 'Rp 49.000',
-      period: '/mo',
-      description: 'Advanced tools for active financial management.',
-      icon: <Zap className="w-6 h-6 text-primary" />,
-      features: [
-        'Everything in Free',
-        'Unlimited AI Assistant Queries',
-        'Full Riba Detox Action Plan',
-        'Detailed Analytics'
-      ],
-      buttonText: currentRole === 'plus' ? 'Current Plan' : 'Upgrade to Plus',
-      buttonStyle: 'bg-primary text-white hover:bg-primary-dark',
-      popular: false
-    },
-    {
-      name: 'Sharify Pro',
-      role: 'pro',
-      price: 'Rp 149.000',
-      period: '/mo',
-      description: 'Expert guidance and complex portfolio management.',
-      icon: <Crown className="w-6 h-6 text-accent" />,
-      features: [
-        'Everything in Plus',
-        '1-on-1 Human Scholar Consultations',
-        'Direct Chat with Ustadz',
-        'Priority Support'
-      ],
-      buttonText: currentRole === 'pro' ? 'Current Plan' : 'Upgrade to Pro',
-      buttonStyle: 'bg-accent text-white hover:bg-[#b08d45]',
-      popular: true
-    },
-    {
-      name: 'Family Plan',
-      role: 'family',
-      price: 'Rp 199.000',
-      period: '/mo',
-      description: 'Comprehensive Sharia planning for the whole household.',
-      icon: <Users className="w-6 h-6 text-[#0F4C3A]" />,
-      features: [
-        'Up to 4 Pro Accounts',
-        'Faraidh (Inheritance) Simulator',
-        'Wakaf Planning Tools',
-        'Shared Family Dashboards'
-      ],
-      buttonText: currentRole === 'family' ? 'Current Plan' : 'Upgrade to Family',
-      buttonStyle: 'bg-[#0F4C3A] text-white hover:bg-[#0a3628]',
-      popular: false
-    }
-  ];
-
-  const pricingContent = (
-    <>
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Choose Your Sharia Financial Journey</h1>
-        <p className="text-gray-500 text-lg">
-          Upgrade your plan to unlock powerful AI features, inheritance simulators, and direct access to certified Islamic Scholars.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 pt-8 max-w-7xl mx-auto">
-        {tiers.map((tier) => (
-          <div 
-            key={tier.name} 
-            className={`relative bg-white rounded-2xl border ${
-              tier.popular ? 'border-accent shadow-xl scale-105 z-10' : 'border-gray-200 shadow-sm'
-            } p-6 flex flex-col transition-transform`}
-          >
-            {tier.popular && (
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                <span className="bg-accent text-slate-950 text-xs font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-md border border-amber-300">
-                  Most Popular
-                </span>
-              </div>
-            )}
-            
-            <div className="mb-6 flex justify-between items-start">
-              <div>
-                <h3 className="text-lg font-bold text-gray-900">{tier.name}</h3>
-                <p className="text-sm text-gray-500 mt-1 h-10">{tier.description}</p>
-              </div>
-              <div className="p-2 bg-gray-50 rounded-lg">
-                {tier.icon}
-              </div>
+        {/* Dynamic Inner Welcome Banner */}
+        <div className="relative mb-10 pb-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="h-14 w-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-inner">
+              <FileText className="h-7 w-7 animate-pulse" />
             </div>
-
-            <div className="mb-6">
-              <span className="text-2xl sm:text-3xl font-bold text-gray-900">{tier.price}</span>
-              {tier.period && <span className="text-gray-500">{tier.period}</span>}
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">
+                Syarat & Ketentuan
+              </h1>
+              <p className="text-slate-400 text-xs sm:text-sm font-semibold mt-1">
+                Aturan main resmi & kesepakatan fiqh demi kenyamanan bersama.
+              </p>
             </div>
-
-            <ul className="space-y-3 mb-8 flex-1">
-              {tier.features.map((feature, idx) => (
-                <li key={idx} className="flex items-start">
-                  <Check className={`w-5 h-5 mr-2 flex-shrink-0 ${tier.popular ? 'text-accent' : 'text-primary'}`} />
-                  <span className="text-sm text-gray-600">{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={() => handleUpgrade(tier.role)}
-              disabled={(session !== null && currentRole === tier.role) || isProcessing !== null}
-              className={`w-full py-3 px-4 rounded-xl font-bold text-sm transition-colors flex justify-center items-center ${
-                (session !== null && currentRole === tier.role) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : tier.buttonStyle
-              } ${isProcessing === tier.role ? 'opacity-75 cursor-wait' : ''}`}
-            >
-              {isProcessing === tier.role ? (
-                <span className="animate-pulse">Processing...</span>
-              ) : (
-                session === null ? (
-                  tier.role === 'free' 
-                    ? 'Daftar Gratis' 
-                    : tier.role === 'plus' 
-                    ? 'Upgrade ke Plus' 
-                    : tier.role === 'pro' 
-                    ? 'Upgrade ke Pro' 
-                    : 'Mulai Family'
-                ) : tier.buttonText
-              )}
-            </button>
           </div>
-        ))}
+          <div className="flex items-center">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100/55 shadow-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-2 animate-ping"></span>
+              Aktif & Terverifikasi
+            </span>
+          </div>
+        </div>
+
+        {/* Dynamic Markdown Content */}
+        <div className="relative z-10 selection:bg-emerald-500 selection:text-white">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h1: ({ node, ...props }) => (
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-8 mb-4 border-b border-slate-100 pb-3 font-display" {...props} />
+              ),
+              h2: ({ node, ...props }) => (
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-6 mb-3 flex items-center font-display" {...props} />
+              ),
+              h3: ({ node, ...props }) => (
+                <h3 className="text-lg font-bold text-slate-800 mt-5 mb-2 font-display" {...props} />
+              ),
+              p: ({ node, ...props }) => (
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-4 font-medium" {...props} />
+              ),
+              ul: ({ node, ...props }) => (
+                <ul className="list-disc pl-6 mb-4 text-slate-600 text-sm sm:text-base space-y-2 font-medium" {...props} />
+              ),
+              ol: ({ node, ...props }) => (
+                <ol className="list-decimal pl-6 mb-4 text-slate-600 text-sm sm:text-base space-y-2 font-medium" {...props} />
+              ),
+              li: ({ node, ...props }) => (
+                <li className="pl-1" {...props} />
+              ),
+              strong: ({ node, ...props }) => (
+                <strong className="font-extrabold text-slate-900" {...props} />
+              ),
+              blockquote: ({ node, ...props }) => (
+                <blockquote className="border-l-4 border-emerald-500 bg-emerald-50/50 p-4 rounded-r-xl italic text-slate-700 my-4" {...props} />
+              ),
+            }}
+          >
+            {settings.terms_content}
+          </ReactMarkdown>
+        </div>
+
+        {/* Footer Nudge inside card */}
+        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-semibold text-slate-400">
+          <p>Terakhir diperbarui: Real-time via Admin CMS</p>
+          <p className="flex items-center text-emerald-600">
+            <ShieldCheck className="w-4 h-4 mr-1 text-[#10B981]" />
+            Sharify Sharia Compliance Verified
+          </p>
+        </div>
       </div>
-    </>
+    </div>
   );
 
   // If logged in, wrap in authenticated dashboard layout container
   if (session) {
     return (
       <DashboardContainer>
-        {pricingContent}
+        <div className="py-6">
+          {termsContent}
+        </div>
       </DashboardContainer>
     );
   }
 
   // If anonymous public guest, wrap in landing page navbar and footer layouts
   return (
-    <div className="min-h-screen bg-gray-50 font-sans selection:bg-accent selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-accent selection:text-white relative overflow-x-hidden">
       {/* Landing Navbar */}
       <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -271,12 +172,12 @@ export const Pricing: React.FC = () => {
             )}
           </Link>
           
-          {/* Navigation Links for Public Pricing page */}
+          {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <a href="/#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
             <a href="/#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
             <a href="/#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
-            <Link to="/upgrade" className="text-sm font-semibold text-[#10B981] transition-colors">Harga</Link>
+            <Link to="/upgrade" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</Link>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -327,7 +228,7 @@ export const Pricing: React.FC = () => {
               <Link 
                 to="/upgrade" 
                 onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-[#10B981] py-3 transition-colors border-b border-slate-50"
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
               >
                 Harga
               </Link>
@@ -353,9 +254,19 @@ export const Pricing: React.FC = () => {
         )}
       </nav>
 
-      {/* Main Pricing Content Area */}
+      {/* Main Content Area */}
       <main className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {pricingContent}
+        {/* Back Button */}
+        <div className="max-w-4xl mx-auto mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-[#10B981] transition-all hover:translate-x-[-4px]"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Kembali ke Home
+          </Link>
+        </div>
+        {termsContent}
       </main>
 
       {/* Footer */}

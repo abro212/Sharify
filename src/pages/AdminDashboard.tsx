@@ -141,6 +141,9 @@ export const AdminDashboard: React.FC = () => {
     harga_subtitle: settings.harga_subtitle,
     footer_desc: settings.footer_desc,
     footer_copyright: settings.footer_copyright,
+    terms_content: settings.terms_content,
+    privacy_policy_content: settings.privacy_policy_content,
+    disclaimer_content: settings.disclaimer_content,
   });
   const [isSavingCMS, setIsSavingCMS] = useState(false);
 
@@ -158,6 +161,9 @@ export const AdminDashboard: React.FC = () => {
       harga_subtitle: settings.harga_subtitle,
       footer_desc: settings.footer_desc,
       footer_copyright: settings.footer_copyright,
+      terms_content: settings.terms_content,
+      privacy_policy_content: settings.privacy_policy_content,
+      disclaimer_content: settings.disclaimer_content,
     });
   }, [settings]);
 
@@ -905,6 +911,46 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* LEGAL TERMS SECTION */}
+              <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-3">
+                <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">5. Legal Configurations</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Syarat & Ketentuan Content (Markdown Support)</label>
+                    <textarea 
+                      rows={8}
+                      value={cmsForm.terms_content}
+                      onChange={e => setCmsForm(prev => ({ ...prev, terms_content: e.target.value }))}
+                      placeholder="Tulis Syarat & Ketentuan menggunakan format Markdown..."
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Kamu literally bisa pakai format Markdown seperti heading (#), list (-), tebal (**), dll. untuk mempercantik tampilan regulasi syariah kita, bestie! ✨</p>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Kebijakan Privasi Content (Markdown Support)</label>
+                    <textarea 
+                      rows={8}
+                      value={cmsForm.privacy_policy_content}
+                      onChange={e => setCmsForm(prev => ({ ...prev, privacy_policy_content: e.target.value }))}
+                      placeholder="Tulis Kebijakan Privasi menggunakan format Markdown..."
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Sama seperti S&K, pastikan format Markdown-nya slay dan rapi ya! 🛡️</p>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Sanggahan Hukum Content (Markdown Support)</label>
+                    <textarea 
+                      rows={8}
+                      value={cmsForm.disclaimer_content}
+                      onChange={e => setCmsForm(prev => ({ ...prev, disclaimer_content: e.target.value }))}
+                      placeholder="Tulis Sanggahan Hukum menggunakan format Markdown..."
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Wajib diisi biar pengguna paham batasan rekomendasi AI kita, bestie! ⚖️</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Publish CTA */}
               <div className="pt-4 border-t border-gray-100 flex justify-end">
                 <button
@@ -963,8 +1009,13 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Footer Preview */}
-                <div className="text-center py-2 text-gray-400 text-[6px] space-y-1">
+                <div className="text-center py-2 text-gray-400 text-[6px] space-y-1 border-t border-gray-200/50 pt-2">
                   <p className="font-bold text-gray-700">{cmsForm.footer_desc}</p>
+                  <div className="flex justify-center space-x-2 text-[5px] text-[#0F4C3A] font-bold my-1">
+                    <span>Syarat & Ketentuan</span>
+                    <span>•</span>
+                    <span>Kebijakan Privasi</span>
+                  </div>
                   <p>{cmsForm.footer_copyright}</p>
                 </div>
 

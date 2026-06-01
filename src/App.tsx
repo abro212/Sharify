@@ -19,6 +19,9 @@ import { QurbanSaver } from './pages/QurbanSaver';
 import { Cashflow } from './pages/Cashflow';
 import { ZakatTaxReport } from './pages/ZakatTaxReport';
 import { WasiatGenerator } from './pages/WasiatGenerator';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { DisclaimerPage } from './pages/DisclaimerPage';
 import { AuthCallback } from './pages/AuthCallback';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { RequireRole } from './components/auth/RequireRole';
@@ -86,6 +89,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/upgrade" element={<Pricing />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
 
 
