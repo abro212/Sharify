@@ -65,7 +65,7 @@ export const FloatingAIChat: React.FC = () => {
       localStorage.setItem('sharify_free_chat_count', '0');
       setMessageCount(0);
     }
-  }, []);
+  }, [settings.gemini_api_key]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
