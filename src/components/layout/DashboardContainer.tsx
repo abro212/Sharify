@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Menu, ShieldCheck } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { FloatingAIChat } from './FloatingAIChat';
-import { FloatingWhatsApp } from './FloatingWhatsApp';
 import { useSettingsStore, bustCache } from '../../store/settingsStore';
 
 interface DashboardContainerProps {
@@ -71,9 +70,6 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
 
       {/* Touch-Draggable Floating AI Co-Pilot */}
       <FloatingAIChat />
-
-      {/* Floating WhatsApp Support Button */}
-      <FloatingWhatsApp isDashboard={true} />
     </div>
   );
 };

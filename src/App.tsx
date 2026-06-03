@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
+import { AboutUsPage } from './pages/AboutUsPage';
 import { Dashboard } from './pages/Dashboard';
 import { Chat } from './pages/Chat';
 import { ZakatCalculator } from './pages/ZakatCalculator';
@@ -86,6 +87,7 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/tentang-kami" element={<AboutUsPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/upgrade" element={<Pricing />} />

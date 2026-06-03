@@ -18,14 +18,11 @@ export const LandingPage: React.FC = () => {
   const currentRole = profile?.role || 'free';
   const navigate = useNavigate();
 
-  const orgMembers = useMemo(() => {
-    try {
-      return settings.organization_structure ? JSON.parse(settings.organization_structure) : [];
-    } catch {
-      return [];
+  useEffect(() => {
+    if (session) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [settings.organization_structure]);
-
+  }, [session, navigate]);
   const handlePlanClick = () => {
     if (!session) {
       navigate('/signup');
@@ -182,6 +179,7 @@ export const LandingPage: React.FC = () => {
           
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
+            <Link to="/tentang-kami" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Tentang Kami</Link>
             <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
             <a href="#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
             <a href="#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
@@ -213,6 +211,13 @@ export const LandingPage: React.FC = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-4 shadow-lg animate-fade-in z-50">
             <div className="flex flex-col space-y-1">
+              <Link 
+                to="/tentang-kami" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Tentang Kami
+              </Link>
               <a 
                 href="#features" 
                 onClick={() => setIsMenuOpen(false)}
@@ -590,57 +595,6 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6.5 Organization Structure */}
-      <section id="organisasi" className="py-24 bg-slate-50/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              Struktur Inti (C-Level & Advisory)
-            </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
-              Pakar syariah dan teknologi di balik keamanan dan kecerdasan Sharify.
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px] bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100/50">
-              <div className="grid grid-cols-12 gap-6 pb-6 border-b border-slate-100 mb-6">
-                <div className="col-span-3">
-                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Nama</span>
-                </div>
-                <div className="col-span-4">
-                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Jabatan yang Disarankan</span>
-                </div>
-                <div className="col-span-5">
-                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Fokus Utama</span>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                {orgMembers.map((member: any, idx: number) => (
-                  <div key={member.id || idx} className="grid grid-cols-12 gap-6 items-center py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors duration-300 rounded-xl px-2 -mx-2">
-                    <div className="col-span-3">
-                      <span className="text-sm font-bold text-slate-900">{member.name}</span>
-                    </div>
-                    <div className="col-span-4">
-                      <span className="text-sm font-medium text-slate-600 leading-snug">{member.role}</span>
-                    </div>
-                    <div className="col-span-5">
-                      <span className="text-sm font-medium text-slate-500 leading-relaxed">{member.focus}</span>
-                    </div>
-                  </div>
-                ))}
-                {orgMembers.length === 0 && (
-                  <div className="text-center py-12 text-sm text-slate-400 font-medium">
-                    Struktur organisasi belum tersedia.
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* 7. Clean Comparison Table */}
       <section id="harga" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -854,6 +808,13 @@ export const LandingPage: React.FC = () => {
                 <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
                 <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
                 <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Perusahaan</h4>
+              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+                <li><Link to="/tentang-kami" className="hover:text-[#10B981] transition-colors">Tentang Kami</Link></li>
               </ul>
             </div>
           </div>
