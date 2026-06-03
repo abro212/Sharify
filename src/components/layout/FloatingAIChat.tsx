@@ -25,7 +25,7 @@ export const FloatingAIChat: React.FC = () => {
     {
       id: '1',
       role: 'model',
-      content: 'Assalamu alaikum, Bestie! ✨ Saya Sharify, AI Co-Pilot Finansial Syariah kamu. Ada yang bisa aku bantu buat hitung zakat, rancang financial goals, waris faraidh, atau detoks riba biar keuanganmu makin glow up berkah hari ini? 🍃',
+      content: 'Assalamu alaikum! ✨ Saya Sharify, AI Co-Pilot Finansial Syariah Anda. Ada yang bisa saya bantu untuk menghitung zakat, merancang tujuan finansial, waris faraidh, atau detoks riba agar keuangan Anda semakin berkah hari ini? 🍃',
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -422,7 +422,7 @@ export const FloatingAIChat: React.FC = () => {
                 <div className="bg-rose-50 border border-rose-100 p-3 rounded-2xl flex items-start space-x-2.5 text-rose-700">
                   <Lock className="w-4 h-4 text-rose-500 mt-0.5 shrink-0 animate-pulse" />
                   <div>
-                    <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-rose-950">Konsultasi AI Terkunci, Bestie 🥺</h4>
+                    <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-rose-950">Konsultasi AI Terkunci</h4>
                     <p className="text-[10px] mt-0.5 leading-relaxed text-rose-600 font-semibold">Yaaah, kuota chat gratis kamu udah abis nih... Kamu udah menghabiskan batas **5 pesan gratis**. Yuk, upgrade plan kamu biar bisa konsultasi sat-set tanpa batas!</p>
                   </div>
                 </div>

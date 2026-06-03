@@ -144,8 +144,12 @@ export const AdminDashboard: React.FC = () => {
     terms_content: settings.terms_content,
     privacy_policy_content: settings.privacy_policy_content,
     disclaimer_content: settings.disclaimer_content,
+    organization_structure: settings.organization_structure,
   });
   const [isSavingCMS, setIsSavingCMS] = useState(false);
+
+  // Local state for organization structure to allow easy array editing
+  const [orgMembers, setOrgMembers] = useState<any[]>([]);
 
   useEffect(() => {
     setCmsForm({
@@ -164,8 +168,22 @@ export const AdminDashboard: React.FC = () => {
       terms_content: settings.terms_content,
       privacy_policy_content: settings.privacy_policy_content,
       disclaimer_content: settings.disclaimer_content,
+      organization_structure: settings.organization_structure,
     });
+
+    try {
+      if (settings.organization_structure) {
+        setOrgMembers(JSON.parse(settings.organization_structure));
+      }
+    } catch (e) {
+      console.error('Failed to parse organization structure', e);
+    }
   }, [settings]);
+
+  // Sync orgMembers back to cmsForm whenever it changes
+  useEffect(() => {
+    setCmsForm(prev => ({ ...prev, organization_structure: JSON.stringify(orgMembers) }));
+  }, [orgMembers]);
 
   const handleSaveCMS = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -911,9 +929,84 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* ORGANIZATION STRUCTURE SECTION */}
+              <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">5. Struktur Organisasi Inti</h4>
+                  <button
+                    type="button"
+                    onClick={() => setOrgMembers([...orgMembers, { id: Date.now().toString(), name: '', role: '', focus: '' }])}
+                    className="text-[10px] font-bold bg-[#0F4C3A] text-white px-3 py-1.5 rounded-full hover:bg-emerald-700 transition-colors shadow-sm"
+                  >
+                    + Tambah Anggota
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {orgMembers.map((member, idx) => (
+                    <div key={member.id || idx} className="bg-white border border-gray-200 p-3 rounded-xl flex flex-col md:flex-row gap-3 relative group shadow-sm hover:border-[#10B981]/40 transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => setOrgMembers(orgMembers.filter((_, i) => i !== idx))}
+                        className="absolute -top-2 -right-2 bg-red-100 text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-200"
+                        title="Hapus"
+                      >
+                        ×
+                      </button>
+                      <div className="flex-1">
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Nama</label>
+                        <input
+                          type="text"
+                          value={member.name}
+                          onChange={(e) => {
+                            const newMembers = [...orgMembers];
+                            newMembers[idx].name = e.target.value;
+                            setOrgMembers(newMembers);
+                          }}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                          placeholder="Dr. Hardiansyah, S.E., M.M"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Jabatan</label>
+                        <input
+                          type="text"
+                          value={member.role}
+                          onChange={(e) => {
+                            const newMembers = [...orgMembers];
+                            newMembers[idx].role = e.target.value;
+                            setOrgMembers(newMembers);
+                          }}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                          placeholder="Dewan Pengawas Syariah"
+                        />
+                      </div>
+                      <div className="flex-[1.5]">
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Fokus Utama</label>
+                        <input
+                          type="text"
+                          value={member.focus}
+                          onChange={(e) => {
+                            const newMembers = [...orgMembers];
+                            newMembers[idx].focus = e.target.value;
+                            setOrgMembers(newMembers);
+                          }}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                          placeholder="Kepatuhan prinsip syariah, validasi output AI."
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  {orgMembers.length === 0 && (
+                    <div className="text-center py-6 text-xs text-gray-400 font-medium bg-white rounded-xl border border-dashed border-gray-200">
+                      Belum ada struktur organisasi. Klik "+ Tambah Anggota" untuk menambahkan.
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* LEGAL TERMS SECTION */}
               <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-3">
-                <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">5. Legal Configurations</h4>
+                <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">6. Legal Configurations</h4>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Syarat & Ketentuan Content (Markdown Support)</label>
@@ -924,7 +1017,7 @@ export const AdminDashboard: React.FC = () => {
                       placeholder="Tulis Syarat & Ketentuan menggunakan format Markdown..."
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
                     />
-                    <p className="text-[10px] text-gray-400 mt-1">Kamu literally bisa pakai format Markdown seperti heading (#), list (-), tebal (**), dll. untuk mempercantik tampilan regulasi syariah kita, bestie! ✨</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Anda dapat menggunakan format Markdown seperti heading (#), list (-), tebal (**), dll. untuk menyusun tampilan dokumen legal. ✨</p>
                   </div>
                   <div>
                     <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Kebijakan Privasi Content (Markdown Support)</label>
@@ -935,7 +1028,7 @@ export const AdminDashboard: React.FC = () => {
                       placeholder="Tulis Kebijakan Privasi menggunakan format Markdown..."
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
                     />
-                    <p className="text-[10px] text-gray-400 mt-1">Sama seperti S&K, pastikan format Markdown-nya slay dan rapi ya! 🛡️</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Sama seperti S&K, pastikan format Markdown-nya tersusun dengan rapi. 🛡️</p>
                   </div>
                   <div>
                     <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Sanggahan Hukum Content (Markdown Support)</label>
@@ -946,7 +1039,7 @@ export const AdminDashboard: React.FC = () => {
                       placeholder="Tulis Sanggahan Hukum menggunakan format Markdown..."
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
                     />
-                    <p className="text-[10px] text-gray-400 mt-1">Wajib diisi biar pengguna paham batasan rekomendasi AI kita, bestie! ⚖️</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Wajib diisi agar pengguna memahami batasan rekomendasi AI kita. ⚖️</p>
                   </div>
                 </div>
               </div>

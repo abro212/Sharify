@@ -18,6 +18,14 @@ export const LandingPage: React.FC = () => {
   const currentRole = profile?.role || 'free';
   const navigate = useNavigate();
 
+  const orgMembers = useMemo(() => {
+    try {
+      return settings.organization_structure ? JSON.parse(settings.organization_structure) : [];
+    } catch {
+      return [];
+    }
+  }, [settings.organization_structure]);
+
   const handlePlanClick = () => {
     if (!session) {
       navigate('/signup');
@@ -314,9 +322,9 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-black text-slate-900 text-center tracking-tight leading-none">Mulai Era Baru, Bestie! ✨</h3>
+                  <h3 className="text-lg font-black text-slate-900 text-center tracking-tight leading-none">Mulai Perjalanan Anda ✨</h3>
                   <p className="text-[10px] text-slate-400 text-center mt-2 leading-relaxed px-2 font-medium">
-                    Honestly, daftar sekarang biar financial goals kamu makin glow up & berkah, no cap!
+                    Daftar sekarang agar perencanaan finansial Anda semakin terarah dan berkah.
                   </p>
                   
                   {/* Small Pagination Dots */}
@@ -330,7 +338,7 @@ export const LandingPage: React.FC = () => {
                 {/* Splash CTAs */}
                 <div className="space-y-2 mt-auto">
                   <Link to="/signup" className="block w-full bg-[#10B981] text-white text-[11px] font-extrabold py-3.5 rounded-full text-center shadow-sm shadow-emerald-500/5 hover:bg-emerald-600 transition-colors">
-                    Daftar Sat-Set
+                    Daftar Sekarang
                   </Link>
                   <Link to="/login" className="block w-full border border-[#10B981] text-[#10B981] text-[11px] font-extrabold py-3.5 rounded-full text-center hover:bg-emerald-50/50 transition-colors bg-white">
                     Masuk
@@ -368,7 +376,7 @@ export const LandingPage: React.FC = () => {
                       <h4 className="text-[11px] font-bold leading-tight mt-0.5">Aura Berkah: Cashback Sedekah 10% ✨</h4>
                     </div>
                     <button className="bg-white text-[#10B981] text-[8px] font-extrabold px-3 py-1 rounded-full w-max shadow-sm">
-                      Klaim, Bestie
+                      Klaim Sekarang
                     </button>
                   </div>
 
@@ -394,7 +402,7 @@ export const LandingPage: React.FC = () => {
                     <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Transaksi Terkini</h5>
                     <div className="space-y-2">
                       {[
-                        { name: 'Abi Dan Ummi', desc: 'Sedekah Sat-Set', val: 'Rp 100k', time: 'Baru Aja' },
+                        { name: 'Abi Dan Ummi', desc: 'Sedekah Harian', val: 'Rp 100k', time: 'Baru Saja' },
                         { name: 'Zulkifli Sharia', desc: 'Zakat Maal', val: 'Rp 2.5jt', time: '1 Jam Lalu' }
                       ].map((item, idx) => (
                         <div key={idx} className="bg-slate-50/60 p-2.5 rounded-xl flex items-center justify-between border border-slate-100/50">
@@ -455,10 +463,10 @@ export const LandingPage: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: AlertTriangle, title: 'Jebakan Riba Era Lama 🚨', desc: 'Honestly, paparan paylater konvensional dan KTA tanpa pelunasan yang jelas itu bikin pusing, no cap!', color: 'red' },
-              { icon: BrainCircuit, title: 'Literasi Syariah Kurang Glow Up', desc: 'Literally bingung dan abu-abu membedakan mana produk keuangan halal dan haram di era modern.', color: 'amber' },
-              { icon: Briefcase, title: 'Penasihat Finansial Kurang Chill', desc: 'Mau konsultasi rencana keuangan syariah tapi harganya kurang bersahabat di kantong.', color: 'emerald' },
-              { icon: RefreshCcw, title: 'Platform Terlalu Terpecah', desc: 'Pusing banget karena hitung zakat, investasi, dan waris terpisah-pisah, bikin tidak sat-set.', color: 'blue' }
+              { icon: AlertTriangle, title: 'Jebakan Riba Konvensional 🚨', desc: 'Penggunaan pinjaman konvensional tanpa skema pelunasan yang jelas dapat mengganggu stabilitas keuangan Anda.', color: 'red' },
+              { icon: BrainCircuit, title: 'Keterbatasan Literasi Syariah', desc: 'Seringkali kesulitan dalam membedakan produk keuangan yang halal dan haram di era modern.', color: 'amber' },
+              { icon: Briefcase, title: 'Biaya Konsultasi Tinggi', desc: 'Biaya jasa konsultasi perencana keuangan profesional seringkali tidak terjangkau bagi sebagian besar kalangan.', color: 'emerald' },
+              { icon: RefreshCcw, title: 'Sistem Tidak Terintegrasi', desc: 'Aplikasi yang terpisah menyulitkan pengelolaan zakat, investasi, dan warisan secara efisien.', color: 'blue' }
             ].map((problem, idx) => (
               <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center relative overflow-hidden group hover:shadow-md hover:border-emerald-500/10 transition-all duration-300">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 ${
@@ -491,12 +499,12 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: HeartPulse, title: 'Health Check Syariah 🩺', desc: 'Cek skor kepatuhan syariah biar tabungan kamu aman, clean, dan berkah, bestie!' },
-              { icon: MessageSquare, title: 'AI Co-Pilot (Gemini) 🤖', desc: 'Tanya-tanya Fiqh Muamalah instan 24/7 secara sat-set biar transaksi makin mantap.' },
+              { icon: HeartPulse, title: 'Health Check Syariah 🩺', desc: 'Periksa skor kepatuhan syariah agar tabungan Anda aman, bersih, dan senantiasa berkah!' },
+              { icon: MessageSquare, title: 'AI Co-Pilot (Gemini) 🤖', desc: 'Tanya jawab seputar Fiqh Muamalah secara instan 24/7 agar keputusan transaksi Anda semakin mantap.' },
               { icon: ShieldCheck, title: 'Rencana Riba Detox 🍃', desc: 'Roadmap pelunasan cicilan konvensional berbantuan AI agar bebas riba seutuhnya.' },
-              { icon: TrendingUp, title: 'Investasi Halal Era Baru 📈', desc: 'Rekomendasi Sukuk dan Reksa Dana Syariah yang pas buat profil risiko kamu.' },
-              { icon: Calculator, title: 'Zakat & Wakaf Hub 💰', desc: 'Kalkulasi Nisab otomatis terhubung harga emas real-time biar hitungan kamu akurat, no cap!' },
-              { icon: Users, title: 'Faraidh Simulator 👨‍👩‍👧‍👦', desc: 'Simulasi pembagian waris syariah biar masa depan keluarga makin tenteram.' }
+              { icon: TrendingUp, title: 'Investasi Halal Era Baru 📈', desc: 'Rekomendasi Sukuk dan Reksa Dana Syariah yang sesuai dengan profil risiko Anda.' },
+              { icon: Calculator, title: 'Zakat & Wakaf Hub 💰', desc: 'Kalkulasi Nisab otomatis terhubung dengan harga emas real-time agar perhitungan Anda lebih akurat.' },
+              { icon: Users, title: 'Faraidh Simulator 👨‍👩‍👧‍👦', desc: 'Simulasi pembagian warisan syariah agar perencanaan masa depan keluarga lebih terjamin.' }
             ].map((feature, idx) => (
               <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#10B981]/30 transition-all duration-300 group">
                 <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-6 border border-emerald-100 group-hover:scale-105 transition-transform duration-300">
@@ -576,6 +584,57 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6.5 Organization Structure */}
+      <section id="organisasi" className="py-24 bg-slate-50/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+              Struktur Inti (C-Level & Advisory)
+            </h2>
+            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
+              Pakar syariah dan teknologi di balik keamanan dan kecerdasan Sharify.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <div className="min-w-[800px] bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100/50">
+              <div className="grid grid-cols-12 gap-6 pb-6 border-b border-slate-100 mb-6">
+                <div className="col-span-3">
+                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Nama</span>
+                </div>
+                <div className="col-span-4">
+                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Jabatan yang Disarankan</span>
+                </div>
+                <div className="col-span-5">
+                  <span className="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Fokus Utama</span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {orgMembers.map((member: any, idx: number) => (
+                  <div key={member.id || idx} className="grid grid-cols-12 gap-6 items-center py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors duration-300 rounded-xl px-2 -mx-2">
+                    <div className="col-span-3">
+                      <span className="text-sm font-bold text-slate-900">{member.name}</span>
+                    </div>
+                    <div className="col-span-4">
+                      <span className="text-sm font-medium text-slate-600 leading-snug">{member.role}</span>
+                    </div>
+                    <div className="col-span-5">
+                      <span className="text-sm font-medium text-slate-500 leading-relaxed">{member.focus}</span>
+                    </div>
+                  </div>
+                ))}
+                {orgMembers.length === 0 && (
+                  <div className="text-center py-12 text-sm text-slate-400 font-medium">
+                    Struktur organisasi belum tersedia.
+                  </div>
+                )}
               </div>
             </div>
           </div>
