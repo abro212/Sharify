@@ -33,27 +33,36 @@ export const AboutUsPage: React.FC = () => {
       {/* Navbar */}
       <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center group">
+          <div className="flex items-center">
             {logoUrl ? (
-              <img src={logoUrl} alt="Sharify Logo" className="h-9 object-contain" onError={() => setLogoUrl(null)} />
+              <Link to="/">
+                <img
+                  src={logoUrl}
+                  alt="Sharify Logo"
+                  className="h-9 object-contain"
+                  onError={() => setLogoUrl(null)}
+                />
+              </Link>
             ) : (
-              <div className="flex items-center">
+              <Link to="/" className="flex items-center group">
                 <div className="h-10 w-10 rounded-2xl bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform duration-300">
                   <ShieldCheck className="h-6 w-6 text-white" />
                 </div>
                 <span className="ml-3 text-2xl font-black text-slate-900 tracking-tight">Sharify</span>
-              </div>
+              </Link>
             )}
-          </Link>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/tentang-kami" className="text-sm font-semibold text-[#10B981] transition-colors">Tentang Kami</Link>
-            <Link to="/#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</Link>
-            <Link to="/#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</Link>
-            <Link to="/#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</Link>
-            <Link to="/#harga" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</Link>
           </div>
           
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link to="/tentang-kami" className="text-sm font-semibold text-[#10B981] transition-colors">Tentang Kami</Link>
+            <a href="/#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
+            <a href="/#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
+            <a href="/#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
+            <a href="/#harga" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</a>
+          </div>
+          
+          {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/login" className="text-sm font-bold text-slate-600 hover:text-slate-900 px-4 py-2 transition-colors">Masuk</Link>
             <Link to="/signup" className="bg-[#10B981] hover:bg-[#0d9488] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] active:scale-[0.98]">
@@ -61,28 +70,67 @@ export const AboutUsPage: React.FC = () => {
             </Link>
           </div>
 
+          {/* Mobile Hamburger Button */}
           <div className="flex md:hidden items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               type="button"
               className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors border border-slate-100"
+              aria-label="Toggle Menu"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
+        {/* Mobile Dropdown Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-4 shadow-lg animate-fade-in z-50">
             <div className="flex flex-col space-y-1">
-              <Link to="/tentang-kami" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-[#10B981] py-3 transition-colors border-b border-slate-50">Tentang Kami</Link>
-              <Link to="/#features" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50">Fitur</Link>
-              <Link to="/#solusi" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50">Solusi</Link>
-              <Link to="/#harga" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50">Harga</Link>
+              <Link 
+                to="/tentang-kami" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Tentang Kami
+              </Link>
+              <a 
+                href="/#features" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Fitur
+              </a>
+              <a 
+                href="/#solusi" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Solusi
+              </a>
+              <a 
+                href="/#teknologi" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Teknologi
+              </a>
+              <a 
+                href="/#harga" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+              >
+                Harga
+              </a>
             </div>
+            
             <div className="pt-4 flex flex-col space-y-3">
-              <Link to="/login" className="text-center text-sm font-bold text-slate-600 bg-slate-50 py-3 rounded-xl hover:bg-slate-100 transition-colors">Masuk</Link>
-              <Link to="/signup" className="text-center text-sm font-bold text-white bg-[#10B981] py-3 rounded-xl hover:bg-emerald-600 transition-colors shadow-sm">Daftar Gratis</Link>
+              <Link to="/login" className="text-center text-sm font-bold text-slate-600 bg-slate-50 py-3 rounded-xl hover:bg-slate-100 transition-colors">
+                Masuk
+              </Link>
+              <Link to="/signup" className="text-center text-sm font-bold text-white bg-[#10B981] py-3 rounded-xl hover:bg-emerald-600 transition-colors shadow-sm">
+                Daftar Gratis
+              </Link>
             </div>
           </div>
         )}
@@ -104,36 +152,36 @@ export const AboutUsPage: React.FC = () => {
         </div>
 
         {/* Organization Chart */}
-        <div className="bg-white p-8 sm:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 overflow-x-auto">
-          <div className="min-w-[800px] flex flex-col items-center">
+        <div className="bg-white p-4 sm:p-8 lg:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+          <div className="flex flex-col items-center w-full">
             
             {/* Top Level: Advisory */}
             <div className="flex justify-center items-start gap-16 relative">
               {advisory.length > 0 && (
                 <div className="flex flex-col items-center relative z-10">
-                  <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl w-80 text-center shadow-sm ring-4 ring-white">
+                  <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl w-full max-w-[320px] text-center shadow-sm ring-4 ring-white">
                     <h3 className="text-xl font-black text-slate-900 mb-1">{advisory[0].name}</h3>
                     <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-3">{advisory[0].role}</p>
                     <p className="text-xs text-slate-500 leading-relaxed font-medium">{advisory[0].focus}</p>
                   </div>
-                  {/* Line down to Level 2 */}
-                  <div className="h-12 border-l-2 border-slate-200"></div>
+                  {/* Line down to Level 2 (Hidden on mobile/tablet) */}
+                  <div className="hidden lg:block h-12 border-l-2 border-slate-200"></div>
                 </div>
               )}
             </div>
 
             {/* Horizontal Line for Level 2 */}
             {level2.length > 0 && advisory.length > 0 && (
-              <div className="w-full max-w-5xl relative">
-                {/* The main horizontal backbone line */}
-                <div className="absolute top-0 left-[10%] right-[10%] border-t-2 border-slate-200"></div>
+              <div className="w-full relative mt-8 lg:mt-0">
+                {/* The main horizontal backbone line (Hidden on mobile/tablet) */}
+                <div className="hidden lg:block absolute top-0 left-[10%] right-[10%] border-t-2 border-slate-200"></div>
                 
                 {/* Level 2 Grid */}
-                <div className={`grid ${level2.length === 5 ? 'grid-cols-5' : 'grid-cols-4'} gap-6 relative pt-8`}>
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${level2.length === 5 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4 sm:gap-6 relative lg:pt-8`}>
                   {level2.map((member, idx) => (
-                    <div key={member.id || idx} className="flex flex-col items-center relative">
-                      {/* Vertical line up to the horizontal backbone */}
-                      <div className="absolute -top-8 left-1/2 h-8 border-l-2 border-slate-200"></div>
+                    <div key={member.id || idx} className="flex flex-col items-center relative w-full">
+                      {/* Vertical line up to the horizontal backbone (Hidden on mobile/tablet) */}
+                      <div className="hidden lg:block absolute -top-8 left-1/2 h-8 border-l-2 border-slate-200"></div>
                       
                       <div className={`bg-white border border-slate-100 p-5 rounded-2xl w-full text-center shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 ${member.role.toLowerCase().includes('ceo') ? 'ring-2 ring-emerald-100' : ''}`}>
                         <h3 className="text-sm font-black text-slate-900 mb-1">{member.name}</h3>
@@ -154,47 +202,65 @@ export const AboutUsPage: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-50 py-16 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-12">
-            <div className="lg:col-span-2">
-              <div className="flex items-center mb-6">
-                <div className="h-10 w-10 rounded-2xl bg-[#10B981] flex items-center justify-center shadow-md">
-                  <ShieldCheck className="h-6 w-6 text-white" />
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100 pb-12">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          <div className="col-span-2">
+            <div className="flex items-center mb-4">
+              {logoUrl ? (
+                <img src={logoUrl} alt="Logo" className="h-7 object-contain" onError={() => setLogoUrl(null)} />
+              ) : (
+                <div className="flex items-center">
+                  <div className="h-8 w-8 rounded-lg bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10">
+                    <ShieldCheck className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="ml-2.5 text-xl font-black text-slate-900 tracking-tight">Sharify</span>
                 </div>
-                <span className="ml-2.5 text-xl font-black text-slate-900 tracking-tight">Sharify</span>
-              </div>
-              <p className="text-xs text-slate-400 max-w-sm font-semibold leading-relaxed">{settings.footer_desc}</p>
+              )}
             </div>
-            
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs uppercase text-slate-400">Fitur Dasar</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check Syariah</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Cashflow & Sedekah</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs uppercase text-slate-400">Kebijakan</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
-                <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
-                <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs uppercase text-slate-400">Perusahaan</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/tentang-kami" className="hover:text-[#10B981] transition-colors">Tentang Kami</Link></li>
-              </ul>
-            </div>
+            <p className="text-xs text-slate-400 max-w-sm font-semibold leading-relaxed">{settings.footer_desc}</p>
           </div>
-          <div className="text-center text-xs font-semibold text-slate-400 pt-8 border-t border-slate-100">
-            {settings.footer_copyright}
+          
+          <div>
+            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Dasar (Free)</h4>
+            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check Syariah</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Cashflow & Sedekah</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">AI Co-Pilot Assistant</Link></li>
+            </ul>
           </div>
+
+          <div>
+            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Premium (Pro/Family)</h4>
+            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Rencana Riba Detox</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Halal Asset Screener</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Smart Akad Analyzer</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Qurban Auto-Saver</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Zakat-to-Tax Report</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Baitul Mal Keluarga</Link></li>
+              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Digital Wasiat Generator</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Kebijakan</h4>
+            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+              <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
+              <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
+              <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Perusahaan</h4>
+            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
+              <li><Link to="/tentang-kami" className="hover:text-[#10B981] transition-colors">Tentang Kami</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="text-center text-xs font-semibold text-slate-400 pt-8 border-t border-slate-100">
+          {settings.footer_copyright}
         </div>
       </footer>
 
