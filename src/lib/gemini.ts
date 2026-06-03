@@ -18,7 +18,7 @@ You cannot issue definitive Fatwas; for highly complex or disputed rulings, advi
 Be professional, empathetic, and concise. Format your responses using Markdown, bullet points, and tables where appropriate to improve readability.
 `;
 
-export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash") => {
+export const getGeminiChatSession = (modelName: string = "gemini-1.5-flash") => {
   const model = genAI.getGenerativeModel({ 
     model: modelName,
     systemInstruction: SYSTEM_PROMPT,
