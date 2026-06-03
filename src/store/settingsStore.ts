@@ -57,6 +57,9 @@ export interface SystemSettings {
 
   // Organization Structure
   organization_structure: string;
+
+  // Third-Party Configurations
+  gemini_api_key: string;
 }
 
 const DEFAULT_SETTINGS: SystemSettings = {
@@ -98,6 +101,7 @@ const DEFAULT_SETTINGS: SystemSettings = {
     { id: '5', name: 'Afif Assalafus Shalih', role: 'Chief Operating Officer (COO)', focus: 'Operasional harian, legalitas, dan kemitraan.' },
     { id: '6', name: 'Asep Ajaeni', role: 'Chief Technology Officer (CTO) / AI Lead', focus: 'Pengembangan model AI, integrasi API, dan basis data.' }
   ]),
+  gemini_api_key: '',
 };
 
 interface SettingsState {

@@ -1,12 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const fallbackApiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-if (!apiKey) {
+if (!fallbackApiKey) {
   console.warn("VITE_GEMINI_API_KEY is not defined in the environment variables.");
 }
 
-const genAI = new GoogleGenerativeAI(apiKey || 'placeholder-key');
+// Global instance using fallback key (used if no custom key is provided)
+const fallbackGenAI = new GoogleGenerativeAI(fallbackApiKey || 'placeholder-key');
 
 export const SYSTEM_PROMPT = `
 You are Sharify, an expert AI Sharia Financial Advisor. Your role is to provide personal finance, investment, Zakat, and debt management advice strictly based on Islamic principles (Fiqh Muamalah) and DSN-MUI fatwas. 
@@ -18,8 +19,10 @@ You cannot issue definitive Fatwas; for highly complex or disputed rulings, advi
 Be professional, empathetic, and concise. Format your responses using Markdown, bullet points, and tables where appropriate to improve readability.
 `;
 
-export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash") => {
-  const model = genAI.getGenerativeModel({ 
+export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash", customApiKey?: string) => {
+  const genAIClient = customApiKey ? new GoogleGenerativeAI(customApiKey) : fallbackGenAI;
+  
+  const model = genAIClient.getGenerativeModel({ 
     model: modelName,
     systemInstruction: SYSTEM_PROMPT,
   });
@@ -31,4 +34,17 @@ export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash") => 
       maxOutputTokens: 1024,
     },
   });
+};
+
+export const validateGeminiApiKey = async (apiKey: string): Promise<boolean> => {
+  try {
+    const testClient = new GoogleGenerativeAI(apiKey);
+    const model = testClient.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent("Test connection. Please reply with 'OK'.");
+    const text = result.response.text();
+    return text.length > 0;
+  } catch (error) {
+    console.error("Gemini API Validation Error:", error);
+    return false;
+  }
 };

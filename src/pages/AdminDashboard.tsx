@@ -145,8 +145,11 @@ export const AdminDashboard: React.FC = () => {
     privacy_policy_content: settings.privacy_policy_content,
     disclaimer_content: settings.disclaimer_content,
     organization_structure: settings.organization_structure,
+    gemini_api_key: settings.gemini_api_key,
   });
   const [isSavingCMS, setIsSavingCMS] = useState(false);
+  const [isTestingGemini, setIsTestingGemini] = useState(false);
+  const [geminiTestStatus, setGeminiTestStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Local state for organization structure to allow easy array editing
   const [orgMembers, setOrgMembers] = useState<any[]>([]);
@@ -169,6 +172,7 @@ export const AdminDashboard: React.FC = () => {
       privacy_policy_content: settings.privacy_policy_content,
       disclaimer_content: settings.disclaimer_content,
       organization_structure: settings.organization_structure,
+      gemini_api_key: settings.gemini_api_key,
     });
 
     try {
@@ -184,6 +188,34 @@ export const AdminDashboard: React.FC = () => {
   useEffect(() => {
     setCmsForm(prev => ({ ...prev, organization_structure: JSON.stringify(orgMembers) }));
   }, [orgMembers]);
+
+  const handleTestGemini = async () => {
+    if (!cmsForm.gemini_api_key) {
+      triggerToast("Silakan masukkan API Key Gemini terlebih dahulu.");
+      return;
+    }
+    
+    setIsTestingGemini(true);
+    setGeminiTestStatus('idle');
+    try {
+      // Import dynamically to avoid top-level dependency if not used
+      const { validateGeminiApiKey } = await import('../lib/gemini');
+      const isValid = await validateGeminiApiKey(cmsForm.gemini_api_key);
+      
+      if (isValid) {
+        setGeminiTestStatus('success');
+        triggerToast("Koneksi Gemini Berhasil! ✅");
+      } else {
+        setGeminiTestStatus('error');
+        triggerToast("Koneksi gagal. Periksa kembali API Key Anda. ❌");
+      }
+    } catch (err) {
+      setGeminiTestStatus('error');
+      triggerToast("Terjadi kesalahan saat memvalidasi API Key.");
+    } finally {
+      setIsTestingGemini(false);
+    }
+  };
 
   const handleSaveCMS = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1004,9 +1036,41 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* AI CONFIGURATION SECTION */}
+              <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">6. Konfigurasi AI (Gemini)</h4>
+                </div>
+                <div className="space-y-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-400 uppercase mb-2">API Key Gemini</label>
+                    <div className="flex gap-3">
+                      <input 
+                        type="password"
+                        value={cmsForm.gemini_api_key || ''}
+                        onChange={e => setCmsForm(prev => ({ ...prev, gemini_api_key: e.target.value }))}
+                        placeholder="AIzaSy............................."
+                        className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-gray-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleTestGemini}
+                        disabled={isTestingGemini}
+                        className="px-4 py-2 bg-emerald-100 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-200 transition-colors whitespace-nowrap flex items-center justify-center min-w-[120px]"
+                      >
+                        {isTestingGemini ? 'Menguji...' : 'Test Koneksi'}
+                      </button>
+                    </div>
+                    {geminiTestStatus === 'success' && <p className="text-xs text-emerald-600 mt-2 font-medium">✅ Koneksi berhasil! API Key valid.</p>}
+                    {geminiTestStatus === 'error' && <p className="text-xs text-red-600 mt-2 font-medium">❌ Koneksi gagal! Periksa kembali API Key Anda.</p>}
+                    <p className="text-[10px] text-gray-400 mt-2">API Key ini akan digunakan secara global oleh semua fitur AI di dalam aplikasi Sharify.</p>
+                  </div>
+                </div>
+              </div>
+
               {/* LEGAL TERMS SECTION */}
               <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-3">
-                <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">6. Legal Configurations</h4>
+                <h4 className="text-xs font-bold text-[#0F4C3A] uppercase tracking-wider">7. Legal Configurations</h4>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Syarat & Ketentuan Content (Markdown Support)</label>

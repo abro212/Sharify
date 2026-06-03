@@ -44,7 +44,7 @@ export const Chat: React.FC = () => {
 
   useEffect(() => {
     // Initialize the chat session
-    setChatSession(getGeminiChatSession());
+    setChatSession(getGeminiChatSession("gemini-2.5-flash", settings.gemini_api_key));
 
     // Load message count from localStorage to persist across refreshes
     const storedCount = localStorage.getItem('sharify_free_chat_count');
