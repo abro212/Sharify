@@ -26,10 +26,7 @@ export const AboutUsPage: React.FC = () => {
 
   // Hierarchy Logic
   const advisory = orgMembers.filter(m => m.role.toLowerCase().includes('dewan') || m.role.toLowerCase().includes('advisory'));
-  const ceo = orgMembers.find(m => m.role.toLowerCase().includes('ceo') || m.role.toLowerCase().includes('chief executive'));
-  const directReports = orgMembers.filter(m => 
-    m !== ceo && !advisory.includes(m)
-  );
+  const level2 = orgMembers.filter(m => !advisory.includes(m));
 
   return (
     <div className="min-h-screen font-sans bg-slate-50 selection:bg-emerald-200 selection:text-emerald-900 overflow-x-hidden">
@@ -110,49 +107,35 @@ export const AboutUsPage: React.FC = () => {
         <div className="bg-white p-8 sm:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 overflow-x-auto">
           <div className="min-w-[800px] flex flex-col items-center">
             
-            {/* Top Level: Advisory & CEO */}
+            {/* Top Level: Advisory */}
             <div className="flex justify-center items-start gap-16 relative">
-              {/* Advisory Board */}
               {advisory.length > 0 && (
                 <div className="flex flex-col items-center relative z-10">
-                  <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl w-72 text-center shadow-sm">
-                    <h3 className="text-lg font-black text-slate-900 mb-1">{advisory[0].name}</h3>
-                    <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">{advisory[0].role}</p>
+                  <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl w-80 text-center shadow-sm ring-4 ring-white">
+                    <h3 className="text-xl font-black text-slate-900 mb-1">{advisory[0].name}</h3>
+                    <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-3">{advisory[0].role}</p>
                     <p className="text-xs text-slate-500 leading-relaxed font-medium">{advisory[0].focus}</p>
                   </div>
-                  {/* Advisory connector line (dashed) */}
-                  <div className="absolute top-1/2 -right-16 w-16 border-t-2 border-dashed border-amber-300"></div>
-                </div>
-              )}
-
-              {/* CEO */}
-              {ceo && (
-                <div className="flex flex-col items-center relative z-10">
-                  <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl w-72 text-center shadow-sm ring-4 ring-white">
-                    <h3 className="text-lg font-black text-slate-900 mb-1">{ceo.name}</h3>
-                    <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-3">{ceo.role}</p>
-                    <p className="text-xs text-slate-500 leading-relaxed font-medium">{ceo.focus}</p>
-                  </div>
-                  {/* Line down to C-Levels */}
+                  {/* Line down to Level 2 */}
                   <div className="h-12 border-l-2 border-slate-200"></div>
                 </div>
               )}
             </div>
 
-            {/* Horizontal Line for Direct Reports */}
-            {directReports.length > 0 && ceo && (
-              <div className="w-full max-w-4xl relative">
+            {/* Horizontal Line for Level 2 */}
+            {level2.length > 0 && advisory.length > 0 && (
+              <div className="w-full max-w-5xl relative">
                 {/* The main horizontal backbone line */}
-                <div className="absolute top-0 left-[12.5%] right-[12.5%] border-t-2 border-slate-200"></div>
+                <div className="absolute top-0 left-[10%] right-[10%] border-t-2 border-slate-200"></div>
                 
-                {/* Direct Reports Grid */}
-                <div className="grid grid-cols-4 gap-6 relative pt-8">
-                  {directReports.map((member, idx) => (
+                {/* Level 2 Grid */}
+                <div className={`grid ${level2.length === 5 ? 'grid-cols-5' : 'grid-cols-4'} gap-6 relative pt-8`}>
+                  {level2.map((member, idx) => (
                     <div key={member.id || idx} className="flex flex-col items-center relative">
                       {/* Vertical line up to the horizontal backbone */}
                       <div className="absolute -top-8 left-1/2 h-8 border-l-2 border-slate-200"></div>
                       
-                      <div className="bg-white border border-slate-100 p-5 rounded-2xl w-full text-center shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300">
+                      <div className={`bg-white border border-slate-100 p-5 rounded-2xl w-full text-center shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 ${member.role.toLowerCase().includes('ceo') ? 'ring-2 ring-emerald-100' : ''}`}>
                         <h3 className="text-sm font-black text-slate-900 mb-1">{member.name}</h3>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">{member.role}</p>
                         <p className="text-[10px] text-slate-500 leading-relaxed font-medium">{member.focus}</p>
