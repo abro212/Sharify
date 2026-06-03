@@ -108,10 +108,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   {item.tier && (
                     <span className={`ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-wider shadow-sm border ${
                       item.tier === 'plus' 
-                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' 
+                        ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20' 
                         : item.tier === 'pro' 
-                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/20 animate-pulse' 
-                        : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20'
+                        ? 'bg-amber-500/10 text-amber-700 border-amber-500/20 animate-pulse' 
+                        : 'bg-indigo-500/10 text-indigo-700 border-indigo-500/20'
                     }`}>
                       {item.tier === 'plus' ? (
                         <Sparkles className="w-2 h-2 mr-0.5" />
