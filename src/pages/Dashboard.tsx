@@ -66,13 +66,13 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-[#064E3B] text-[10px] font-mono font-semibold border border-emerald-500/30 uppercase tracking-wider">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 mr-1.5 animate-ping"></span>
-                SYSTEM_STATUS: NOMINAL
+                SYSTEM STATUS: NOMINAL
               </span>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-amber-800 text-[10px] font-mono font-semibold border border-amber-500/20 uppercase tracking-wider">
-                SHARIA_BOARD: ONLINE
+                SHARIA BOARD: ONLINE
               </span>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E6F4ED] text-emerald-800 text-[10px] font-mono font-semibold border border-emerald-500/20 uppercase tracking-wider hidden sm:inline-flex">
-                NODE: JAKARTA_WEST
+                NODE: JAKARTA WEST
               </span>
             </div>
             
@@ -108,7 +108,7 @@ export const Dashboard: React.FC = () => {
             <Wallet className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1 relative z-10">
-            <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#047857] block mb-0.5">TOTAL_ACTIVE_ASSETS</span>
+            <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-[#047857] block mb-0.5">TOTAL ACTIVE ASSETS</span>
             <p className="text-xl sm:text-2xl font-black text-slate-950 truncate font-sans">
               Rp {financialProfile?.assets ? financialProfile.assets.toLocaleString('id-ID') : '0'}
             </p>
@@ -126,7 +126,7 @@ export const Dashboard: React.FC = () => {
             <TrendingUp className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1 relative z-10">
-            <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-amber-800 block mb-0.5">MONTHLY_INFLOW_RATE</span>
+            <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-amber-800 block mb-0.5">MONTHLY INFLOW RATE</span>
             <p className="text-xl sm:text-2xl font-black text-slate-950 truncate font-sans">
               Rp {financialProfile?.monthly_income ? financialProfile.monthly_income.toLocaleString('id-ID') : '0'}
             </p>
@@ -149,7 +149,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="min-w-0 flex-1 relative z-10">
             <div className="flex justify-between items-center mb-0.5">
-              <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-rose-800 block">RIBA_DEBT_EXPOSURE</span>
+              <span className="text-[9px] uppercase tracking-widest font-mono font-bold text-rose-800 block">RIBA DEBT EXPOSURE</span>
               {financialProfile?.conventional_debts > 0 && (
                 <span className="text-[7px] font-mono font-black uppercase bg-rose-100 text-rose-800 border border-rose-400/40 px-1.5 py-0.5 rounded leading-none animate-pulse">EXPOSED</span>
               )}
@@ -177,7 +177,7 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-center mb-5 border-b border-emerald-500/20 pb-3">
             <h2 className="text-xs font-mono font-black text-[#064E3B] uppercase tracking-widest flex items-center">
               <ShieldCheck className="h-4.5 w-4.5 mr-2 text-emerald-600" />
-              SHARIA_DIAGNOSTIC_COMPASS
+              SHARIA DIAGNOSTIC COMPASS
             </h2>
             <div className="h-2.5 w-2.5 rounded-full bg-emerald-600 animate-ping"></div>
           </div>
@@ -223,7 +223,7 @@ export const Dashboard: React.FC = () => {
           ) : (
             <div className="text-center py-8 flex-1 flex flex-col justify-center items-center">
               <ShieldCheck className="h-11 w-11 text-emerald-500/30 mb-3" />
-              <h3 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-wider mb-1">NO_DIAGNOSTIC_HISTORY_FOUND</h3>
+              <h3 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-wider mb-1">NO DIAGNOSTIC HISTORY FOUND</h3>
               <p className="text-xs text-emerald-700/60 mb-4 max-w-xs leading-normal">
                 Mari periksa portofolio aset Anda untuk memastikannya bebas dari unsur riba demi mencapai tujuan finansial yang berkah.
               </p>
@@ -243,7 +243,7 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-center mb-5 border-b border-emerald-500/20 pb-3">
             <h2 className="text-xs font-mono font-black text-[#064E3B] uppercase tracking-widest flex items-center">
               <Calculator className="h-4.5 w-4.5 mr-2 text-amber-600" />
-              ZAKAT_OBLIGATION_TELEMETRY
+              ZAKAT OBLIGATION TELEMETRY
             </h2>
             <div className="h-2.5 w-2.5 rounded-full bg-amber-500 animate-ping"></div>
           </div>
@@ -284,7 +284,7 @@ export const Dashboard: React.FC = () => {
                         </>
                       ) : (
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-[#E6F4ED] text-emerald-800 border border-emerald-500/20">
-                          BELOW_NISAB
+                          BELOW NISAB
                         </span>
                       )}
                     </div>
@@ -300,7 +300,7 @@ export const Dashboard: React.FC = () => {
           ) : (
             <div className="text-center py-8 flex-1 flex flex-col justify-center items-center">
               <Calculator className="h-11 w-11 text-emerald-500/30 mb-3" />
-              <h3 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-wider mb-1">NO_ZAKAT_RECORDS_SAVED</h3>
+              <h3 className="text-xs font-mono font-black text-emerald-800 uppercase tracking-wider mb-1">NO ZAKAT RECORDS SAVED</h3>
               <p className="text-xs text-emerald-700/60 mb-4 max-w-xs leading-normal">
                 Belum ada kalkulasi zakat yang disimpan. Mari hitung nisab dinamis Anda sekarang.
               </p>
@@ -320,7 +320,7 @@ export const Dashboard: React.FC = () => {
       <div className="mt-8">
         <h2 className="text-xs font-mono font-black text-[#064E3B] uppercase tracking-widest mb-4 flex items-center">
           <CircleDot className="h-3 w-3 text-amber-500 mr-2.5 animate-pulse" />
-          INTEGRATED_SHARIA_SERVICES_SUITE
+          INTEGRATED SHARIA SERVICES SUITE
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
