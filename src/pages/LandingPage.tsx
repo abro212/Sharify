@@ -505,7 +505,7 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { icon: HeartPulse, title: 'Health Check Syariah 🩺', desc: 'Periksa skor kepatuhan syariah agar tabungan Anda aman, bersih, dan senantiasa berkah!' },
-              { icon: MessageSquare, title: 'AI Co-Pilot (Gemini) 🤖', desc: 'Tanya jawab seputar Fiqh Muamalah secara instan 24/7 agar keputusan transaksi Anda semakin mantap.' },
+              { icon: MessageSquare, title: 'AI Syarify Assistant 🤖', desc: 'Tanya jawab seputar Fiqh Muamalah secara instan 24/7 agar keputusan transaksi Anda semakin mantap.' },
               { icon: ShieldCheck, title: 'Rencana Riba Detox 🍃', desc: 'Roadmap pelunasan cicilan konvensional berbantuan AI agar bebas riba seutuhnya.' },
               { icon: TrendingUp, title: 'Investasi Halal Era Baru 📈', desc: 'Rekomendasi Sukuk dan Reksa Dana Syariah yang sesuai dengan profil risiko Anda.' },
               { icon: Calculator, title: 'Zakat & Wakaf Hub 💰', desc: 'Kalkulasi Nisab otomatis terhubung dengan harga emas real-time agar perhitungan Anda lebih akurat.' },
