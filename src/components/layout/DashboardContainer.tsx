@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, ShieldCheck } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { FloatingAIChat } from './FloatingAIChat';
@@ -26,7 +27,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       
       {/* Mobile Top Header (Sticky, only visible on lg:hidden) */}
       <header className="lg:hidden bg-[#F4FAF7]/85 backdrop-blur-md border-b border-[#10B981]/20 sticky top-0 z-30 px-4 h-16 flex items-center justify-between shadow-xs relative z-30">
-        <div className="flex items-center">
+        <Link to="/dashboard" className="flex items-center">
           {resolvedLogoUrl && !logoError ? (
             <img
               src={resolvedLogoUrl}
@@ -40,7 +41,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
               <span className="text-base font-black tracking-widest bg-gradient-to-r from-emerald-400 to-amber-300 bg-clip-text text-transparent font-sans uppercase">Sharify</span>
             </>
           )}
-        </div>
+        </Link>
         <button
           onClick={() => setIsMobileMenuOpen(true)}
           title="Buka Menu"

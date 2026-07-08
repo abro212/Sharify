@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { 
   Home, MessageSquare, Calculator, User, ShieldCheck, HeartPulse, 
   Crown, Target, RefreshCcw, Search, FileText, Users, Sparkles, Star, Heart, Coins, X 
@@ -55,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       isOpen ? 'translate-x-0' : '-translate-x-full'
     }`}>
       <div className="flex items-center justify-between lg:justify-center h-16 border-b border-[#10B981]/20 px-4 bg-[#E6F4ED]/60">
-        <div className="flex items-center">
+        <Link to="/dashboard" onClick={onClose} className="flex items-center">
           {resolvedLogoUrl && !logoError ? (
             <img
               src={resolvedLogoUrl}
@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 ml-1.5 animate-pulse"></span>
             </>
           )}
-        </div>
+        </Link>
         {onClose && (
           <button 
             onClick={onClose}
