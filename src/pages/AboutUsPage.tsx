@@ -156,11 +156,11 @@ export const AboutUsPage: React.FC = () => {
           <div className="flex flex-col items-center w-full">
             
             {/* Top Level: Advisory */}
-            <div className="flex justify-center items-start gap-16 relative">
+            <div className="flex justify-center items-start gap-4 sm:gap-8 lg:gap-16 relative w-full">
               {advisory.length > 0 && (
-                <div className="flex flex-col items-center relative z-10">
-                  <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl w-full max-w-[320px] text-center shadow-sm ring-4 ring-white">
-                    <h3 className="text-xl font-black text-slate-900 mb-1">{advisory[0].name}</h3>
+                <div className="flex flex-col items-center relative z-10 w-full max-w-sm">
+                  <div className="bg-emerald-50 border border-emerald-200 p-5 sm:p-6 rounded-2xl w-full text-center shadow-sm ring-4 ring-white">
+                    <h3 className="text-base sm:text-xl font-black text-slate-900 mb-1">{advisory[0].name}</h3>
                     <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-3">{advisory[0].role}</p>
                     <p className="text-xs text-slate-500 leading-relaxed font-medium">{advisory[0].focus}</p>
                   </div>
@@ -203,7 +203,7 @@ export const AboutUsPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100 pb-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <div className="flex items-center mb-4">
               {logoUrl ? (

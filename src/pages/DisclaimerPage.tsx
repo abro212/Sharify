@@ -271,8 +271,8 @@ export const DisclaimerPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12 text-left">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12 text-left">
+          <div className="col-span-1 sm:col-span-2">
             <div className="flex items-center mb-4">
               {logoLoading ? (
                 <div className="h-7 w-24 bg-slate-100 rounded-full animate-pulse" />

@@ -173,9 +173,11 @@ export const Pricing: React.FC = () => {
         {tiers.map((tier) => (
           <div 
             key={tier.name} 
-            className={`relative bg-white rounded-2xl border ${
-              tier.popular ? 'border-accent shadow-xl scale-105 z-10' : 'border-gray-200 shadow-sm'
-            } p-6 flex flex-col transition-transform`}
+            className={`relative bg-white rounded-[2rem] border p-6 flex flex-col transition-all duration-500 group ${
+              tier.popular 
+                ? 'border-[#F59E0B] shadow-xl md:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-[#F59E0B]/25 hover:border-amber-400' 
+                : 'border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-[#10B981]/15 hover:border-[#10B981]/30'
+            }`}
           >
             {tier.popular && (
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
@@ -360,8 +362,8 @@ export const Pricing: React.FC = () => {
 
       {/* Footer */}
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12 text-left">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          <div className="col-span-1 sm:col-span-2">
             <div className="flex items-center mb-4">
               {logoLoading ? (
                 <div className="h-7 w-24 bg-slate-100 rounded-full animate-pulse" />
