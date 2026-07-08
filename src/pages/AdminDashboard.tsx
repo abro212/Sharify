@@ -146,6 +146,7 @@ export const AdminDashboard: React.FC = () => {
     disclaimer_content: settings.disclaimer_content,
     organization_structure: settings.organization_structure,
     gemini_api_key: settings.gemini_api_key,
+    gemini_model: settings.gemini_model,
   });
   const [isSavingCMS, setIsSavingCMS] = useState(false);
   const [isTestingGemini, setIsTestingGemini] = useState(false);
@@ -173,6 +174,7 @@ export const AdminDashboard: React.FC = () => {
       disclaimer_content: settings.disclaimer_content,
       organization_structure: settings.organization_structure,
       gemini_api_key: settings.gemini_api_key,
+      gemini_model: settings.gemini_model,
     });
 
     try {
@@ -200,7 +202,7 @@ export const AdminDashboard: React.FC = () => {
     try {
       // Import dynamically to avoid top-level dependency if not used
       const { validateGeminiApiKey } = await import('../lib/gemini');
-      const isValid = await validateGeminiApiKey(cmsForm.gemini_api_key);
+      const isValid = await validateGeminiApiKey(cmsForm.gemini_api_key, cmsForm.gemini_model || 'gemini-3.5-flash');
       
       if (isValid) {
         setGeminiTestStatus('success');
@@ -1062,8 +1064,21 @@ export const AdminDashboard: React.FC = () => {
                       </button>
                     </div>
                     {geminiTestStatus === 'success' && <p className="text-xs text-emerald-600 mt-2 font-medium">✅ Koneksi berhasil! API Key valid.</p>}
-                    {geminiTestStatus === 'error' && <p className="text-xs text-red-600 mt-2 font-medium">❌ Koneksi gagal! Periksa kembali API Key Anda.</p>}
+                    {geminiTestStatus === 'error' && <p className="text-xs text-red-600 mt-2 font-medium">❌ Koneksi gagal! Periksa kembali API Key Anda atau Model yang dipilih.</p>}
                     <p className="text-[10px] text-gray-400 mt-2">API Key ini akan digunakan secara global oleh semua fitur AI di dalam aplikasi Sharify.</p>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-400 uppercase mb-2">Versi Model Gemini</label>
+                    <select
+                      value={cmsForm.gemini_model || 'gemini-3.5-flash'}
+                      onChange={e => setCmsForm(prev => ({ ...prev, gemini_model: e.target.value }))}
+                      className="w-full px-4 py-2 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-gray-50"
+                    >
+                      <option value="gemini-3.5-flash">Gemini 3.5 Flash (Terbaru & Tercepat)</option>
+                      <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash Lite (Ringan & Hemat Kuota)</option>
+                      <option value="gemini-1.5-flash">Gemini 1.5 Flash (Versi Lama)</option>
+                    </select>
+                    <p className="text-[10px] text-gray-400 mt-2">Pilih model kecerdasan buatan (AI) yang akan digunakan untuk merespons Chat dan analisis pengguna.</p>
                   </div>
                 </div>
               </div>

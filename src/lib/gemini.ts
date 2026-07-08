@@ -19,7 +19,7 @@ You cannot issue definitive Fatwas; for highly complex or disputed rulings, advi
 Be professional, empathetic, and concise. Format your responses using Markdown, bullet points, and tables where appropriate to improve readability.
 `;
 
-export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash", customApiKey?: string) => {
+export const getGeminiChatSession = (modelName: string = "gemini-3.5-flash", customApiKey?: string) => {
   const genAIClient = customApiKey ? new GoogleGenerativeAI(customApiKey) : fallbackGenAI;
   
   const model = genAIClient.getGenerativeModel({ 
@@ -36,10 +36,10 @@ export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash", cus
   });
 };
 
-export const validateGeminiApiKey = async (apiKey: string): Promise<boolean> => {
+export const validateGeminiApiKey = async (apiKey: string, modelName: string = "gemini-3.5-flash"): Promise<boolean> => {
   try {
     const testClient = new GoogleGenerativeAI(apiKey);
-    const model = testClient.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = testClient.getGenerativeModel({ model: modelName });
     const result = await model.generateContent("Test connection. Please reply with 'OK'.");
     const text = result.response.text();
     return text.length > 0;

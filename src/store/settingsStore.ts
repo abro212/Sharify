@@ -60,6 +60,7 @@ export interface SystemSettings {
 
   // Third-Party Configurations
   gemini_api_key: string;
+  gemini_model: string;
 }
 
 const DEFAULT_SETTINGS: SystemSettings = {
@@ -102,6 +103,7 @@ const DEFAULT_SETTINGS: SystemSettings = {
     { id: '6', name: 'Asep Ajaeni', role: 'Chief Technology Officer (CTO) / AI Lead', focus: 'Pengembangan model AI, integrasi API, dan basis data.' }
   ]),
   gemini_api_key: '',
+  gemini_model: 'gemini-3.5-flash',
 };
 
 interface SettingsState {
