@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getGeminiChatSession } from '../../lib/gemini';
+import { getGeminiChatSession, PUBLIC_SYSTEM_PROMPT } from '../../lib/gemini';
 import { useAuthStore } from '../../store/authStore';
 import { useSettingsStore } from '../../store/settingsStore';
 
@@ -29,7 +29,9 @@ export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = fals
     {
       id: '1',
       role: 'model',
-      content: 'Assalamu alaikum! ✨ Saya Sharify, AI Co-Pilot Finansial Syariah Anda. Ada yang bisa saya bantu untuk menghitung zakat, merancang tujuan finansial, waris faraidh, atau detoks riba agar keuangan Anda semakin berkah hari ini? 🍃',
+      content: unlimited
+        ? 'Halo! 👋 Selamat datang di **Sharify**! Saya asisten virtual Sharify yang siap menjawab pertanyaan Anda seputar aplikasi ini. Mau tanya apa? 😊'
+        : 'Assalamu alaikum! ✨ Saya Sharify, AI Co-Pilot Finansial Syariah Anda. Ada yang bisa saya bantu untuk menghitung zakat, merancang tujuan finansial, waris faraidh, atau detoks riba agar keuangan Anda semakin berkah hari ini? 🍃',
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -60,7 +62,11 @@ export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = fals
 
   // Initialize Gemini Chat Session and load free message limit counter
   useEffect(() => {
-    setChatSession(getGeminiChatSession(settings.gemini_model || "gemini-3.5-flash", settings.gemini_api_key));
+    setChatSession(getGeminiChatSession(
+      settings.gemini_model || "gemini-3.5-flash",
+      settings.gemini_api_key,
+      unlimited ? PUBLIC_SYSTEM_PROMPT : undefined
+    ));
 
     // Load message count from localStorage to persist across refreshes
     const storedCount = localStorage.getItem('sharify_free_chat_count');
@@ -458,7 +464,7 @@ export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = fals
                   type="text" 
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Tanyakan akad, zakat, atau investasi halal..." 
+                  placeholder={unlimited ? "Tanya tentang fitur Sharify..." : "Tanyakan akad, zakat, atau investasi halal..."} 
                   className="flex-1 px-4 py-2.5 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-[#10B981] bg-slate-50 text-slate-800 focus:bg-white transition-all select-text font-sans font-semibold"
                   disabled={isLoading}
                 />
