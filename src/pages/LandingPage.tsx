@@ -9,7 +9,7 @@ import {
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { supabase } from '../lib/supabase';
-import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
+import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 
 export const LandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -825,8 +825,8 @@ export const LandingPage: React.FC = () => {
         </footer>
       </section>
 
-      {/* Floating WhatsApp Support Button */}
-      <FloatingWhatsApp />
+      {/* Floating AI Chat Button */}
+      <FloatingAIChat unlimited />
     </div>
   );
 };

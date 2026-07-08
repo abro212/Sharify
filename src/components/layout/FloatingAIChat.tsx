@@ -16,7 +16,11 @@ type Message = {
   content: string;
 };
 
-export const FloatingAIChat: React.FC = () => {
+interface FloatingAIChatProps {
+  unlimited?: boolean; // If true, bypasses all quota and login restrictions
+}
+
+export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = false }) => {
   const { profile } = useAuthStore();
   const { settings } = useSettingsStore();
   const navigate = useNavigate();
@@ -41,7 +45,8 @@ export const FloatingAIChat: React.FC = () => {
   const [messageCount, setMessageCount] = useState<number>(0);
   const maxFreeMessages = 5;
   const userRole = profile?.role?.toLowerCase() || 'free';
-  const isFreeUser = userRole === 'free';
+  // If unlimited=true (public pages), never gate the user
+  const isFreeUser = unlimited ? false : (userRole === 'free');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -243,7 +248,7 @@ export const FloatingAIChat: React.FC = () => {
 
           {renderWidgetIcon()}
           
-          {isFreeUser && messageCount < maxFreeMessages && (
+          {!unlimited && isFreeUser && messageCount < maxFreeMessages && (
             <span className="absolute -top-0.5 -right-0.5 h-4 w-4 bg-rose-500 rounded-full border-2 border-white flex items-center justify-center text-[7px] font-black text-white">
               !
             </span>
@@ -316,7 +321,12 @@ export const FloatingAIChat: React.FC = () => {
 
           {/* Clean Slate Quota Row */}
           <div className="px-4 py-2 border-b border-slate-100 bg-slate-50 flex items-center justify-between text-[9px] font-semibold text-slate-500">
-            {isFreeUser ? (
+            {unlimited ? (
+              <span className="text-emerald-600 font-extrabold flex items-center">
+                <Sparkles className="w-3.5 h-3.5 mr-1" />
+                AI SHARIAH ADVISOR — GRATIS TANPA BATAS
+              </span>
+            ) : isFreeUser ? (
               <span className={messageCount >= maxFreeMessages ? 'text-rose-500 font-extrabold' : 'text-slate-500'}>
                 {messageCount >= maxFreeMessages 
                   ? 'KONSULTASI GRATIS HABIS (5/5)' 

@@ -5,7 +5,7 @@ import { Check, Crown, Zap, Shield, Users, ShieldCheck, Menu, X } from 'lucide-r
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
-import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
+import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 
 export const Pricing: React.FC = () => {
   const { profile, session, fetchProfile } = useAuthStore();
@@ -417,8 +417,8 @@ export const Pricing: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating WhatsApp Support Button */}
-      <FloatingWhatsApp />
+      {/* Floating AI Chat Button */}
+      <FloatingAIChat unlimited />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { ShieldCheck, Menu, X, FileText, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
-import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
+import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -328,8 +328,7 @@ export const DisclaimerPage: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating WhatsApp Support Button */}
-      <FloatingWhatsApp />
+      <FloatingAIChat unlimited />
     </div>
   );
 };

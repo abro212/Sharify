@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Menu, X, Users } from 'lucide-react';
 import { useSettingsStore } from '../store/settingsStore';
-import { FloatingWhatsApp } from '../components/layout/FloatingWhatsApp';
+import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 
 interface OrgMember {
   id?: string;
@@ -264,7 +264,7 @@ export const AboutUsPage: React.FC = () => {
         </div>
       </footer>
 
-      <FloatingWhatsApp />
+      <FloatingAIChat unlimited />
     </div>
   );
 };
