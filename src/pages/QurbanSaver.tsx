@@ -312,12 +312,12 @@ export const QurbanSaver: React.FC = () => {
 
             {/* Visual Progress Bar */}
             <div className="space-y-2">
-              <div className="w-full bg-gray-100 h-5 rounded-full overflow-hidden p-1 shadow-inner border border-gray-200/50">
+              <div className="w-full bg-gray-100 h-5 rounded-full overflow-hidden p-1 shadow-inner border border-gray-200/50 flex">
                 <div 
-                  className="bg-gradient-to-r from-[#0F4C3A] via-[#10B981] to-[#D4AF37] h-full rounded-full transition-all duration-300 relative shadow-sm"
+                  className="bg-gradient-to-r from-[#0F4C3A] via-[#10B981] to-[#D4AF37] h-full rounded-full transition-all duration-300 shadow-sm flex items-center justify-center min-w-[2.5rem]"
                   style={{ width: `${progressPercentage}%` }}
                 >
-                  <span className="absolute right-2 top-0.5 text-[9px] font-black text-white">{progressPercentage.toFixed(0)}%</span>
+                  <span className="text-[9px] font-black text-white leading-none">{progressPercentage.toFixed(0)}%</span>
                 </div>
               </div>
               
