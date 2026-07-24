@@ -12,14 +12,14 @@ export const Dashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const services = [
-    { name: 'Cashflow', icon: Coins, path: '/cashflow', iconColor: 'text-blue-500', bgColor: 'bg-blue-50' },
-    { name: 'Goals', icon: Target, path: '/goals', iconColor: 'text-red-500', bgColor: 'bg-red-50' },
-    { name: 'Zakat', icon: Calculator, path: '/zakat', iconColor: 'text-emerald-500', bgColor: 'bg-emerald-50' },
-    { name: 'Screener', icon: SearchIcon, path: '/screener', iconColor: 'text-indigo-500', bgColor: 'bg-indigo-50' },
-    { name: 'Qurban', icon: Heart, path: '/qurban-saver', iconColor: 'text-amber-700', bgColor: 'bg-amber-50' },
-    { name: 'Smart Akad', icon: FileText, path: '/akad-analyzer', iconColor: 'text-slate-800', bgColor: 'bg-slate-100' },
-    { name: 'Family', icon: Users, path: '/family-dashboard', iconColor: 'text-rose-500', bgColor: 'bg-rose-50' },
-    { name: 'More', icon: LayoutGrid, path: '#', iconColor: 'text-blue-600', bgColor: 'bg-blue-100' },
+    { name: 'Cashflow', icon: Coins, path: '/cashflow', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Goals', icon: Target, path: '/goals', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Zakat', icon: Calculator, path: '/zakat', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Screener', icon: SearchIcon, path: '/screener', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Qurban', icon: Heart, path: '/qurban-saver', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Smart Akad', icon: FileText, path: '/akad-analyzer', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'Family', icon: Users, path: '/family-dashboard', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { name: 'More', icon: LayoutGrid, path: '#', iconColor: 'text-emerald-600', bgColor: 'bg-emerald-50' },
   ];
 
   return (
@@ -42,7 +42,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <button className="relative p-3 bg-white rounded-2xl shadow-[0_2px_10px_rgb(0,0,0,0.05)] text-slate-700 hover:bg-slate-50 transition-colors">
             <Bell className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
               2
             </span>
           </button>
@@ -56,7 +56,7 @@ export const Dashboard: React.FC = () => {
               placeholder="Search for any service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white rounded-2xl py-4 pl-4 pr-12 text-sm text-slate-900 placeholder-slate-400 shadow-[0_2px_15px_rgb(0,0,0,0.04)] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              className="w-full bg-white rounded-2xl py-4 pl-4 pr-12 text-sm text-slate-900 placeholder-slate-400 shadow-[0_2px_15px_rgb(0,0,0,0.04)] focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           </div>
@@ -66,17 +66,17 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Promo Banner */}
-        <div className="relative bg-gradient-to-br from-cyan-300 to-blue-400 rounded-3xl p-6 mb-10 overflow-hidden shadow-lg shadow-blue-500/20">
+        <div className="relative bg-gradient-to-br from-emerald-400 to-teal-600 rounded-3xl p-6 mb-10 overflow-hidden shadow-lg shadow-emerald-500/20">
           {/* Decorative shapes */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 right-10 w-24 h-24 bg-blue-500/20 rounded-full blur-xl translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-10 w-24 h-24 bg-emerald-700/20 rounded-full blur-xl translate-y-1/2"></div>
           
           <div className="relative z-10 w-2/3">
-            <p className="text-orange-600 font-bold text-sm mb-1 drop-shadow-sm">Save 25% Today!</p>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-4">
+            <p className="text-amber-300 font-bold text-sm mb-1 drop-shadow-sm">Save 25% Today!</p>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-tight mb-4">
               Exclusive discounts<br/>on premium service
             </h2>
-            <Link to="/upgrade" className="inline-block bg-orange-400 hover:bg-orange-500 text-white text-sm font-bold py-2.5 px-5 rounded-xl shadow-md transition-colors">
+            <Link to="/upgrade" className="inline-block bg-amber-400 hover:bg-amber-500 text-slate-900 text-sm font-bold py-2.5 px-5 rounded-xl shadow-md transition-colors">
               <span className="flex items-center">
                 <Target className="w-4 h-4 mr-2" />
                 Book Now
@@ -130,7 +130,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-sm font-bold text-slate-500 mt-0.5">$45 <span className="font-normal text-slate-400">/ session</span></p>
             </div>
             
-            <div className="px-3 py-1 bg-orange-400 text-white text-[10px] font-bold rounded-lg self-start mt-1">
+            <div className="px-3 py-1 bg-amber-400 text-slate-900 text-[10px] font-bold rounded-lg self-start mt-1">
               Premium
             </div>
           </div>

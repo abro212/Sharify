@@ -20,8 +20,8 @@ export const BottomNavigation: React.FC = () => {
             className={({ isActive }) =>
               `relative flex items-center justify-center w-[50px] h-[50px] rounded-full transition-all duration-300 ${
                 isActive
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/40'
-                  : 'text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800'
+                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40'
+                  : 'text-emerald-400/70 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-800'
               }`
             }
           >
