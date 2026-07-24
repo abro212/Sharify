@@ -612,40 +612,42 @@ export const LandingPage: React.FC = () => {
             {tiers.map((tier) => (
               <div 
                 key={tier.name} 
-                className={`relative bg-white rounded-[2rem] border p-6 flex flex-col transition-all duration-500 group ${
+                className={`relative rounded-[2rem] border p-8 flex flex-col transition-all duration-500 group ${
                   tier.popular 
-                    ? 'border-[#F59E0B] shadow-xl scale-102 lg:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-[#F59E0B]/25 hover:border-amber-400' 
-                    : 'border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-[#10B981]/15 hover:border-[#10B981]/30'
+                    ? 'bg-[#3B82F6] border-[#3B82F6] shadow-xl md:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-blue-500/30' 
+                    : 'bg-white border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-slate-200'
                 }`}
               >
                 {tier.popular && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105 z-20">
-                    <span className="bg-[#F59E0B] text-slate-950 text-[10px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-md border border-amber-300">
+                    <span className="bg-[#60A5FA] text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm border border-blue-400">
                       MOST POPULAR
                     </span>
                   </div>
                 )}
                 
-                <div className="mb-6 flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-black text-slate-900 leading-tight transition-colors duration-300 group-hover:text-[#10B981]">{tier.name}</h3>
-                    <p className="text-xs text-slate-400 mt-1 h-10 leading-relaxed font-semibold">{tier.description}</p>
+                <div className="mb-6 flex flex-col items-start">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 shadow-sm transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${
+                    tier.popular ? 'bg-white/20 text-white border border-white/30' : 'bg-slate-50 text-slate-600 border border-slate-100'
+                  }`}>
+                    {React.cloneElement(tier.icon as React.ReactElement<any>, { className: `w-6 h-6 ${tier.popular ? 'text-white' : 'text-slate-600'}` })}
                   </div>
-                  <div className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ml-2 shadow-xs transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 ${tier.iconClass}`}>
-                    {tier.icon}
-                  </div>
+                  <h3 className={`text-2xl font-black leading-tight transition-colors duration-300 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.name}</h3>
+                  <p className={`text-sm mt-2 h-10 leading-relaxed font-medium ${tier.popular ? 'text-blue-100' : 'text-slate-500'}`}>{tier.description}</p>
                 </div>
 
-                <div className="my-5 flex items-baseline">
-                  <span className="text-3xl font-black text-slate-900 tracking-tight leading-none transition-transform duration-300 group-hover:scale-102">{tier.price}</span>
-                  {tier.period && <span className="text-xs text-slate-400 font-bold lowercase ml-1.5 leading-none">{tier.period}</span>}
+                <div className="my-6 flex items-baseline">
+                  <span className={`text-4xl font-black tracking-tight leading-none transition-transform duration-300 group-hover:scale-102 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.price}</span>
+                  {tier.period && <span className={`text-sm font-bold lowercase ml-1.5 leading-none ${tier.popular ? 'text-blue-200' : 'text-slate-400'}`}>{tier.period}</span>}
                 </div>
 
-                <ul className="space-y-3 mb-8 flex-1">
+                <ul className="space-y-4 mb-8 flex-1">
                   {tier.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start transform transition-transform duration-300 group-hover:translate-x-0.5">
-                      <Check className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-[#10B981]" />
-                      <span className="text-xs text-slate-600 font-semibold leading-normal">{feature}</span>
+                    <li key={idx} className="flex items-start transform transition-transform duration-300 group-hover:translate-x-1">
+                      <div className={`mt-0.5 rounded-full p-0.5 flex-shrink-0 ${tier.popular ? 'text-white' : 'text-[#10B981] bg-emerald-50'}`}>
+                        <Check className="w-3.5 h-3.5 font-bold" />
+                      </div>
+                      <span className={`text-sm font-medium leading-normal ml-3 ${tier.popular ? 'text-white' : 'text-slate-600'}`}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -653,10 +655,12 @@ export const LandingPage: React.FC = () => {
                 <button
                   onClick={() => handlePlanClick()}
                   disabled={session !== null && currentRole === tier.role}
-                  className={`w-full py-3.5 px-4 rounded-full font-black text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center shadow-xs cursor-pointer hover:scale-[1.03] hover:shadow-lg active:scale-[0.97] ${
+                  className={`w-full py-4 px-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex justify-center items-center cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                     (session !== null && currentRole === tier.role) 
-                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none' 
-                      : tier.buttonStyle
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' 
+                      : tier.popular
+                        ? 'bg-white text-[#3B82F6] hover:bg-slate-50 shadow-md shadow-black/10'
+                        : 'bg-blue-50 text-[#3B82F6] hover:bg-blue-100 border border-blue-100/50'
                   }`}
                 >
                   {tier.buttonText}
