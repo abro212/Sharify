@@ -71,9 +71,9 @@ export const Dashboard: React.FC = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
           <div className="absolute bottom-0 right-10 w-24 h-24 bg-emerald-700/20 rounded-full blur-xl translate-y-1/2"></div>
           
-          <div className="relative z-10 w-2/3">
+          <div className="relative z-10 w-3/4 sm:w-2/3">
             <p className="text-amber-300 font-bold text-sm mb-1 drop-shadow-sm">Save 25% Today!</p>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-tight mb-4">
+            <h2 className="text-lg sm:text-2xl font-extrabold text-white leading-tight mb-4">
               Exclusive discounts<br/>on premium service
             </h2>
             <Link to="/upgrade" className="inline-block bg-amber-400 hover:bg-amber-500 text-slate-900 text-sm font-bold py-2.5 px-5 rounded-xl shadow-md transition-colors">
@@ -96,15 +96,15 @@ export const Dashboard: React.FC = () => {
             <button className="text-sm font-medium text-slate-500 hover:text-slate-800">View all</button>
           </div>
           
-          <div className="grid grid-cols-4 gap-y-6 gap-x-2">
+          <div className="grid grid-cols-4 gap-y-4 gap-x-1 sm:gap-y-6 sm:gap-x-2">
             {services.map((service, index) => (
               <Link key={index} to={service.path} className="flex flex-col items-center group">
-                <div className={`w-16 h-16 rounded-2xl bg-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] flex items-center justify-center mb-2 group-hover:scale-105 transition-transform duration-300`}>
-                  <div className={`w-10 h-10 rounded-full ${service.bgColor} flex items-center justify-center`}>
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] flex items-center justify-center mb-2 group-hover:scale-105 transition-transform duration-300`}>
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full ${service.bgColor} flex items-center justify-center`}>
                     <service.icon className={`w-5 h-5 ${service.iconColor}`} />
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-700">{service.name}</span>
+                <span className="text-[10px] sm:text-[11px] font-semibold text-slate-700 text-center leading-tight truncate w-full px-0.5">{service.name}</span>
               </Link>
             ))}
           </div>
