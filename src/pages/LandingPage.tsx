@@ -404,7 +404,135 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. App Download Banner (Mulai Perjalanan Keuangan Islami Anda Sekarang Juga) */}
+      {/* 6. Pricing Cards Section (Paket Layanan) */}
+      <section id="harga" className="py-20 bg-slate-50/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+              Pilihan Paket Layanan
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Pilih Paket Sesuai Kebutuhan Finansial Anda
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
+              Mulai dari akses gratis hingga bimbingan personal 1-on-1 bersama pakar fiqh muamalah.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Tier 1: Free */}
+            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+              <div>
+                <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider block mb-2">Free</span>
+                <div className="flex items-baseline space-x-1">
+                  <span className="text-3xl font-black text-slate-900">Rp 0</span>
+                  <span className="text-xs text-slate-400 font-medium">/ selamanya</span>
+                </div>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  Fitur dasar untuk kepatuhan syariah pribadi sehari-hari.
+                </p>
+                <ul className="mt-6 space-y-3 text-xs text-slate-600 font-medium">
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Kalkulator Zakat Maal & Profesi</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Basic Financial Health Check</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> 5 Query AI Chatbot / Hari</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => navigate('/signup')}
+                className="mt-8 w-full py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+              >
+                Mulai Gratis
+              </button>
+            </div>
+
+            {/* Tier 2: Plus */}
+            <div className="bg-white rounded-3xl p-6 border border-emerald-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+              <div>
+                <span className="text-xs font-extrabold text-emerald-600 uppercase tracking-wider block mb-2">Sharify Plus</span>
+                <div className="flex items-baseline space-x-1">
+                  <span className="text-3xl font-black text-slate-900">Rp 49.000</span>
+                  <span className="text-xs text-slate-400 font-medium">/ bulan</span>
+                </div>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  Modul lengkap pengelolaan utang riba & analisis keuangan aktif.
+                </p>
+                <ul className="mt-6 space-y-3 text-xs text-slate-600 font-medium">
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Semua Fitur Paket Free</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Unlimited AI Chatbot Queries</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Full Riba & Judol Detox Plan</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Halal Asset Screener Ticker</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => navigate('/pricing')}
+                className="mt-8 w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-colors"
+              >
+                Pilih Plus
+              </button>
+            </div>
+
+            {/* Tier 3: Pro (Popular) */}
+            <div className="bg-gradient-to-b from-[#064E3B] to-emerald-900 text-white rounded-3xl p-6 shadow-xl flex flex-col justify-between relative transform lg:-translate-y-2 border border-emerald-500/30">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
+                MOST POPULAR
+              </span>
+              <div>
+                <span className="text-xs font-extrabold text-amber-300 uppercase tracking-wider block mb-2 pt-2">Sharify Pro</span>
+                <div className="flex items-baseline space-x-1">
+                  <span className="text-3xl font-black text-white">Rp 149.000</span>
+                  <span className="text-xs text-emerald-200 font-medium">/ bulan</span>
+                </div>
+                <p className="text-xs text-emerald-100/90 font-medium mt-2 leading-relaxed">
+                  Bimbingan 1-on-1 langsung bersama pakar & ulama syariah.
+                </p>
+                <ul className="mt-6 space-y-3 text-xs text-emerald-50 font-medium">
+                  <li className="flex items-center"><span className="text-amber-400 mr-2 font-bold">✓</span> Semua Fitur Paket Plus</li>
+                  <li className="flex items-center"><span className="text-amber-400 mr-2 font-bold">✓</span> 1-on-1 Scholar Consultation</li>
+                  <li className="flex items-center"><span className="text-amber-400 mr-2 font-bold">✓</span> Direct Chat dengan Ustadz</li>
+                  <li className="flex items-center"><span className="text-amber-400 mr-2 font-bold">✓</span> Prioritas Penanganan Syariah</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => navigate('/pricing')}
+                className="mt-8 w-full py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs shadow-md transition-colors"
+              >
+                Pilih Pro
+              </button>
+            </div>
+
+            {/* Tier 4: Family */}
+            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+              <div>
+                <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider block mb-2">Family Plan</span>
+                <div className="flex items-baseline space-x-1">
+                  <span className="text-3xl font-black text-slate-900">Rp 199.000</span>
+                  <span className="text-xs text-slate-400 font-medium">/ bulan</span>
+                </div>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  Perencanaan finansial syariah terpadu untuk 4 anggota keluarga.
+                </p>
+                <ul className="mt-6 space-y-3 text-xs text-slate-600 font-medium">
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Hingga 4 Akun Pro Keluarga</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Simulator Faraidh (Harta Waris)</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Wakaf & Digital Wasiat Generator</li>
+                  <li className="flex items-center"><span className="text-emerald-600 mr-2 font-bold">✓</span> Dashboard Baitul Mal Keluarga</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => navigate('/pricing')}
+                className="mt-8 w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors"
+              >
+                Pilih Family
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 7. App Download Banner (Mulai Perjalanan Keuangan Islami Anda Sekarang Juga) */}
       <section className="my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#064E3B] text-white rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
