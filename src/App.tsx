@@ -28,11 +28,21 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { RequireRole } from './components/auth/RequireRole';
 import { useAuthStore } from './store/authStore';
 import { useSettingsStore } from './store/settingsStore';
+import { useThemeStore } from './store/useThemeStore';
 import { supabase } from './lib/supabase';
 
 function App() {
   const { setSession } = useAuthStore();
   const { settings, fetchSettings, subscribeToRealtime, unsubscribeFromRealtime } = useSettingsStore();
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   useEffect(() => {
     // Fetch global configuration and CMS settings once on load
