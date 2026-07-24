@@ -128,98 +128,97 @@ export const QurbanSaver: React.FC = () => {
 
   return (
     <DashboardContainer>
+      <div className="px-6 pt-12 pb-6">
       
       {/* Toast System */}
       {showToast && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md bg-gradient-to-tr from-[#0F4C3A] to-[#10B981] text-white p-4 rounded-xl shadow-lg border border-emerald-500 flex items-center justify-between animate-slide-in">
-          <div className="flex items-center space-x-3">
-            <CheckCircle2 className="w-6 h-6 text-amber-300 animate-bounce flex-shrink-0" />
-            <p className="text-xs font-bold leading-relaxed">{toastMessage}</p>
-          </div>
+        <div className="fixed bottom-24 right-6 left-6 z-50 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.1)] border border-emerald-400 flex items-center animate-slide-in">
+          <CheckCircle2 className="w-6 h-6 text-amber-300 animate-bounce flex-shrink-0 mr-3" />
+          <p className="text-xs font-bold leading-relaxed">{toastMessage}</p>
         </div>
       )}
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
-          <Sparkles className="h-8 w-8 text-[#0F4C3A] mr-3 animate-pulse" />
-          Qurban & Aqiqah Auto-Saver
+        <h1 className="text-2xl font-extrabold text-slate-900 flex items-center mb-2">
+          <Sparkles className="h-6 w-6 text-emerald-600 mr-2 animate-pulse" />
+          Qurban & Aqiqah
         </h1>
-        <p className="text-gray-500 mt-1">Sinking fund cerdas untuk merencanakan ibadah Qurban Idul Adha atau Aqiqah buah hati dengan target harian/bulanan terukur.</p>
+        <p className="text-sm text-slate-500">Sinking fund cerdas merencanakan ibadah Qurban atau Aqiqah dengan target harian/bulanan terukur.</p>
       </div>
 
       {/* 1. Livestock Live Mock Prices Ticker */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="flex overflow-x-auto gap-4 snap-x pb-4 -mx-6 px-6 no-scrollbar mb-4">
         {livestockPrices.map(livestock => (
           <button
             key={livestock.id}
             onClick={() => handleLivestockChange(livestock.id)}
-            className={`p-4 rounded-2xl border text-left transition-all ${
+            className={`flex-shrink-0 w-64 p-5 rounded-3xl border text-left transition-all snap-center ${
               selectedLivestockId === livestock.id 
-                ? 'bg-[#0F4C3A] text-white border-transparent shadow-md transform -translate-y-0.5' 
-                : 'bg-white text-gray-800 border-gray-100 hover:bg-gray-50/50'
+                ? 'bg-emerald-600 dark:bg-emerald-500 text-white border-transparent shadow-[0_4px_20px_rgba(16,185,129,0.3)] transform -translate-y-1' 
+                : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-white border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
-            <span className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded ${
+            <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
               selectedLivestockId === livestock.id 
                 ? 'bg-white/20 text-amber-300' 
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
             }`}>{livestock.category}</span>
-            <h4 className="text-xs font-extrabold mt-2 truncate">{livestock.name}</h4>
-            <p className={`text-md font-black mt-1 font-mono ${
-              selectedLivestockId === livestock.id ? 'text-amber-400' : 'text-[#0F4C3A]'
+            <h4 className="text-sm font-extrabold mt-3 truncate">{livestock.name}</h4>
+            <p className={`text-lg font-black mt-1 font-mono ${
+              selectedLivestockId === livestock.id ? 'text-amber-300' : 'text-emerald-600 dark:text-emerald-400'
             }`}>
               Rp {livestock.price.toLocaleString('id-ID')}
             </p>
-            <span className="block text-[8px] text-gray-400 mt-2">Harga Pasar Acuan 2026</span>
+            <span className={`block text-[10px] font-medium mt-2 ${selectedLivestockId === livestock.id ? 'text-emerald-100' : 'text-slate-400'}`}>Harga Pasar Acuan 2026</span>
           </button>
         ))}
       </div>
 
       {/* Main Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="flex flex-col gap-6">
         
-        {/* Left Column: Form & Calculator (5/12 width) */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-50 pb-3">Konfigurasi Tabungan</h3>
+        {/* Top: Form & Calculator */}
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-6 border-b border-slate-50 dark:border-slate-800 pb-3">Konfigurasi Tabungan</h3>
             
             <div className="space-y-4">
               
               {/* Goal Type Selector */}
               <div>
-                <label className="block text-xs font-extrabold text-gray-400 uppercase mb-2">Jenis Ibadah</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Jenis Ibadah</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setGoalType('Qurban')}
-                    className={`py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                    className={`py-3.5 rounded-2xl text-xs font-bold transition-all border ${
                       goalType === 'Qurban' 
-                        ? 'bg-[#0F4C3A] text-white border-transparent' 
-                        : 'bg-gray-50 hover:bg-gray-100 text-gray-600 border-gray-200'
+                        ? 'bg-emerald-600 text-white border-transparent shadow-sm' 
+                        : 'bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                     }`}
                   >
-                    Qurban (Idul Adha)
+                    Qurban
                   </button>
                   <button 
                     onClick={() => setGoalType('Aqiqah')}
-                    className={`py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                    className={`py-3.5 rounded-2xl text-xs font-bold transition-all border ${
                       goalType === 'Aqiqah' 
-                        ? 'bg-[#0F4C3A] text-white border-transparent' 
-                        : 'bg-gray-50 hover:bg-gray-100 text-gray-600 border-gray-200'
+                        ? 'bg-emerald-600 text-white border-transparent shadow-sm' 
+                        : 'bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                     }`}
                   >
-                    Aqiqah Anak
+                    Aqiqah
                   </button>
                 </div>
               </div>
 
               {/* Livestock Selection Dropdown */}
               <div>
-                <label className="block text-xs font-extrabold text-gray-400 uppercase mb-2">Pilihan Hewan Qurban / Aqiqah</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Pilihan Hewan</label>
                 <select 
                   value={selectedLivestockId}
                   onChange={e => handleLivestockChange(e.target.value)}
-                  className="w-full p-3 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-bold text-gray-800"
+                  className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 font-bold text-slate-900 dark:text-white"
                 >
                   {livestockPrices.map(livestock => (
                     <option key={livestock.id} value={livestock.id}>
@@ -231,24 +230,24 @@ export const QurbanSaver: React.FC = () => {
 
               {/* Target Date Input */}
               <div>
-                <label className="block text-xs font-extrabold text-gray-400 uppercase mb-2">Target Tanggal Penyembelihan</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Target Waktu</label>
                 <div className="relative">
-                  <Calendar className="w-4 h-4 text-gray-400 absolute left-3 top-3.5" />
+                  <Calendar className="w-5 h-5 text-slate-400 absolute left-4 top-4" />
                   <input 
                     type="date" 
                     value={targetDateString}
                     onChange={e => setTargetDateString(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-bold text-gray-800"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 font-bold text-slate-900 dark:text-white"
                   />
                 </div>
-                <span className="text-[10px] text-gray-400 mt-1.5 block">Default diset ke prakiraan hari raya Idul Adha terdekat (Mei 2027)</span>
+                <span className="text-[10px] text-slate-400 font-medium mt-2 block">Default: Idul Adha terdekat (Mei 2027)</span>
               </div>
 
               {/* Initial deposit selection */}
               <div>
-                <label className="block text-xs font-extrabold text-gray-400 uppercase mb-2">Setoran Awal (Modal Tabungan)</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Setoran Awal (Modal)</label>
                 <div className="relative">
-                  <Coins className="w-4 h-4 text-[#D4AF37] absolute left-3 top-3.5" />
+                  <Coins className="w-5 h-5 text-amber-500 absolute left-4 top-4" />
                   <input 
                     type="number" 
                     min={0}
@@ -258,7 +257,7 @@ export const QurbanSaver: React.FC = () => {
                       setStartingDeposit(val);
                       setSimulatedSaved(val);
                     }}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-extrabold font-mono text-gray-800"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 font-extrabold font-mono text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -267,89 +266,89 @@ export const QurbanSaver: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Calculations & Animated Sinking Progress (7/12 width) */}
-        <div className="lg:col-span-7 space-y-6">
+        {/* Bottom Column: Calculations & Animated Sinking Progress */}
+        <div className="space-y-6">
           
           {/* Target breakdown cards */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-4">Hasil Perhitungan Tabungan Syariah</h4>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-6">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-6">Hasil Perhitungan Tabungan Syariah</h4>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-emerald-50/40 border border-emerald-100 rounded-2xl">
-                <span className="text-[10px] font-bold text-[#0F4C3A] uppercase tracking-wider block">Tabungan Bulanan</span>
-                <span className="text-2xl font-black text-emerald-800 mt-1.5 block font-mono">
+              <div className="p-5 bg-emerald-50/40 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 rounded-2xl">
+                <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">Tabungan Bulanan</span>
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-500 mt-2 block font-mono">
                   Rp {calculations.monthlySavingsNeeded.toLocaleString('id-ID')}
                 </span>
-                <span className="text-[9px] text-gray-400 mt-1 block">selama {calculations.monthsRemaining} bulan</span>
+                <span className="text-[10px] font-medium text-emerald-700/60 dark:text-emerald-400/60 mt-1 block">selama {calculations.monthsRemaining} bulan</span>
               </div>
 
-              <div className="p-4 bg-amber-50/40 border border-amber-100 rounded-2xl">
-                <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">Tabungan Harian</span>
-                <span className="text-2xl font-black text-amber-800 mt-1.5 block font-mono">
+              <div className="p-5 bg-amber-50/40 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 rounded-2xl">
+                <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">Tabungan Harian</span>
+                <span className="text-2xl font-black text-amber-600 dark:text-amber-500 mt-2 block font-mono">
                   Rp {calculations.dailySavingsNeeded.toLocaleString('id-ID')}
                 </span>
-                <span className="text-[9px] text-gray-400 mt-1 block">selama {calculations.daysRemaining} hari</span>
+                <span className="text-[10px] font-medium text-amber-700/60 dark:text-amber-400/60 mt-1 block">selama {calculations.daysRemaining} hari</span>
               </div>
             </div>
 
-            <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-start space-x-2 mt-4 text-[10px] text-gray-500">
-              <AlertCircle className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 flex items-start space-x-3 mt-6 text-xs text-slate-600 dark:text-slate-400 font-medium">
+              <AlertCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
               <p>Tabungan Sinking Fund ini bebas biaya administrasi dan bunga (Riba). Dana Anda tersimpan aman, suci, dan siap diserahkan kepada penyedia hewan qurban tepercaya.</p>
             </div>
           </div>
 
           {/* Sinking Progress & Interactive simulator */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-6 space-y-6">
             <div>
-              <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Progress Sinking Fund Tabungan</h4>
-              <div className="flex justify-between items-baseline">
-                <span className="text-xs font-bold text-gray-600">Simulasi Dana Terkumpul</span>
-                <span className="text-md font-black text-[#0F4C3A] font-mono">
-                  Rp {simulatedSaved.toLocaleString('id-ID')} <span className="text-xs font-normal text-gray-400">/ Rp {calculations.targetPrice.toLocaleString('id-ID')}</span>
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Progress Tabungan</h4>
+              <div className="flex justify-between items-baseline mb-3">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Simulasi Dana Terkumpul</span>
+                <span className="text-lg font-black text-emerald-600 dark:text-emerald-500 font-mono">
+                  Rp {simulatedSaved.toLocaleString('id-ID')} <span className="text-xs font-bold text-slate-400">/ Rp {calculations.targetPrice.toLocaleString('id-ID')}</span>
                 </span>
               </div>
             </div>
 
             {/* Visual Progress Bar */}
-            <div className="space-y-2">
-              <div className="w-full bg-gray-100 h-5 rounded-full overflow-hidden p-1 shadow-inner border border-gray-200/50 flex">
+            <div className="space-y-3">
+              <div className="w-full bg-slate-100 dark:bg-slate-800 h-6 rounded-full overflow-hidden p-1 shadow-inner border border-slate-200/50 flex">
                 <div 
-                  className="bg-gradient-to-r from-[#0F4C3A] via-[#10B981] to-[#D4AF37] h-full rounded-full transition-all duration-300 shadow-sm flex items-center justify-center min-w-[2.5rem]"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-300 shadow-sm flex items-center justify-center min-w-[2.5rem]"
                   style={{ width: `${progressPercentage}%` }}
                 >
-                  <span className="text-[9px] font-black text-white leading-none">{progressPercentage.toFixed(0)}%</span>
+                  <span className="text-[10px] font-bold text-white leading-none">{progressPercentage.toFixed(0)}%</span>
                 </div>
               </div>
               
-              <div className="flex justify-between text-[10px] text-gray-400 font-bold">
+              <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                 <span>Setoran Awal</span>
                 <span>Terpenuhi</span>
               </div>
             </div>
 
             {/* Sinking deposit simulator controls */}
-            <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3">
-              <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Simulasi Tabungan Mandiri Bulanan</span>
-              <p className="text-[11px] text-gray-500 leading-relaxed">Gunakan tombol di bawah ini untuk mensimulasikan penambahan setoran tabungan Anda dan amati bagaimana nominal setoran harian/bulanan Anda berkurang secara otomatis!</p>
+            <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 space-y-4">
+              <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Simulasi Tabungan Mandiri Bulanan</span>
+              <p className="text-xs font-medium text-slate-600 dark:text-slate-400 leading-relaxed">Gunakan tombol di bawah ini untuk mensimulasikan penambahan setoran tabungan Anda dan amati bagaimana nominal setoran harian/bulanan Anda berkurang secara otomatis!</p>
               
-              <div className="flex flex-wrap gap-2 pt-1.5">
+              <div className="flex flex-wrap gap-2 pt-2">
                 <button 
                   onClick={() => handleSimulateDeposit(100000)}
                   disabled={simulatedSaved >= calculations.targetPrice}
-                  className="bg-white hover:bg-gray-100 border border-gray-200 text-[#0F4C3A] font-bold py-2 px-3 rounded-lg text-xs transition-colors flex items-center space-x-1"
+                  className="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 text-emerald-600 dark:text-emerald-400 font-bold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>+ Rp 100 Ribu</span>
                 </button>
                 <button 
                   onClick={() => handleSimulateDeposit(500000)}
                   disabled={simulatedSaved >= calculations.targetPrice}
-                  className="bg-white hover:bg-gray-100 border border-gray-200 text-[#0F4C3A] font-bold py-2 px-3 rounded-lg text-xs transition-colors flex items-center space-x-1"
+                  className="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 text-emerald-600 dark:text-emerald-400 font-bold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>+ Rp 500 Ribu</span>
                 </button>
                 <button 
                   onClick={handleResetSimulation}
-                  className="bg-white hover:bg-red-50 border border-gray-200 text-red-600 font-bold py-2 px-3 rounded-lg text-xs transition-colors flex items-center space-x-1 ml-auto"
+                  className="bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 border border-slate-200 dark:border-slate-600 text-rose-600 dark:text-rose-400 font-bold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center shadow-sm ml-auto"
                 >
                   <span>Reset</span>
                 </button>
@@ -358,19 +357,19 @@ export const QurbanSaver: React.FC = () => {
           </div>
 
           {/* Motivational Rotating Islamic Card */}
-          <div className="bg-gradient-to-br from-[#0F4C3A] to-[#0A3427] text-white rounded-2xl p-6 shadow-sm relative overflow-hidden transition-all duration-500">
-            <div className="absolute -top-16 -right-16 w-36 h-36 bg-[#D4AF37]/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-3xl p-8 shadow-lg shadow-emerald-500/20 relative overflow-hidden transition-all duration-500">
+            <div className="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div className="space-y-4">
-              <h5 className="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest flex items-center">
-                <Heart className="w-3.5 h-3.5 mr-1.5 animate-pulse" /> Inspirasi Qurban & Aqiqah
+            <div className="relative z-10 space-y-6">
+              <h5 className="text-[11px] font-extrabold text-amber-300 uppercase tracking-widest flex items-center">
+                <Heart className="w-4 h-4 mr-2 animate-pulse text-rose-400" /> Inspirasi Qurban & Aqiqah
               </h5>
               
-              <div className="min-h-[4rem] flex flex-col justify-between">
-                <p className="text-xs leading-relaxed italic text-emerald-100 font-medium transition-opacity duration-300">
+              <div className="min-h-[5rem] flex flex-col justify-between">
+                <p className="text-sm leading-relaxed font-medium transition-opacity duration-300">
                   "{islamicQuotes[quoteIndex].text}"
                 </p>
-                <p className="text-[10px] text-emerald-300 font-mono mt-3 text-right">
+                <p className="text-xs text-emerald-200 font-bold font-mono mt-4 text-right">
                   — {islamicQuotes[quoteIndex].source}
                 </p>
               </div>
@@ -378,7 +377,7 @@ export const QurbanSaver: React.FC = () => {
           </div>
 
         </div>
-
+      </div>
       </div>
     </DashboardContainer>
   );

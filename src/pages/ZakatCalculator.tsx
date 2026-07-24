@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { ZakatCalculatorContent } from '../components/calculators/ZakatCalculatorContent';
 import { FaraidhCalculator } from '../components/calculators/FaraidhCalculator';
-
 import { RequireRole } from '../components/auth/RequireRole';
+import { Calculator, Scale } from 'lucide-react';
 
 type ActiveTool = 'zakat' | 'faraidh';
 
@@ -12,45 +12,53 @@ export const ZakatCalculator: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Zakat & Faraidh</h1>
-          <p className="text-gray-500">Calculate your obligations and understand your inheritance rights.</p>
+      <div className="px-6 pt-12 pb-6">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold text-slate-900 mb-2">Zakat & Faraidh</h1>
+          <p className="text-sm text-slate-500">Hitung kewajiban zakat dan pelajari hak waris sesuai syariah dengan mudah.</p>
         </div>
         
-        {/* Master Toggle */}
-        <div className="flex bg-white rounded-lg shadow-sm border border-gray-200 p-1">
+        {/* Master Toggle - Pill Shape */}
+        <div className="flex bg-slate-100 dark:bg-slate-800 rounded-2xl p-1.5 mb-8 shadow-inner">
           <button
             onClick={() => setActiveTool('zakat')}
-            className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTool === 'zakat' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+            className={`flex-1 flex items-center justify-center py-2.5 px-4 text-sm font-bold rounded-xl transition-all duration-300 ${
+              activeTool === 'zakat' 
+                ? 'bg-white text-emerald-600 shadow-[0_2px_10px_rgb(0,0,0,0.05)]' 
+                : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            Zakat Calculator
+            <Calculator className="w-4 h-4 mr-2" />
+            Zakat
           </button>
           <button
             onClick={() => setActiveTool('faraidh')}
-            className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTool === 'faraidh' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'
+            className={`flex-1 flex items-center justify-center py-2.5 px-4 text-sm font-bold rounded-xl transition-all duration-300 ${
+              activeTool === 'faraidh' 
+                ? 'bg-white text-emerald-600 shadow-[0_2px_10px_rgb(0,0,0,0.05)]' 
+                : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            Faraidh Simulator
+            <Scale className="w-4 h-4 mr-2" />
+            Faraidh
           </button>
         </div>
-      </div>
 
-      {/* Conditionally Render the Active Tool */}
-      {activeTool === 'zakat' ? (
-        <ZakatCalculatorContent />
-      ) : (
-        <RequireRole 
-          allowedRoles={['family', 'admin']} 
-          fallbackMessage="The Faraidh (Inheritance) Simulator is a highly advanced tool available on the Family Plan."
-        >
-          <FaraidhCalculator />
-        </RequireRole>
-      )}
-      
+        {/* Content Section */}
+        <div className="animate-fade-in">
+          {activeTool === 'zakat' ? (
+            <ZakatCalculatorContent />
+          ) : (
+            <RequireRole 
+              allowedRoles={['family', 'admin']} 
+              fallbackMessage="Simulator Faraidh (Waris) adalah fitur lanjutan yang tersedia eksklusif pada paket Family."
+            >
+              <FaraidhCalculator />
+            </RequireRole>
+          )}
+        </div>
+      </div>
     </DashboardContainer>
   );
 };

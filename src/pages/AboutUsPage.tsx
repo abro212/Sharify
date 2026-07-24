@@ -156,7 +156,7 @@ export const AboutUsPage: React.FC = () => {
           <div className="flex flex-col items-center w-full">
             
             {/* Top Level: Advisory */}
-            <div className="flex justify-center items-start gap-4 sm:gap-8 lg:gap-16 relative w-full">
+            <div className="flex flex-wrap justify-center items-start gap-4 sm:gap-8 lg:gap-16 relative w-full">
               {advisory.length > 0 && (
                 <div className="flex flex-col items-center relative z-10 w-full max-w-sm">
                   <div className="bg-emerald-50 border border-emerald-200 p-5 sm:p-6 rounded-2xl w-full text-center shadow-sm ring-4 ring-white">

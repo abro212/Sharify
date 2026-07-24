@@ -1,220 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
-import { Target, Save, Calendar, CheckCircle, TrendingUp } from 'lucide-react';
+import { Target } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 
-type Goal = {
-  id: string;
-  goal_type: string;
-  target_amount: number;
-  target_date: string;
-  monthly_savings_required: number;
-  suggested_instrument: string;
-};
-
 export const Goals: React.FC = () => {
   const { session } = useAuthStore();
-  const [goals, setGoals] = useState<Goal[]>([]);
-  
-  // Form State
-  const [goalType, setGoalType] = useState('Haji');
-  const [targetAmount, setTargetAmount] = useState<number>(0);
-  const [targetDate, setTargetDate] = useState('');
-  
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // Load existing goals
   useEffect(() => {
-    const fetchGoals = async () => {
-      if (!session?.user?.id) return;
-      const { data } = await supabase
-        .from('financial_goals')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
-      if (data) setGoals(data);
-    };
-    fetchGoals();
-  }, [session?.user?.id, saveStatus]);
-
-  // Calculations
-  const calculateGoal = () => {
-    if (!targetAmount || !targetDate) return null;
-    
-    const today = new Date();
-    const target = new Date(targetDate);
-    const monthsDiff = (target.getFullYear() - today.getFullYear()) * 12 + (target.getMonth() - today.getMonth());
-    
-    if (monthsDiff <= 0) return null;
-
-    const monthlyRequired = targetAmount / monthsDiff;
-    
-    let instrument = '';
-    if (monthsDiff < 24) {
-      instrument = 'Reksa Dana Pasar Uang Syariah / Deposito Syariah';
-    } else if (monthsDiff <= 60) {
-      instrument = 'Sukuk Ritel / Reksa Dana Pendapatan Tetap Syariah';
-    } else {
-      instrument = 'Reksa Dana Saham Syariah / Saham Syariah';
+    if (session?.user?.id) {
+      supabase.from('financial_goals').select('*').eq('user_id', session.user.id);
     }
-
-    return { monthlyRequired, instrument, monthsDiff };
-  };
-
-  const preview = calculateGoal();
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!session?.user?.id || !preview) return;
-    
-    setIsSaving(true);
-    setSaveStatus('idle');
-
-    const { error } = await supabase
-      .from('financial_goals')
-      .insert({
-        user_id: session.user.id,
-        goal_type: goalType,
-        target_amount: targetAmount,
-        target_date: targetDate,
-        monthly_savings_required: preview.monthlyRequired,
-        suggested_instrument: preview.instrument
-      });
-
-    setIsSaving(false);
-    if (!error) {
-      setSaveStatus('success');
-      setTargetAmount(0);
-      setTargetDate('');
-      setTimeout(() => setSaveStatus('idle'), 3000);
-    } else {
-      setSaveStatus('error');
-    }
-  };
+  }, [session?.user?.id]);
 
   return (
     <DashboardContainer>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-          <Target className="h-6 w-6 text-primary mr-2" />
-          Goal-Based Islamic Planning
-        </h1>
-        <p className="text-gray-500">Set financial targets and discover the best Sharia instruments to reach them.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Add Goal Form */}
-        <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="font-bold text-gray-900 mb-6">Tentukan Target Baru</h2>
-          <form onSubmit={handleSave} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tujuan Finansial</label>
-              <select 
-                value={goalType} 
-                onChange={(e) => setGoalType(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-              >
-                <option value="Haji">Biaya Haji</option>
-                <option value="Umrah">Biaya Umrah</option>
-                <option value="Qurban">Qurban</option>
-                <option value="Education">Pendidikan Anak</option>
-                <option value="Property">Beli Rumah (KPR Syariah)</option>
-                <option value="Other">Lainnya</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Target Dana (Rp)</label>
-              <input
-                type="number"
-                value={targetAmount || ''}
-                onChange={(e) => setTargetAmount(Number(e.target.value))}
-                required
-                min="1000"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Target Waktu Tercapai</label>
-              <input
-                type="month"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                required
-                min={new Date().toISOString().slice(0, 7)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-            </div>
-
-            {/* Preview Card */}
-            {preview && (
-              <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/10">
-                <p className="text-xs text-gray-500 mb-1">Estimasi Tabungan Bulanan ({preview.monthsDiff} bulan)</p>
-                <p className="text-xl font-bold text-primary font-mono mb-3">
-                  Rp {Math.round(preview.monthlyRequired).toLocaleString('id-ID')}
-                </p>
-                <p className="text-xs text-gray-500 mb-1">Rekomendasi Instrumen Halal:</p>
-                <p className="text-sm font-medium text-gray-900 leading-snug">{preview.instrument}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={!preview || isSaving}
-              className={`w-full mt-4 flex items-center justify-center py-2.5 rounded-lg font-bold text-sm transition-colors ${
-                !preview ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-[#0c3d2e] text-white shadow-md'
-              }`}
-            >
-              {isSaving ? 'Menyimpan...' : <><Save className="w-4 h-4 mr-2" /> Simpan Target</>}
-            </button>
-            {saveStatus === 'success' && <p className="text-primary text-xs text-center mt-2 flex items-center justify-center"><CheckCircle className="w-3 h-3 mr-1"/> Disimpan!</p>}
-          </form>
+      <div className="p-5 space-y-5">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between pt-2">
+          <div>
+            <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Goal-Based Planning</h1>
+            <p className="text-xs text-slate-500 font-medium">Plan your financial goals with barakah</p>
+          </div>
         </div>
 
-        {/* Right: Saved Goals Grid */}
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="font-bold text-gray-900 mb-2">Target Finansial Anda</h2>
+        {/* Deep Emerald Header Card matching Screen 11 */}
+        <div className="bg-[#064E3B] text-white p-6 rounded-3xl relative overflow-hidden shadow-lg shadow-emerald-950/20 flex items-center justify-between">
+          <div className="relative z-10 max-w-[70%] space-y-1">
+            <h2 className="text-base font-extrabold text-white leading-tight">
+              Plan Your Goals with Barakah
+            </h2>
+            <p className="text-xs text-emerald-100/90 font-medium">
+              Set, track & achieve your financial goals
+            </p>
+          </div>
           
-          {goals.length === 0 ? (
-            <div className="bg-white p-10 rounded-xl shadow-sm border border-gray-100 text-center flex flex-col items-center justify-center h-full min-h-[300px]">
-              <Target className="h-12 w-12 text-gray-200 mb-4" />
-              <p className="text-gray-500 max-w-sm">Anda belum memiliki target finansial yang tersimpan. Mulai rencanakan masa depan Anda sekarang.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {goals.map((goal) => (
-                <div key={goal.id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-primary to-accent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                  
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-bold text-lg text-gray-900">{goal.goal_type}</h3>
-                    <div className="flex items-center text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      {new Date(goal.target_date).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' })}
+          <div className="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 text-amber-300">
+            <Target className="w-7 h-7" />
+          </div>
+        </div>
+
+        {/* Your Goals List Card */}
+        <div className="bg-white dark:bg-slate-800/90 p-5 rounded-3xl shadow-[0_2px_16px_rgba(0,0,0,0.04)] border border-slate-100 dark:border-slate-700/60 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Your Goals</h2>
+            <button 
+              onClick={() => alert('Form penambahan target dibuka!')}
+              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+            >
+              + Add New Goal
+            </button>
+          </div>
+
+          <div className="space-y-3.5">
+            {[
+              { title: 'Umrah 2025', saved: '25.000.000', target: '35.000.000', percent: 71, color: 'border-emerald-500' },
+              { title: 'Buy House', saved: '175.000.000', target: '500.000.000', percent: 35, color: 'border-amber-500' },
+              { title: 'Retirement', saved: '200.000.000', target: '1.000.000.000', percent: 20, color: 'border-rose-500' },
+            ].map((item, idx) => (
+              <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-9 w-9 rounded-xl bg-emerald-500/10 text-[#064E3B] dark:text-emerald-400 flex items-center justify-center font-black text-xs">
+                      {item.percent}%
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                      <p className="text-[10px] text-slate-400 font-mono">
+                        Rp {item.saved} / Rp {item.target}
+                      </p>
                     </div>
                   </div>
-
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-500">Target Dana</p>
-                    <p className="font-bold text-gray-900 font-mono">Rp {Math.round(goal.target_amount).toLocaleString('id-ID')}</p>
-                  </div>
-
-                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                     <p className="text-xs text-gray-500 mb-1">Tabungan Bulanan</p>
-                     <p className="text-primary font-bold font-mono text-lg mb-2">Rp {Math.round(goal.monthly_savings_required).toLocaleString('id-ID')}</p>
-                     <div className="flex items-start">
-                       <TrendingUp className="w-4 h-4 text-accent mr-1.5 flex-shrink-0 mt-0.5" />
-                       <p className="text-xs text-gray-600 font-medium leading-tight">{goal.suggested_instrument}</p>
-                     </div>
-                  </div>
+                  <span className="text-xs font-black text-[#064E3B] dark:text-emerald-400">{item.percent}%</span>
                 </div>
-              ))}
-            </div>
-          )}
+
+                {/* Progress Bar */}
+                <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-[#064E3B] dark:bg-emerald-500 h-full transition-all duration-500" 
+                    style={{ width: `${item.percent}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Add Goal Button */}
+        <button
+          onClick={() => alert('Tambahkan target finansial baru.')}
+          className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs py-3 px-4 rounded-2xl shadow-md shadow-amber-500/20 transition-all uppercase tracking-wider flex items-center justify-center space-x-1.5"
+        >
+          <Target className="w-4 h-4" />
+          <span>+ Add New Goal</span>
+        </button>
+
       </div>
     </DashboardContainer>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { ShieldCheck, ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
 
@@ -118,9 +118,7 @@ export const SignUp: React.FC = () => {
               onError={() => setLogoUrl(null)}
             />
           ) : (
-            <div className="h-16 w-16 bg-gradient-to-br from-[#0F4C3A] to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/10 border border-emerald-500/10">
-              <ShieldCheck className="h-9 w-9 text-[#D4AF37]" />
-            </div>
+            <img src="/app logo.png" alt="Sharify Logo" className="h-16 w-auto object-contain" />
           )}
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 tracking-tight">

@@ -175,7 +175,7 @@ export const Cashflow: React.FC = () => {
 
   return (
     <DashboardContainer>
-      
+      <div className="px-6 pt-12 pb-6">
       {/* Dynamic Spiritual Nudging Alert Banner */}
       <div className="mb-8">
         {hasSedekahThisMonth ? (
@@ -208,18 +208,18 @@ export const Cashflow: React.FC = () => {
 
       {/* Title */}
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
-          <Coins className="h-8 w-8 text-[#0F4C3A] mr-3" />
-          Daily Cashflow & Sedekah
+        <h1 className="text-2xl font-extrabold text-slate-900 flex items-center">
+          <Coins className="h-6 w-6 text-emerald-600 mr-2" />
+          Daily Cashflow
         </h1>
-        <p className="text-gray-500 mt-1">Pantau pemasukan dan pengeluaran harian Anda, sembari menjaga istiqomah berbagi berkah melalui sedekah.</p>
+        <p className="text-sm text-slate-500 mt-2">Pantau pemasukan dan pengeluaran harian, sembari menjaga istiqomah berbagi berkah melalui sedekah.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="flex flex-col gap-6">
         
-        {/* Left Column: Transaction Logging Form (5/12 width) */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        {/* Top: Transaction Logging Form */}
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-50 pb-3">Catat Transaksi Baru</h3>
             
             <form onSubmit={handleAddTransaction} className="space-y-4">
@@ -255,9 +255,9 @@ export const Cashflow: React.FC = () => {
 
               {/* Amount Input */}
               <div>
-                <label className="block text-xs font-extrabold text-gray-400 uppercase mb-2">Nominal (Rupiah)</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Nominal (Rupiah)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-3.5 text-xs font-bold text-gray-400">Rp</span>
+                  <span className="absolute left-4 top-4 text-sm font-bold text-slate-400">Rp</span>
                   <input 
                     ref={amountInputRef}
                     required
@@ -266,7 +266,7 @@ export const Cashflow: React.FC = () => {
                     value={amount}
                     onChange={e => setAmount(e.target.value)}
                     placeholder="0"
-                    className="w-full pl-9 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-extrabold font-mono text-gray-800"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-shadow"
                   />
                 </div>
               </div>
@@ -316,7 +316,7 @@ export const Cashflow: React.FC = () => {
               <button 
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-extrabold py-3.5 px-4 rounded-xl transition-all shadow-md flex items-center justify-center disabled:opacity-50"
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-2xl transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center disabled:opacity-50"
               >
                 {isSaving ? 'Menyimpan ke Supabase...' : 'Simpan Transaksi'}
               </button>
@@ -324,11 +324,11 @@ export const Cashflow: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Visual Summary & Recent list (7/12 width) */}
-        <div className="lg:col-span-7 space-y-6">
+        {/* Bottom: Visual Summary & Recent list */}
+        <div className="space-y-6">
           
           {/* Visual Summary counters */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-6">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Ringkasan Bulan Ini</h3>
             
             <div className="grid grid-cols-3 gap-4">
@@ -354,10 +354,10 @@ export const Cashflow: React.FC = () => {
           </div>
 
           {/* Recent list transactions */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Histori Transaksi</h3>
-              <span className="text-[10px] text-gray-400 font-bold">{transactions.length} Transaksi</span>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Histori Transaksi</h3>
+              <span className="text-[10px] text-slate-400 font-bold bg-white dark:bg-slate-800 px-2 py-1 rounded-full shadow-sm">{transactions.length} Transaksi</span>
             </div>
 
             <div className="divide-y divide-gray-100 max-h-[400px] overflow-y-auto">
@@ -408,6 +408,7 @@ export const Cashflow: React.FC = () => {
 
         </div>
 
+      </div>
       </div>
     </DashboardContainer>
   );

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { LandingPage } from './pages/LandingPage';
 import { AboutUsPage } from './pages/AboutUsPage';
 import { Dashboard } from './pages/Dashboard';
+import { ExplorePage } from './pages/ExplorePage';
 import { Chat } from './pages/Chat';
 import { ZakatCalculator } from './pages/ZakatCalculator';
 import { Profile } from './pages/Profile';
@@ -110,6 +111,7 @@ function App() {
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/explore" element={<ExplorePage />} />
           <Route path="/cashflow" element={<Cashflow />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/zakat" element={<ZakatCalculator />} />

@@ -143,7 +143,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
                     onError={() => setLogoError(true)}
                   />
                 ) : (
-                  <ShieldCheck className="w-6 h-6 text-[#10B981] mr-2" />
+                  <img src="/app logo.png" alt="Sharify Logo" className="w-6 h-6 object-contain mr-2" />
                 )}
                 <span className="text-base font-bold text-slate-900 dark:text-white truncate">Sharify App</span>
               </Link>

@@ -159,232 +159,237 @@ Jika Pihak Kedua terlambat melakukan pembayaran angsuran bulanan karena kelalaia
 
   return (
     <DashboardContainer>
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
-          <FileText className="h-8 w-8 text-[#0F4C3A] mr-3" />
-          Smart Akad Analyzer
-        </h1>
-        <p className="text-gray-500 mt-1">Audit kontrak pembiayaan, KPR, atau pinjaman secara otomatis untuk memastikan bebas dari klausul Riba, Gharar, dan kedzaliman finansial.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: Contract Input Area (5/12 width) */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Input Dokumen Akad</h3>
-              <span className="text-xs text-gray-400 font-mono">Batas: 5.000 kata</span>
-            </div>
-
-            {/* Quick Template Selector */}
-            <div className="mb-4">
-              <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Pilih Templat Uji Coba Cepat:</p>
-              <div className="flex flex-col gap-2">
-                <button 
-                  onClick={() => handleSelectTemplate('kprKonvensional')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-100 transition-colors flex items-center justify-between"
-                >
-                  <span>1. KPR Konvensional (Bunga Majemuk)</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-                <button 
-                  onClick={() => handleSelectTemplate('kontrakKerja')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 transition-colors flex items-center justify-between"
-                >
-                  <span>2. Pinjaman Karyawan (Pinalti Sepihak)</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-                <button 
-                  onClick={() => handleSelectTemplate('murabahahSyariah')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 transition-colors flex items-center justify-between"
-                >
-                  <span>3. Akad Murabahah (Halal Compliant)</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Text Editor */}
-            <form onSubmit={handleAnalyze} className="space-y-4">
-              <textarea 
-                required
-                rows={12}
-                value={contractText}
-                onChange={e => setContractText(e.target.value)}
-                placeholder="Tempel klausul kontrak pembiayaan di sini (atau klik salah satu templat uji coba di atas)..."
-                className="w-full p-4 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono leading-relaxed"
-              />
-
-              <button 
-                type="submit"
-                disabled={isAnalyzing || !contractText.trim()}
-                className="w-full bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-extrabold py-3.5 px-4 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isAnalyzing ? (
-                  <span>Menganalisis Akad...</span>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 text-amber-400" />
-                    <span>Mulai Analisis Akad</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
+      <div className="px-6 pt-12 pb-6">
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold text-slate-900 flex items-center mb-2">
+            <FileText className="h-6 w-6 text-emerald-600 mr-2" />
+            Smart Akad Analyzer
+          </h1>
+          <p className="text-sm text-slate-500">Audit kontrak pembiayaan, KPR, atau pinjaman secara otomatis untuk memastikan bebas dari klausul Riba, Gharar, dan kedzaliman finansial.</p>
         </div>
 
-        {/* Right Column: Audit Report (7/12 width) */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="flex flex-col gap-6">
           
-          {isAnalyzing && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center space-y-6">
-              
-              {/* Spinning progress dial */}
-              <div className="relative h-28 w-28 mx-auto flex items-center justify-center">
-                <RefreshCw className="h-16 w-16 text-[#0F4C3A] animate-spin" />
-                <span className="absolute text-sm font-black text-gray-800">{progress}%</span>
+          {/* Top: Contract Input Area */}
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800">
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Input Dokumen Akad</h3>
+                <span className="text-[10px] text-slate-400 font-mono">Batas: 5.000 kata</span>
               </div>
 
-              <div>
-                <h3 className="font-extrabold text-gray-900 text-lg">Menjalankan Audit Akad Syariah...</h3>
-                <p className="text-xs text-emerald-600 font-semibold mt-1.5 animate-pulse">
-                  {analysisStep || 'Menginisialisasi analisis Fiqh Muamalah...'}
+              {/* Quick Template Selector */}
+              <div className="mb-5">
+                <p className="text-[10px] text-slate-400 font-bold uppercase mb-2.5">Pilih Templat Uji Coba Cepat:</p>
+                <div className="flex flex-col gap-2">
+                  <button 
+                    onClick={() => handleSelectTemplate('kprKonvensional')}
+                    className="w-full text-left px-4 py-3 rounded-2xl text-xs font-bold bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-800/30 transition-colors flex items-center justify-between"
+                  >
+                    <span>1. KPR Konvensional (Bunga Majemuk)</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => handleSelectTemplate('kontrakKerja')}
+                    className="w-full text-left px-4 py-3 rounded-2xl text-xs font-bold bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/30 transition-colors flex items-center justify-between"
+                  >
+                    <span>2. Pinjaman Karyawan (Pinalti Sepihak)</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => handleSelectTemplate('murabahahSyariah')}
+                    className="w-full text-left px-4 py-3 rounded-2xl text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/30 transition-colors flex items-center justify-between"
+                  >
+                    <span>3. Akad Murabahah (Halal Compliant)</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Text Editor */}
+              <form onSubmit={handleAnalyze} className="space-y-4">
+                <textarea 
+                  required
+                  rows={10}
+                  value={contractText}
+                  onChange={e => setContractText(e.target.value)}
+                  placeholder="Tempel klausul kontrak pembiayaan di sini (atau klik salah satu templat uji coba di atas)..."
+                  className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 font-mono leading-relaxed resize-none"
+                />
+
+                <button 
+                  type="submit"
+                  disabled={isAnalyzing || !contractText.trim()}
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-2xl transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isAnalyzing ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Menganalisis...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 text-amber-300" />
+                      <span>Mulai Analisis Akad</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Bottom Column: Audit Report */}
+          <div className="space-y-6">
+          
+            {isAnalyzing && (
+              <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-8 text-center space-y-6">
+                
+                {/* Spinning progress dial */}
+                <div className="relative h-28 w-28 mx-auto flex items-center justify-center">
+                  <RefreshCw className="h-16 w-16 text-emerald-500 animate-spin" />
+                  <span className="absolute text-sm font-black text-slate-800 dark:text-white">{progress}%</span>
+                </div>
+
+                <div>
+                  <h3 className="font-extrabold text-slate-900 dark:text-white text-lg">Menjalankan Audit Akad Syariah...</h3>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-2 animate-pulse leading-relaxed">
+                    {analysisStep || 'Menginisialisasi analisis Fiqh Muamalah...'}
+                  </p>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="max-w-md mx-auto bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-100" style={{ width: `${progress}%` }}></div>
+                </div>
+              </div>
+            )}
+
+            {!isAnalyzing && !report && (
+              <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-12 text-center">
+                <div className="h-16 w-16 bg-amber-50 dark:bg-amber-900/20 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-500">
+                  <FileText className="h-8 w-8" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Menunggu Analisis Kontrak</h3>
+                <p className="text-sm text-slate-500 mt-2 max-w-sm mx-auto leading-relaxed">
+                  Silakan tempel teks akad di sebelah kiri atau klik templat uji coba, lalu tekan "Mulai Analisis Akad" untuk mengaktifkan audit kepatuhan Fiqh Muamalah.
                 </p>
               </div>
+            )}
 
-              {/* Progress Bar */}
-              <div className="max-w-md mx-auto bg-gray-100 h-2 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-[#0F4C3A] to-[#D4AF37] h-full transition-all duration-100" style={{ width: `${progress}%` }}></div>
-              </div>
-            </div>
-          )}
-
-          {!isAnalyzing && !report && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
-              <div className="h-16 w-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 text-[#D4AF37]">
-                <FileText className="h-8 w-8" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">Menunggu Analisis Kontrak</h3>
-              <p className="text-sm text-gray-500 mt-1 max-w-sm mx-auto">
-                Silakan tempel teks akad di sebelah kiri atau klik templat uji coba, lalu tekan "Mulai Analisis Akad" untuk mengaktifkan audit kepatuhan Fiqh Muamalah.
-              </p>
-            </div>
-          )}
-
-          {!isAnalyzing && report && (
-            <div className="space-y-6">
-              
-              {/* Compliance Rating Card */}
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="flex items-center space-x-4">
-                  <div className="h-16 w-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center font-extrabold text-gray-900 shadow-inner">
-                    <Scale className="w-8 h-8 text-[#0F4C3A]" />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-gray-900 text-lg">Skor Kepatuhan Akad Syariah</h3>
-                    <p className="text-xs text-gray-400 mt-1">Diaudit secara otomatis menggunakan standar Fiqh Kontemporer.</p>
-                  </div>
-                </div>
-
-                <div className="text-center sm:text-right">
-                  <div className="text-4xl font-black font-mono text-[#0F4C3A]">
-                    {report.score} <span className="text-sm font-normal text-gray-400">/ 100</span>
-                  </div>
-                  <div className="mt-1">
-                    {report.status === 'Lolos Kepatuhan' ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                        <CheckCircle2 className="w-3 h-3 mr-1" /> 100% SYARIAH COMPLIANT
-                      </span>
-                    ) : report.status === 'Gagal Kepatuhan' ? (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200 animate-pulse">
-                        <AlertOctagon className="w-3 h-3 mr-1" /> REKOMENDASI REVISI (Tinggi Riba)
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                        <ShieldAlert className="w-3 h-3 mr-1" /> REKOMENDASI REVISI SEDANG
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Findings Audit Cards */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider">Hasil Audit Klausul</h4>
-
-                {report.findings.map((finding, idx) => (
-                  <div key={idx} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
-                    finding.type === 'Riba' 
-                      ? 'border-red-500/30' 
-                      : finding.type === 'Gharar' 
-                      ? 'border-amber-500/30' 
-                      : 'border-emerald-500/30'
-                  }`}>
-                    {/* Finding Header */}
-                    <div className={`px-5 py-4 border-b flex items-center justify-between ${
-                      finding.type === 'Riba' 
-                        ? 'bg-red-50/40 border-red-100' 
-                        : finding.type === 'Gharar' 
-                        ? 'bg-amber-50/40 border-amber-100' 
-                        : 'bg-emerald-50/40 border-emerald-100'
-                    }`}>
-                      <div className="flex items-center space-x-2">
-                        {finding.type === 'Riba' ? (
-                          <ShieldAlert className="w-5 h-5 text-red-600 animate-bounce" />
-                        ) : finding.type === 'Gharar' ? (
-                          <AlertOctagon className="w-5 h-5 text-amber-600" />
-                        ) : (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                        )}
-                        <h4 className="text-sm font-extrabold text-gray-800">{finding.clauseName}</h4>
-                      </div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        finding.type === 'Riba' 
-                          ? 'bg-red-100 text-red-800' 
-                          : finding.type === 'Gharar' 
-                          ? 'bg-amber-100 text-amber-800' 
-                          : 'bg-emerald-100 text-emerald-800'
-                      }`}>
-                        {finding.type}
-                      </span>
+            {!isAnalyzing && report && (
+              <div className="space-y-6">
+                
+                {/* Compliance Rating Card */}
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_20px_rgb(0,0,0,0.04)] p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-16 w-16 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 flex items-center justify-center shadow-inner">
+                      <Scale className="w-8 h-8 text-emerald-600" />
                     </div>
+                    <div>
+                      <h3 className="font-extrabold text-slate-900 dark:text-white text-lg">Skor Kepatuhan Akad</h3>
+                      <p className="text-xs text-slate-400 mt-1 font-medium">Diaudit secara otomatis dengan standar Fiqh Kontemporer.</p>
+                    </div>
+                  </div>
 
-                    {/* Finding Content */}
-                    <div className="p-5 space-y-4">
-                      
-                      {/* Highlighted text segment */}
-                      <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100 text-xs font-mono text-gray-600 italic">
-                        "{finding.foundText}"
-                      </div>
-
-                      {/* Explanation */}
-                      <div>
-                        <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Analisis Fiqh</span>
-                        <p className="text-xs text-gray-600 leading-relaxed mt-1">{finding.explanation}</p>
-                      </div>
-
-                      {/* Alternative */}
-                      <div className="bg-emerald-50/30 p-3.5 rounded-xl border border-emerald-100/40 space-y-1">
-                        <span className="block text-[10px] font-bold text-emerald-700 uppercase tracking-wider flex items-center">
-                          <BookOpen className="w-3.5 h-3.5 mr-1" /> Rekomendasi Solusi Halal
+                  <div className="text-center sm:text-right">
+                    <div className="text-4xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+                      {report.score} <span className="text-sm font-bold text-slate-400">/ 100</span>
+                    </div>
+                    <div className="mt-2">
+                      {report.status === 'Lolos Kepatuhan' ? (
+                        <span className="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+                          <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" /> 100% SYARIAH COMPLIANT
                         </span>
-                        <div className="text-xs text-emerald-800 leading-relaxed flex items-start">
-                          <CornerDownRight className="w-3.5 h-3.5 mr-1.5 mt-0.5 flex-shrink-0 text-emerald-600" />
-                          <p>{finding.alternative}</p>
-                        </div>
-                      </div>
-
+                      ) : report.status === 'Gagal Kepatuhan' ? (
+                        <span className="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-400 border border-rose-200 dark:border-rose-800/50 animate-pulse">
+                          <AlertOctagon className="w-3.5 h-3.5 mr-1.5" /> REKOMENDASI REVISI (Tinggi Riba)
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50">
+                          <ShieldAlert className="w-3.5 h-3.5 mr-1.5" /> REKOMENDASI REVISI SEDANG
+                        </span>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
 
-            </div>
-          )}
+                {/* Findings Audit Cards */}
+                <div className="space-y-5">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hasil Audit Klausul</h4>
+
+                  {report.findings.map((finding, idx) => (
+                    <div key={idx} className={`bg-white dark:bg-slate-900 rounded-3xl border shadow-[0_2px_20px_rgb(0,0,0,0.04)] overflow-hidden transition-all ${
+                      finding.type === 'Riba' 
+                        ? 'border-rose-500/30 dark:border-rose-500/20' 
+                        : finding.type === 'Gharar' 
+                        ? 'border-amber-500/30 dark:border-amber-500/20' 
+                        : 'border-emerald-500/30 dark:border-emerald-500/20'
+                    }`}>
+                      {/* Finding Header */}
+                      <div className={`px-6 py-5 border-b flex items-center justify-between ${
+                        finding.type === 'Riba' 
+                          ? 'bg-rose-50/40 dark:bg-rose-900/10 border-rose-100 dark:border-rose-800/30' 
+                          : finding.type === 'Gharar' 
+                          ? 'bg-amber-50/40 dark:bg-amber-900/10 border-amber-100 dark:border-amber-800/30' 
+                          : 'bg-emerald-50/40 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-800/30'
+                      }`}>
+                        <div className="flex items-center space-x-3">
+                          {finding.type === 'Riba' ? (
+                            <ShieldAlert className="w-5 h-5 text-rose-600 animate-bounce" />
+                          ) : finding.type === 'Gharar' ? (
+                            <AlertOctagon className="w-5 h-5 text-amber-500" />
+                          ) : (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          )}
+                          <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">{finding.clauseName}</h4>
+                        </div>
+                        <span className={`text-[10px] font-black px-3 py-1 rounded-lg tracking-wider uppercase ${
+                          finding.type === 'Riba' 
+                            ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-400' 
+                            : finding.type === 'Gharar' 
+                            ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400' 
+                            : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400'
+                        }`}>
+                          {finding.type}
+                        </span>
+                      </div>
+
+                      {/* Finding Content */}
+                      <div className="p-6 space-y-5">
+                        
+                        {/* Highlighted text segment */}
+                        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-600 dark:text-slate-400 italic leading-relaxed">
+                          "{finding.foundText}"
+                        </div>
+
+                        {/* Explanation */}
+                        <div>
+                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Analisis Fiqh</span>
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{finding.explanation}</p>
+                        </div>
+
+                        {/* Alternative */}
+                        <div className="bg-emerald-50/50 dark:bg-emerald-900/10 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-800/30 space-y-2">
+                          <span className="block text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider flex items-center">
+                            <BookOpen className="w-3.5 h-3.5 mr-1.5" /> Rekomendasi Solusi Halal
+                          </span>
+                          <div className="text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed font-medium flex items-start">
+                            <CornerDownRight className="w-3.5 h-3.5 mr-2 mt-0.5 flex-shrink-0 text-emerald-600 dark:text-emerald-500" />
+                            <p>{finding.alternative}</p>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            )}
+
+          </div>
 
         </div>
-
       </div>
     </DashboardContainer>
   );

@@ -175,7 +175,7 @@ export const Pricing: React.FC = () => {
             key={tier.name} 
             className={`relative rounded-[2rem] border p-8 flex flex-col transition-all duration-500 group ${
               tier.popular 
-                ? 'bg-[#3B82F6] border-[#3B82F6] shadow-xl md:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-blue-500/30' 
+                ? 'bg-[#3B82F6] border-[#3B82F6] shadow-xl md:scale-[1.08] z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-blue-500/30' 
                 : 'bg-white border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-slate-200'
             }`}
           >

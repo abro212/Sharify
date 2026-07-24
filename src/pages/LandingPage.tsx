@@ -1,835 +1,564 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { 
-  ShieldCheck, HeartPulse, Calculator, RefreshCcw, CheckCircle2, 
-  Lock, AlertTriangle, BookOpen, MessageSquare, Briefcase, BrainCircuit,
-  TrendingUp, Users, Star, Quote, Menu, X, Search, Coins,
-  Shield, Zap, Crown, Check
+  TrendingUp, MessageSquare, Calculator, RefreshCcw, Target, BookOpen,
+  ShieldCheck, Users, Star, Download, Play, Lock, ChevronDown, 
+  Globe, Sparkles, Menu, X
 } from 'lucide-react';
-import { useSettingsStore, bustCache } from '../store/settingsStore';
-import { useAuthStore } from '../store/authStore';
-import { supabase } from '../lib/supabase';
 import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 
 export const LandingPage: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { settings } = useSettingsStore();
-  const { session, profile } = useAuthStore();
-  const currentRole = profile?.role || 'free';
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (session) {
-      navigate('/dashboard', { replace: true });
-    }
-  }, [session, navigate]);
-  const handlePlanClick = () => {
-    if (!session) {
-      navigate('/signup');
-    } else {
-      navigate('/upgrade');
-    }
-  };
-
-  const tiers = [
-    {
-      name: 'Free',
-      role: 'free',
-      price: 'Rp 0',
-      description: 'Essential tools for personal Sharia compliance.',
-      icon: <Shield className="w-5 h-5 text-slate-400" />,
-      iconClass: 'bg-slate-50 border-slate-100 text-slate-400',
-      features: [
-        'Zakat Calculator',
-        'Basic Financial Health Check',
-        'Limited AI Assistant Queries',
-      ],
-      buttonText: !session ? 'Daftar Gratis' : currentRole === 'free' ? 'Plan Aktif' : 'Downgrade',
-      buttonStyle: 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-    },
-    {
-      name: 'Sharify Plus',
-      role: 'plus',
-      price: 'Rp 49.000',
-      period: '/mo',
-      description: 'Advanced tools for active financial management.',
-      icon: <Zap className="w-5 h-5 text-[#10B981]" />,
-      iconClass: 'bg-emerald-50 border-emerald-100/50 text-[#10B981]',
-      features: [
-        'Everything in Free',
-        'Unlimited AI Assistant Queries',
-        'Full Riba Detox Action Plan',
-        'Detailed Analytics'
-      ],
-      buttonText: !session ? 'Upgrade ke Plus' : currentRole === 'plus' ? 'Plan Aktif' : 'Upgrade to Plus',
-      buttonStyle: 'bg-[#10B981] text-white hover:bg-emerald-600',
-      popular: false
-    },
-    {
-      name: 'Sharify Pro',
-      role: 'pro',
-      price: 'Rp 149.000',
-      period: '/mo',
-      description: 'Expert guidance and complex portfolio management.',
-      icon: <Crown className="w-5 h-5 text-amber-500" />,
-      iconClass: 'bg-amber-50 border-amber-100/50 text-amber-500',
-      features: [
-        'Everything in Plus',
-        '1-on-1 Human Scholar Consultations',
-        'Direct Chat with Ustadz',
-        'Priority Support'
-      ],
-      buttonText: !session ? 'Upgrade ke Pro' : currentRole === 'pro' ? 'Plan Aktif' : 'Upgrade to Pro',
-      buttonStyle: 'bg-[#F59E0B] text-white hover:bg-[#d97706]',
-      popular: true
-    },
-    {
-      name: 'Family Plan',
-      role: 'family',
-      price: 'Rp 199.000',
-      period: '/mo',
-      description: 'Comprehensive Sharia planning for the whole household.',
-      icon: <Users className="w-5 h-5 text-[#0F4C3A]" />,
-      iconClass: 'bg-[#E6F4ED] border-[#10B981]/25 text-[#0F4C3A]',
-      features: [
-        'Up to 4 Pro Accounts',
-        'Faraidh (Inheritance) Simulator',
-        'Wakaf Planning Tools',
-        'Shared Family Dashboards'
-      ],
-      buttonText: !session ? 'Mulai Family' : currentRole === 'family' ? 'Plan Aktif' : 'Upgrade to Family',
-      buttonStyle: 'bg-[#0F4C3A] text-white hover:bg-[#0c3d2e]',
-      popular: false
-    }
-  ];
-
-  // ── Direct logo fetch ──────────────────────────────────────────
-  // The logo is fetched directly from Supabase here in the component
-  // (not just from the store) so it is guaranteed to be the latest
-  // value from the database on every page mount.
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [logoLoading, setLogoLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    const fetchLogo = async () => {
-      setLogoLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('system_settings')
-          .select('value')
-          .eq('key', 'logo_url')
-          .maybeSingle();
-
-        if (!cancelled) {
-          if (error) {
-            console.error('[LandingPage] Logo fetch error:', error.message);
-            setLogoUrl(null);
-          } else {
-            // Verify the value is a non-empty string before using it
-            const rawUrl = data?.value;
-            setLogoUrl(rawUrl && rawUrl.trim() !== '' ? rawUrl.trim() : null);
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          console.error('[LandingPage] Unexpected logo fetch error:', err);
-          setLogoUrl(null);
-        }
-      } finally {
-        if (!cancelled) setLogoLoading(false);
-      }
-    };
-
-    fetchLogo();
-    return () => { cancelled = true; };
-  }, []);
-
-  // Cache-bust the URL once at fetch time (not on every render)
-  const resolvedLogoUrl = useMemo(() => bustCache(logoUrl), [logoUrl]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('beranda');
 
   return (
-    <div className="min-h-screen bg-cyber-grid text-slate-800 font-sans selection:bg-emerald-500 selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-emerald-600 selection:text-white relative overflow-x-hidden">
       
-      {/* 1. Clean Navbar */}
-      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+      {/* 1. Header / Navbar */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center">
-            {logoLoading ? (
-              // Skeleton: shown while direct DB fetch is in-flight
-              <div className="h-9 w-24 bg-slate-100 rounded-full animate-pulse" />
-            ) : resolvedLogoUrl ? (
-              // URL verified non-null from DB — cache-busted at fetch time
-              <img
-                src={resolvedLogoUrl}
-                alt="Sharify Logo"
-                className="h-9 object-contain"
-                onError={() => setLogoUrl(null)}
-              />
-            ) : (
-              // Fallback to default brand mark when no logo is in DB
-              <div className="flex items-center group">
-                <div className="h-10 w-10 rounded-2xl bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform duration-300">
-                  <ShieldCheck className="h-6 w-6 text-white" />
-                </div>
-                <span className="ml-3 text-2xl font-black text-slate-900 tracking-tight">Sharify</span>
-              </div>
-            )}
-          </div>
           
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/tentang-kami" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Tentang Kami</Link>
-            <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
-            <a href="#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
-            <a href="#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
-            <a href="#harga" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Harga</a>
-          </div>
-          
-          {/* Desktop CTAs - Using Fully Rounded Pill Buttons (like screenshot) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login" className="text-sm font-bold text-slate-600 hover:text-slate-900 px-4 py-2 transition-colors">Masuk</Link>
-            <Link to="/signup" className="bg-[#10B981] hover:bg-[#0d9488] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] active:scale-[0.98]">
-              Daftar Gratis
-            </Link>
-          </div>
+          {/* Logo Brand */}
+          <Link to="/" className="flex items-center space-x-3">
+            <img src="/app logo.png" alt="Sharify Logo" className="h-10 w-auto object-contain" />
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold text-[#064E3B] tracking-tight leading-none">Sharify</span>
+              <span className="text-[9px] font-bold text-amber-600 tracking-wider uppercase mt-0.5">AI-Based Islamic Financial Advisory</span>
+            </div>
+          </Link>
 
-          {/* Mobile Hamburger Button */}
-          <div className="flex md:hidden items-center">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-7">
+            {[
+              { id: 'beranda', label: 'Beranda', href: '#' },
+              { id: 'fitur', label: 'Fitur', href: '#fitur' },
+              { id: 'manfaat', label: 'Manfaat', href: '#manfaat' },
+              { id: 'tentang-kami', label: 'Tentang Kami', href: '#tentang-kami' },
+              { id: 'faq', label: 'FAQ', href: '#faq' },
+              { id: 'blog', label: 'Blog', href: '#blog' },
+            ].map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={() => setActiveTab(item.id)}
+                className={`text-sm font-bold transition-all relative py-1 ${
+                  activeTab === item.id 
+                    ? 'text-[#064E3B] border-b-2 border-[#064E3B]' 
+                    : 'text-slate-600 hover:text-[#064E3B]'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right Header Actions */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {/* Language Selector */}
+            <div className="relative flex items-center space-x-1 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 cursor-pointer">
+              <Globe className="w-3.5 h-3.5 text-slate-500" />
+              <span>ID</span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </div>
+
+            {/* Gold CTA Button */}
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              type="button"
-              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors border border-slate-100"
-              aria-label="Toggle Menu"
+              onClick={() => navigate('/dashboard')}
+              className="bg-[#D97706] hover:bg-[#B45309] text-white text-xs font-extrabold px-6 py-2.5 rounded-full shadow-md shadow-amber-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              Unduh Aplikasi
             </button>
           </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-xl"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-4 shadow-lg animate-fade-in z-50">
-            <div className="flex flex-col space-y-1">
-              <Link 
-                to="/tentang-kami" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Tentang Kami
-              </Link>
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white border-b border-slate-100 px-6 py-4 space-y-3 shadow-xl animate-fade-in">
+            {['Beranda', 'Fitur', 'Manfaat', 'Tentang Kami', 'FAQ', 'Blog'].map((label, idx) => (
               <a 
-                href="#features" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+                key={idx} 
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-700 hover:text-[#064E3B] py-2 border-b border-slate-50"
               >
-                Fitur
+                {label}
               </a>
-              <a 
-                href="#solusi" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+            ))}
+            <div className="pt-2 flex flex-col space-y-2">
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); navigate('/dashboard'); }}
+                className="w-full bg-[#064E3B] text-white text-xs font-extrabold py-3 rounded-xl"
               >
-                Solusi
-              </a>
-              <a 
-                href="#teknologi" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
+                Buka Aplikasi Web
+              </button>
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); navigate('/dashboard'); }}
+                className="w-full bg-[#D97706] text-white text-xs font-extrabold py-3 rounded-xl"
               >
-                Teknologi
-              </a>
-              <a 
-                href="#harga" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Harga
-              </a>
-            </div>
-            
-            <div className="pt-2 flex flex-col space-y-3">
-              <Link 
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center text-sm font-bold text-slate-700 hover:text-slate-900 py-3 rounded-full border border-slate-200 bg-white"
-              >
-                Masuk
-              </Link>
-              <Link 
-                to="/signup"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center text-sm font-bold bg-[#10B981] hover:bg-[#0d9488] text-white py-3 rounded-full shadow-lg shadow-emerald-500/10"
-              >
-                Daftar Gratis
-              </Link>
+                Unduh Aplikasi Mobile
+              </button>
             </div>
           </div>
         )}
-      </nav>
+      </header>
 
       {/* 2. Hero Section */}
-      <main className="pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden relative bg-white">
+      <section className="relative pt-8 pb-20 lg:pt-16 lg:pb-28 overflow-hidden bg-gradient-to-b from-emerald-50/40 via-white to-[#F8FAFC]">
+        {/* Subtle Islamic Motif Pattern Background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#064E3B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            <div className="lg:w-1/2 text-center lg:text-left">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 text-[#10B981] text-xs font-bold tracking-wider uppercase mb-6 border border-emerald-100 shadow-sm">
-                <span className="flex h-2.5 w-2.5 rounded-full bg-[#10B981] mr-2"></span>
-                AI-Powered Islamic Finance
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Content */}
+            <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+              {/* Badge */}
+              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-amber-200/80 text-xs font-extrabold shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 mr-2 text-amber-600 fill-amber-600" />
+                <span>Keuangan Islami, Hidup Berkah</span>
               </div>
-              
-              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-[1.15]">
-                {settings.hero_title.split(' ').map((word, i) => (
-                  <span key={i} className={i >= 3 ? "text-[#10B981] inline-block mr-2" : "inline-block mr-2"}>
-                    {word}
-                  </span>
-                ))}
+
+              {/* Main Headline */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.18] tracking-tight">
+                Bimbingan Keuangan Islami, Kini Lebih <span className="text-[#064E3B] underline decoration-amber-400 decoration-4 underline-offset-4">Mudah & Personal</span>
               </h1>
-              
-              <p className="text-base lg:text-lg text-slate-500 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
-                {settings.hero_subtitle}
+
+              {/* Description */}
+              <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Sharify adalah aplikasi Islamic financial advisory berbasis AI yang membantu kamu mengelola keuangan sesuai syariah untuk masa depan yang lebih berkah.
               </p>
-              
-              {/* Fully rounded pills for hero buttons (like reference image) */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Link to="/signup" className="w-full sm:w-auto bg-[#10B981] hover:bg-[#0d9488] text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-emerald-500/15 transition-all duration-300 hover:-translate-y-0.5 text-center text-base">
-                  {settings.hero_cta_primary}
-                </Link>
-                <a href="#features" className="w-full sm:w-auto bg-white hover:bg-slate-50 text-[#10B981] border-2 border-[#10B981] px-8 py-4 rounded-full font-bold shadow-sm transition-all duration-300 flex items-center justify-center text-base hover:-translate-y-0.5">
-                  {settings.hero_cta_secondary}
-                </a>
-              </div>
-            </div>
-            
-            {/* Visual Mockups Representing Clean Mobile Screens From Reference Image */}
-            <div className="lg:w-1/2 w-full relative flex justify-center h-[540px]">
-              
-              {/* Phone Mockup 1: "Let's Get Started" Splash Screen */}
-              <div className="w-[250px] h-[500px] bg-white border-[6px] border-slate-100 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col p-6 z-20 hover:scale-[1.02] transition-transform duration-300 select-none">
-                {/* Speaker & camera dots */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-50 rounded-full flex items-center justify-center">
-                  <div className="w-8 h-1 bg-slate-200 rounded-full" />
-                </div>
-                <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 mt-1 mb-6">
-                  <span>8:01</span>
-                  <div className="flex space-x-1">
-                    <span className="w-2.5 h-2 bg-slate-300 rounded-xs block" />
-                    <span className="w-3 h-2 bg-slate-300 rounded-xs block" />
-                  </div>
-                </div>
 
-                {/* Minimalist Flag Illustration from Screenshot */}
-                <div className="flex-1 flex flex-col items-center justify-center my-2">
-                  <div className="relative w-36 h-36 bg-emerald-50/70 rounded-full flex items-center justify-center border border-emerald-100/50 mb-6">
-                    <div className="absolute w-24 h-16 border-2 border-[#10B981] border-dashed rounded-full opacity-35 animate-spin [animation-duration:20s]" />
-                    <div className="h-14 w-14 rounded-full bg-[#10B981] flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                      <ShieldCheck className="h-8 w-8 text-white" />
-                    </div>
-                  </div>
-
-                  <h3 className="text-lg font-black text-slate-900 text-center tracking-tight leading-none">Mulai Perjalanan Anda ✨</h3>
-                  <p className="text-[10px] text-slate-400 text-center mt-2 leading-relaxed px-2 font-medium">
-                    Daftar sekarang agar perencanaan finansial Anda semakin terarah dan berkah.
-                  </p>
-                  
-                  {/* Small Pagination Dots */}
-                  <div className="flex justify-center space-x-1.5 mt-4">
-                    <span className="w-2.5 h-1 bg-[#10B981] rounded-full" />
-                    <span className="w-1.5 h-1 bg-slate-200 rounded-full" />
-                    <span className="w-1.5 h-1 bg-slate-200 rounded-full" />
-                  </div>
-                </div>
-
-                {/* Splash CTAs */}
-                <div className="space-y-2 mt-auto">
-                  <Link to="/signup" className="block w-full bg-[#10B981] text-white text-[11px] font-extrabold py-3.5 rounded-full text-center shadow-sm shadow-emerald-500/5 hover:bg-emerald-600 transition-colors">
-                    Daftar Sekarang
-                  </Link>
-                  <Link to="/login" className="block w-full border border-[#10B981] text-[#10B981] text-[11px] font-extrabold py-3.5 rounded-full text-center hover:bg-emerald-50/50 transition-colors bg-white">
-                    Masuk
-                  </Link>
-                </div>
-              </div>
-
-              {/* Phone Mockup 2: Home Dashboard / Recent Transaction Screen (Layered behind) */}
-              <div className="w-[250px] h-[500px] bg-white border-[6px] border-slate-100 rounded-[3rem] shadow-xl absolute -right-4 top-10 overflow-hidden flex flex-col z-10 opacity-90 hidden sm:flex hover:opacity-100 transition-opacity duration-300">
-                {/* Speaker bar */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-50 rounded-full flex items-center justify-center">
-                  <div className="w-8 h-1 bg-slate-200 rounded-full" />
-                </div>
-                <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 p-6 pb-2 mt-1">
-                  <span>8:01</span>
-                </div>
-
-                {/* Dashboard Navbar */}
-                <div className="flex justify-between items-center px-4 py-2 border-b border-slate-50">
-                  <Menu className="h-4 w-4 text-slate-500" />
-                  <div className="flex items-center space-x-1">
-                    <span className="h-1.5 w-1.5 bg-[#10B981] rounded-full animate-ping" />
-                    <span className="text-[10px] font-black text-slate-900 tracking-wider">SHARIFY</span>
-                  </div>
-                  <Search className="h-4 w-4 text-slate-500" />
-                </div>
-
-                {/* Dashboard Content */}
-                <div className="p-3 flex-1 flex flex-col space-y-3.5 overflow-y-auto">
-                  {/* Clean Promo Banner */}
-                  <div className="bg-[#10B981] p-3 rounded-2xl text-white relative overflow-hidden flex flex-col justify-between h-24">
-                    <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-600 rounded-full opacity-50" />
-                    <div>
-                      <p className="text-[8px] opacity-75 font-bold uppercase tracking-wider">Sedekah Harian Era Baru</p>
-                      <h4 className="text-[11px] font-bold leading-tight mt-0.5">Aura Berkah: Cashback Sedekah 10% ✨</h4>
-                    </div>
-                    <button className="bg-white text-[#10B981] text-[8px] font-extrabold px-3 py-1 rounded-full w-max shadow-sm">
-                      Klaim Sekarang
-                    </button>
-                  </div>
-
-                  {/* Feature Grid */}
-                  <div>
-                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Fitur Andalan</h5>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { icon: Coins, text: 'Cashflow' },
-                        { icon: RefreshCcw, text: 'Riba Detox' },
-                        { icon: Calculator, text: 'Zakat' }
-                      ].map((item, idx) => (
-                        <div key={idx} className="bg-emerald-50/60 p-2 rounded-xl border border-emerald-100/30 flex flex-col items-center justify-center text-center">
-                          <item.icon className="h-4 w-4 text-[#10B981] mb-1" />
-                          <span className="text-[8px] font-bold text-[#10B981]">{item.text}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Recent Transaction List */}
-                  <div>
-                    <h5 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Transaksi Terkini</h5>
-                    <div className="space-y-2">
-                      {[
-                        { name: 'Abi Dan Ummi', desc: 'Sedekah Harian', val: 'Rp 100k', time: 'Baru Saja' },
-                        { name: 'Zulkifli Sharia', desc: 'Zakat Maal', val: 'Rp 2.5jt', time: '1 Jam Lalu' }
-                      ].map((item, idx) => (
-                        <div key={idx} className="bg-slate-50/60 p-2.5 rounded-xl flex items-center justify-between border border-slate-100/50">
-                          <div className="flex items-center space-x-2">
-                            <div className="h-7 w-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-[9px] text-slate-600">
-                              {item.name[0]}
-                            </div>
-                            <div>
-                              <p className="text-[9px] font-bold text-slate-900 leading-none">{item.name}</p>
-                              <p className="text-[7px] text-slate-400 mt-0.5">{item.desc}</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-[9px] font-bold text-[#10B981] block leading-none">{item.val}</span>
-                            <span className="text-[7px] text-slate-400 block mt-0.5">{item.time}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* 3. Trust & Syariah Compliance */}
-      <section className="py-12 border-y border-slate-100 relative bg-slate-50/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <p className="text-center text-xs font-bold text-slate-400 tracking-[0.2em] uppercase mb-8">Dirancang Sesuai Standar Kepatuhan Syariah</p>
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12">
-            {[
-              { icon: ShieldCheck, text: 'DSN-MUI Compliant' },
-              { icon: BookOpen, text: 'Sharia Board Supervised' },
-              { icon: Lock, text: 'Bank-Grade Security' }
-            ].map((badge, idx) => (
-              <div key={idx} className="flex items-center bg-white px-5 py-3 rounded-2xl border border-slate-100 shadow-sm hover:scale-105 transition-all duration-300">
-                <badge.icon className="h-5 w-5 mr-3 text-[#10B981]" />
-                <span className="font-bold text-slate-800 text-sm">{badge.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. The Problem / Sharia Challenges */}
-      <section id="solusi" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              Tantangan Finansial Muslim Modern
-            </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
-              Masalah nyata yang dihadapi umat dalam mengelola keuangan harian, menuntut solusi cerdas yang sesuai syariat.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: AlertTriangle, title: 'Jebakan Riba Konvensional 🚨', desc: 'Penggunaan pinjaman konvensional tanpa skema pelunasan yang jelas dapat mengganggu stabilitas keuangan Anda.', color: 'red' },
-              { icon: BrainCircuit, title: 'Keterbatasan Literasi Syariah', desc: 'Seringkali kesulitan dalam membedakan produk keuangan yang halal dan haram di era modern.', color: 'amber' },
-              { icon: Briefcase, title: 'Biaya Konsultasi Tinggi', desc: 'Biaya jasa konsultasi perencana keuangan profesional seringkali tidak terjangkau bagi sebagian besar kalangan.', color: 'emerald' },
-              { icon: RefreshCcw, title: 'Sistem Tidak Terintegrasi', desc: 'Aplikasi yang terpisah menyulitkan pengelolaan zakat, investasi, dan warisan secara efisien.', color: 'blue' }
-            ].map((problem, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center relative overflow-hidden group hover:shadow-md hover:border-emerald-500/10 transition-all duration-300">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 ${
-                  problem.color === 'red' ? 'bg-red-50 text-red-500' :
-                  problem.color === 'amber' ? 'bg-amber-50 text-amber-500' :
-                  problem.color === 'emerald' ? 'bg-emerald-50 text-[#10B981]' :
-                  'bg-blue-50 text-blue-500'
-                }`}>
-                  <problem.icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg mb-3 tracking-tight">{problem.title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-semibold">{problem.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. The Solution (Features Grid) */}
-      <section id="features" className="py-24 bg-slate-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              {settings.fitur_title}
-            </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium">
-              {settings.fitur_subtitle}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { icon: HeartPulse, title: 'Health Check Syariah 🩺', desc: 'Periksa skor kepatuhan syariah agar tabungan Anda aman, bersih, dan senantiasa berkah!' },
-              { icon: MessageSquare, title: 'AI Syarify Assistant 🤖', desc: 'Tanya jawab seputar Fiqh Muamalah secara instan 24/7 agar keputusan transaksi Anda semakin mantap.' },
-              { icon: ShieldCheck, title: 'Rencana Riba Detox 🍃', desc: 'Roadmap pelunasan cicilan konvensional berbantuan AI agar bebas riba seutuhnya.' },
-              { icon: TrendingUp, title: 'Investasi Halal Era Baru 📈', desc: 'Rekomendasi Sukuk dan Reksa Dana Syariah yang sesuai dengan profil risiko Anda.' },
-              { icon: Calculator, title: 'Zakat & Wakaf Hub 💰', desc: 'Kalkulasi Nisab otomatis terhubung dengan harga emas real-time agar perhitungan Anda lebih akurat.' },
-              { icon: Users, title: 'Faraidh Simulator 👨‍👩‍👧‍👦', desc: 'Simulasi pembagian warisan syariah agar perencanaan masa depan keluarga lebih terjamin.' }
-            ].map((feature, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#10B981]/30 transition-all duration-300 group">
-                <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-6 border border-emerald-100 group-hover:scale-105 transition-transform duration-300">
-                  <feature.icon className="h-6 w-6 text-[#10B981]" />
-                </div>
-                <h3 className="text-xl font-extrabold text-slate-900 mb-3 tracking-tight">{feature.title}</h3>
-                <p className="text-slate-500 text-xs leading-relaxed font-semibold">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Clean Solid Green AI Section (Inspired by Screen 3 solid green theme) */}
-      <section id="teknologi" className="max-w-7xl mx-auto my-12 bg-[#10B981] rounded-[2.5rem] py-20 text-white relative overflow-hidden shadow-xl px-8 sm:px-16">
-        <div className="absolute -right-20 -bottom-20 w-[400px] h-[400px] bg-emerald-600 rounded-full opacity-60 pointer-events-none" />
-        
-        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
-          <div className="lg:w-1/2">
-            <span className="text-emerald-100 font-extrabold text-xs uppercase tracking-widest block mb-4">Sharia Intelligence Hub</span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black mb-6 leading-tight tracking-tight">Didukung Teknologi AI Terdepan</h2>
-            <p className="text-emerald-50/80 mb-8 text-base lg:text-lg font-medium leading-relaxed">
-              Sistem kami menggunakan arsitektur mutakhir untuk memastikan fatwa dan panduan yang akurat, aman, dan dapat diandalkan secara syariah.
-            </p>
-            
-            <ul className="space-y-6">
-              {[
-                { title: 'Retrieval-Augmented Generation (RAG)', desc: 'AI kami tidak berhalusinasi. Seluruh respon merujuk langsung pada Knowledge Base fatwa DSN-MUI yang sah.' },
-                { title: 'Open Banking Integration', desc: 'Sinkronisasi mutasi rekening secara aman untuk mendeteksi pengeluaran dan transaksi non-halal secara otomatis.' },
-                { title: 'Privasi Data Berlapis', desc: 'Enkripsi End-to-End standar perbankan. Data keuangan pribadi Anda dijamin aman.' }
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 mt-1">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-base mb-1 tracking-tight">{item.title}</h4>
-                    <p className="text-xs text-emerald-50/70 leading-relaxed font-semibold">{item.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Right Clean Core HUD Panel Visual */}
-          <div className="lg:w-1/2 w-full flex justify-center items-center">
-            <div className="bg-white p-8 rounded-3xl text-slate-800 shadow-2xl w-full max-w-md border border-slate-100 relative group transition-transform duration-300 hover:scale-[1.01]">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-[#10B981] border border-emerald-100">
-                    <BrainCircuit className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-extrabold text-slate-900 tracking-wide uppercase font-sans">Sharify Engine</h4>
-                    <span className="text-[9px] text-[#10B981] block font-mono uppercase tracking-wider">Active Sharia AI Node</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[9px] font-bold bg-emerald-50 text-[#10B981] border border-emerald-100">
-                  Active
-                </span>
-              </div>
-
-              <div className="space-y-4">
-                {[
-                  { icon: ShieldCheck, title: 'Verified Sharia Knowledge Base', desc: 'Seluruh konsultasi diselaraskan dengan fatwa resmi DSN-MUI untuk jaminan keabsahan.' },
-                  { icon: Calculator, title: 'AI-Powered Fiqh Analysis', desc: 'Mesin pemrosesan bahasa pintar yang memetakan akad, menganalisis riba, dan menghitung waris.' }
-                ].map((value, idx) => (
-                  <div key={idx} className="flex items-start space-x-3.5 p-3 rounded-2xl hover:bg-slate-50 transition-colors duration-300">
-                    <div className="h-8 w-8 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center shrink-0 border border-emerald-100">
-                      <value.icon className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h5 className="text-xs font-extrabold text-slate-900 tracking-tight">{value.title}</h5>
-                      <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed font-semibold">
-                        {value.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Clean Comparison Table */}
-      <section id="harga" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-              {settings.harga_title}
-            </h2>
-            <p className="text-base lg:text-lg text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
-              {settings.harga_subtitle}
-            </p>
-          </div>
-
-          {/* Pricing Tiers Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 pt-8 mb-20 max-w-7xl mx-auto">
-            {tiers.map((tier) => (
-              <div 
-                key={tier.name} 
-                className={`relative rounded-[2rem] border p-8 flex flex-col transition-all duration-500 group ${
-                  tier.popular 
-                    ? 'bg-[#3B82F6] border-[#3B82F6] shadow-xl md:scale-105 z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-blue-500/30' 
-                    : 'bg-white border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-slate-200'
-                }`}
-              >
-                {tier.popular && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105 z-20">
-                    <span className="bg-[#60A5FA] text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm border border-blue-400">
-                      MOST POPULAR
-                    </span>
-                  </div>
-                )}
-                
-                <div className="mb-6 flex flex-col items-start">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 shadow-sm transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${
-                    tier.popular ? 'bg-white/20 text-white border border-white/30' : 'bg-slate-50 text-slate-600 border border-slate-100'
-                  }`}>
-                    {React.cloneElement(tier.icon as React.ReactElement<any>, { className: `w-6 h-6 ${tier.popular ? 'text-white' : 'text-slate-600'}` })}
-                  </div>
-                  <h3 className={`text-2xl font-black leading-tight transition-colors duration-300 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.name}</h3>
-                  <p className={`text-sm mt-2 h-10 leading-relaxed font-medium ${tier.popular ? 'text-blue-100' : 'text-slate-500'}`}>{tier.description}</p>
-                </div>
-
-                <div className="my-6 flex items-baseline">
-                  <span className={`text-4xl font-black tracking-tight leading-none transition-transform duration-300 group-hover:scale-102 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.price}</span>
-                  {tier.period && <span className={`text-sm font-bold lowercase ml-1.5 leading-none ${tier.popular ? 'text-blue-200' : 'text-slate-400'}`}>{tier.period}</span>}
-                </div>
-
-                <ul className="space-y-4 mb-8 flex-1">
-                  {tier.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start transform transition-transform duration-300 group-hover:translate-x-1">
-                      <div className={`mt-0.5 rounded-full p-0.5 flex-shrink-0 ${tier.popular ? 'text-white' : 'text-[#10B981] bg-emerald-50'}`}>
-                        <Check className="w-3.5 h-3.5 font-bold" />
-                      </div>
-                      <span className={`text-sm font-medium leading-normal ml-3 ${tier.popular ? 'text-white' : 'text-slate-600'}`}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="w-full sm:w-auto bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs sm:text-sm px-7 py-3.5 rounded-full shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02] flex items-center justify-center space-x-2"
+                >
+                  <Download className="w-4 h-4 text-amber-300" />
+                  <span>Unduh Sekarang</span>
+                </button>
 
                 <button
-                  onClick={() => handlePlanClick()}
-                  disabled={session !== null && currentRole === tier.role}
-                  className={`w-full py-4 px-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex justify-center items-center cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
-                    (session !== null && currentRole === tier.role) 
-                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' 
-                      : tier.popular
-                        ? 'bg-white text-[#3B82F6] hover:bg-slate-50 shadow-md shadow-black/10'
-                        : 'bg-blue-50 text-[#3B82F6] hover:bg-blue-100 border border-blue-100/50'
-                  }`}
+                  onClick={() => navigate('/dashboard')}
+                  className="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-xs transition-all flex items-center justify-center space-x-2"
                 >
-                  {tier.buttonText}
+                  <Play className="w-3.5 h-3.5 text-[#064E3B] fill-[#064E3B]" />
+                  <span>Pelajari Lebih Lanjut</span>
                 </button>
               </div>
-            ))}
-          </div>
 
-          {/* Comparison Table Section Header (Subtle) */}
-          <div className="text-center mb-10">
-            <h3 className="text-lg font-black text-slate-900 tracking-tight uppercase">Perbandingan Fitur Selengkapnya</h3>
-            <p className="text-xs text-slate-400 mt-1 font-semibold">Bandingkan kapabilitas teknis di setiap paket secara rinci</p>
-          </div>
-          
-          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-lg overflow-hidden max-w-5xl mx-auto">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-50/60 border-b border-slate-100">
-                    <th className="p-6 font-extrabold text-slate-900 text-sm w-1/3">Fitur Platform</th>
-                    <th className="p-6 font-bold text-slate-400 text-xs tracking-wider uppercase text-center w-1/3">Aplikasi Keuangan Biasa</th>
-                    <th className="p-6 font-extrabold text-white bg-[#10B981] text-xs tracking-wider uppercase text-center w-1/3">Ekosistem Sharify</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {[
-                    ['Pencatatan Pemasukan/Pengeluaran', true, true],
-                    ['Kalkulasi Zakat Otomatis Sesuai Emas', false, true],
-                    ['Deteksi & Rekomendasi Riba (Riba Detox)', false, true],
-                    ['Simulasi Hukum Waris Islam (Faraidh)', false, true],
-                    ['Konsultasi AI Fiqh Muamalah 24/7', false, true],
-                  ].map((row, i) => (
-                    <tr key={i} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="p-6 text-sm font-extrabold text-slate-900">{row[0]}</td>
-                      <td className="p-6 text-center text-slate-400">
-                        {row[1] ? <CheckCircle2 className="h-5 w-5 mx-auto text-slate-300" /> : '-'}
-                      </td>
-                      <td className="p-6 text-center bg-emerald-50/30 border-l border-slate-50">
-                        <CheckCircle2 className="h-5 w-5 mx-auto text-[#10B981]" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Testimonials */}
-      <section className="py-24 bg-slate-50/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-[#10B981] font-bold text-xs uppercase tracking-widest block mb-4">Testimoni Pengguna</span>
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">Kisah Hijrah Finansial</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: 'Ahmad S.', role: 'Wirausaha', avatar: 'AS', text: 'Alhamdulillah, melalui fitur Riba Detox Sharify, saya berhasil memetakan utang konvensional saya dan melunasinya secara sistematis. Hidup jadi jauh lebih tenang.' },
-              { name: 'Fatima R.', role: 'Ibu Rumah Tangga', avatar: 'FR', text: 'Kalkulator Zakatnya sangat menolong! Perhitungan nisab emas otomatis terupdate real-time sehingga saya tidak perlu ragu lagi dalam menghitung kewajiban maal.' },
-              { name: 'Budi W.', role: 'Karyawan Swasta', avatar: 'BW', text: 'Fitur Faraidh dan AI Asistennya sangat edukatif untuk mengenalkan pembagian harta waris syariah kepada keluarga besar kami secara adil dan transparan.' }
-            ].map((person, i) => (
-              <div key={i} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300">
-                <Quote className="absolute top-6 right-6 h-8 w-8 text-[#10B981]/10" />
-                
-                <div className="flex text-amber-400 mb-4">
-                  {[...Array(5)].map((_, starIdx) => (
-                    <Star key={starIdx} className="h-4 w-4 fill-current mr-0.5" />
-                  ))}
-                </div>
-                
-                <p className="text-slate-500 text-xs italic mb-6 leading-relaxed font-semibold">"{person.text}"</p>
-                
-                <div className="flex items-center">
-                  <div className="h-10 w-10 bg-[#10B981] text-white rounded-xl mr-3 flex items-center justify-center font-extrabold text-sm shadow-md shadow-emerald-500/10">
-                    {person.avatar}
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">{person.name}</h4>
-                    <p className="text-[10px] text-[#10B981] font-bold uppercase tracking-wider">{person.role}</p>
-                  </div>
-                </div>
+              {/* Trust Badges */}
+              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-semibold text-slate-500">
+                <span className="flex items-center text-emerald-700 font-bold">
+                  <ShieldCheck className="w-4 h-4 mr-1 text-[#064E3B]" /> 100% Sesuai Prinsip Syariah
+                </span>
+                <span className="text-slate-300">•</span>
+                <span className="flex items-center text-slate-600">
+                  <Lock className="w-3.5 h-3.5 mr-1 text-slate-400" /> Aman & Terpercaya
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
 
-      {/* 9. Final CTA & Footer */}
-      <section className="bg-white border-t border-slate-100 pt-24 pb-12">
-        <div className="max-w-4xl mx-auto px-4 text-center mb-20 bg-[#10B981] text-white p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
-          <div className="absolute -left-10 -top-10 w-32 h-32 bg-emerald-600 rounded-full opacity-40" />
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black mb-6 leading-tight tracking-tight relative z-10">
-            Mulai Perjalanan Finansial Syariah Anda Hari Ini.
-          </h2>
-          <p className="text-base lg:text-lg text-emerald-50 mb-10 max-w-2xl mx-auto font-medium relative z-10">
-            Daftar gratis sekarang dan ambil langkah pertama menuju kebebasan finansial yang berkah dan diridhai Allah SWT.
-          </p>
-          <Link to="/signup" className="inline-block bg-white text-[#10B981] hover:bg-slate-50 px-10 py-4.5 rounded-full text-base font-extrabold shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] relative z-10">
-            Daftar Sekarang - Gratis
-          </Link>
-        </div>
-
-        <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
-            <div className="col-span-1 sm:col-span-2">
-              <div className="flex items-center mb-4">
-                {settings.logo_url ? (
-                  <img src={bustCache(settings.logo_url)} alt="Logo" className="h-7 object-contain" />
-                ) : (
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 rounded-lg bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10">
-                      <ShieldCheck className="h-5 w-5 text-white" />
+            {/* Right Side: Dual Mobile Screenshots Frame (Exact match with reference image) */}
+            <div className="lg:col-span-6 relative flex justify-center items-center py-6">
+              <div className="relative w-full max-w-[460px] h-[520px] sm:h-[560px]">
+                
+                {/* Back Phone: Screen 5 (Investasi Halal) */}
+                <div className="absolute right-0 top-6 w-[240px] sm:w-[260px] bg-white border-[6px] border-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden transform rotate-6 scale-95 z-10 transition-transform hover:rotate-3 duration-300">
+                  {/* Phone Header Notch */}
+                  <div className="bg-slate-900 text-white text-[9px] px-4 py-1.5 flex justify-between items-center font-semibold">
+                    <span>09:47</span>
+                    <div className="w-12 h-2.5 bg-black rounded-full"></div>
+                  </div>
+                  {/* Screen Content */}
+                  <div className="p-3 space-y-3 bg-slate-50 min-h-[440px]">
+                    <div className="flex items-center space-x-1 text-slate-800 text-[10px] font-bold">
+                      <span>‹</span>
+                      <span>Investasi Halal</span>
                     </div>
-                    <span className="ml-2.5 text-xl font-black text-slate-900 tracking-tight">Sharify</span>
+                    {/* Deep Emerald Card */}
+                    <div className="bg-[#064E3B] text-white p-3 rounded-2xl space-y-1 relative overflow-hidden">
+                      <h4 className="text-[11px] font-extrabold leading-tight">Halal Investment Opportunities</h4>
+                      <p className="text-[8px] text-emerald-100 opacity-80">Invest with confidence and balance principles</p>
+                      <button className="bg-amber-500 text-slate-950 text-[8px] font-bold px-2 py-0.5 rounded-md mt-1">
+                        Cari Peluang
+                      </button>
+                    </div>
+                    {/* Categories */}
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-bold text-slate-700">Top Categories</span>
+                      <div className="grid grid-cols-4 gap-1 text-[8px] text-center font-semibold">
+                        <div className="bg-white p-1 rounded-lg shadow-xs">Sukuk</div>
+                        <div className="bg-white p-1 rounded-lg shadow-xs">Halal Stocks</div>
+                        <div className="bg-white p-1 rounded-lg shadow-xs">Reksa Dana Syariah</div>
+                        <div className="bg-white p-1 rounded-lg shadow-xs">Emas</div>
+                      </div>
+                    </div>
+                    {/* Portfolio Overview */}
+                    <div className="bg-white p-2.5 rounded-xl shadow-xs space-y-1">
+                      <span className="text-[8px] text-slate-400 font-bold uppercase">Portfolio Overview</span>
+                      <p className="text-[12px] font-black text-slate-900">Rp 125.000.000 <span className="text-[8px] text-emerald-600 font-bold">+8,45%</span></p>
+                      <div className="h-6 bg-emerald-50 rounded-lg flex items-center justify-center text-[8px] text-emerald-600 font-bold">
+                        📈 Mini Trend Line Chart
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
+
+                {/* Front Phone: Screen 3 (Dashboard Home) */}
+                <div className="absolute left-2 top-0 w-[250px] sm:w-[270px] bg-white border-[7px] border-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden z-20 transition-transform hover:scale-[1.02] duration-300">
+                  {/* Phone Header Notch */}
+                  <div className="bg-slate-900 text-white text-[9px] px-4 py-1.5 flex justify-between items-center font-semibold">
+                    <span>09:47</span>
+                    <div className="w-12 h-2.5 bg-black rounded-full"></div>
+                  </div>
+                  {/* Screen Content */}
+                  <div className="p-3.5 space-y-3 bg-slate-50 min-h-[460px]">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-[9px] text-slate-400 font-semibold">Assalamu'alaikum,</p>
+                        <h4 className="text-xs font-black text-slate-900 flex items-center">Ahmad 👋</h4>
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-slate-100 border flex items-center justify-center text-[10px]">🔔</div>
+                    </div>
+
+                    {/* Financial Health Score Circle Gauge */}
+                    <div className="bg-white p-3 rounded-2xl shadow-xs border space-y-2">
+                      <div className="flex justify-between items-center text-[9px]">
+                        <span className="font-bold text-slate-700">Financial Health Score</span>
+                        <span className="text-slate-400">✕</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 rounded-full border-4 border-emerald-500 border-t-amber-400 flex items-center justify-center font-black text-xs text-slate-800 shrink-0">
+                          78
+                        </div>
+                        <div className="text-[9px]">
+                          <p className="font-bold text-emerald-700">Keep going!</p>
+                          <p className="text-slate-400">You're on the right path.</p>
+                        </div>
+                      </div>
+                      <button className="w-full bg-[#064E3B] text-white text-[8px] font-bold py-1.5 rounded-lg">
+                        Lihat Detail
+                      </button>
+                    </div>
+
+                    {/* Quick Access 3x2 Grid */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-[9px]">
+                        <span className="font-extrabold text-slate-800">Quick Access</span>
+                        <span className="text-emerald-700 font-bold">Lihat Semua</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-1.5 text-[8px] font-bold text-center">
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <TrendingUp className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>Investasi Halal</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <MessageSquare className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>AI Chatbot Syariah</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <Calculator className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>Zakat Calculator</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <RefreshCcw className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>Riba Detox</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <RefreshCcw className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>Judol Detox</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl shadow-xs border flex flex-col items-center">
+                          <Calculator className="w-3.5 h-3.5 text-emerald-600 mb-1" />
+                          <span>Faraidh Calculator</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Rekomendasi untukmu */}
+                    <div className="bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-100 text-[8px] space-y-0.5">
+                      <span className="font-bold text-emerald-800 block">Rekomendasi untukmu</span>
+                      <p className="text-slate-500">Pelajari dasar investasi halal untuk pemula</p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-              <p className="text-xs text-slate-400 max-w-sm font-semibold leading-relaxed">{settings.footer_desc}</p>
-            </div>
-            
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Dasar (Free)</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check Syariah</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Cashflow & Sedekah</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">AI Co-Pilot Assistant</Link></li>
-              </ul>
             </div>
 
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Premium (Pro/Family)</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Rencana Riba Detox</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Halal Asset Screener</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Smart Akad Analyzer</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Qurban Auto-Saver</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Zakat-to-Tax Report</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Baitul Mal Keluarga</Link></li>
-                <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Digital Wasiat Generator</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Kebijakan</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
-                <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
-                <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Perusahaan</h4>
-              <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-                <li><Link to="/tentang-kami" className="hover:text-[#10B981] transition-colors">Tentang Kami</Link></li>
-              </ul>
-            </div>
           </div>
-          
-          <div className="text-center text-xs font-semibold text-slate-400 pt-8 border-t border-slate-100">
-            {settings.footer_copyright}
-          </div>
-        </footer>
+        </div>
       </section>
 
-      {/* Floating AI Chat Button */}
+      {/* 3. 6 Features Row (White Floating Card Bar) */}
+      <section id="fitur" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-30">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.06)] border border-slate-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+            
+            {[
+              { icon: TrendingUp, title: 'Investasi Halal', desc: 'Temukan peluang investasi sesuai prinsip syariah' },
+              { icon: MessageSquare, title: 'AI Chatbot Syariah', desc: 'Tanya apa saja seputar keuangan Islami kapan pun' },
+              { icon: Calculator, title: 'Zakat Calculator', desc: 'Hitung zakat dengan mudah, akurat, dan sesuai syariah' },
+              { icon: RefreshCcw, title: 'Riba Detox', desc: 'Bersihkan keuangan dari riba secara bertahap' },
+              { icon: Target, title: 'Goal-Based Planning', desc: 'Rencanakan tujuan keuangan untuk masa depan yang berkah' },
+              { icon: BookOpen, title: 'Edukasi Fiqh Muamalah', desc: 'Belajar fiqh muamalah secara praktis dan terpercaya' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center p-3 pt-4 lg:pt-3 space-y-2.5 group hover:-translate-y-1 transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-[#064E3B] flex items-center justify-center group-hover:bg-[#064E3B] group-hover:text-white transition-colors shadow-xs">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <h3 className="font-extrabold text-slate-900 text-xs sm:text-sm tracking-tight leading-tight">{item.title}</h3>
+                <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Statistics Banner Section (Dark Emerald Band) */}
+      <section id="manfaat" className="my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#064E3B] text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+          {/* Subtle Mosque Dome Outline Background */}
+          <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+            <svg className="w-80 h-80" viewBox="0 0 100 100" fill="currentColor">
+              <path d="M50 0 C30 20 20 40 20 70 L80 70 C80 40 70 20 50 0 Z" />
+            </svg>
+          </div>
+
+          <div className="relative z-10 space-y-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-50">
+              Keuangan Sehat, Hidup Lebih Berkah
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-2">
+              {[
+                { icon: Users, stat: '10.000+', label: 'Pengguna Terpercaya' },
+                { icon: ShieldCheck, stat: '100%', label: 'Sesuai Prinsip Syariah' },
+                { icon: Star, stat: '50+', label: 'Ulama & Pakar Syariah' },
+                { icon: TrendingUp, stat: 'Bantu Capai', label: 'Tujuan Keuangan Islami' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex flex-col items-center space-y-2 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                  <item.icon className="w-7 h-7 text-amber-400 mb-1" />
+                  <span className="text-2xl sm:text-3xl font-black text-amber-300 font-mono tracking-tight">{item.stat}</span>
+                  <span className="text-xs text-emerald-100 font-bold">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Ulama & Sharia Experts Section */}
+      <section id="tentang-kami" className="py-16 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Description */}
+            <div className="lg:col-span-4 space-y-5 text-center lg:text-left">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                Didukung oleh Ulama & Pakar Keuangan Syariah
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                Sharify bekerja sama dengan ulama dan pakar keuangan syariah untuk memastikan setiap fitur dan rekomendasi sesuai syariah.
+              </p>
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs px-6 py-3 rounded-full shadow-md transition-all inline-flex items-center space-x-2"
+              >
+                <span>Pelajari Tentang Kami</span>
+              </button>
+            </div>
+
+            {/* Right Expert Cards (4 circular profile cards) */}
+            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {[
+                { name: 'Ust. Ahmad Yusuf, Lc., MA', role: 'Pakar Fiqh Muamalah', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250' },
+                { name: 'Dr. Erwandi Tarmidzi, MA', role: 'Pakar Ekonomi Syariah', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250' },
+                { name: 'Ust. Fatimah Az-Zahra, MA', role: 'Pakar Waris & Faraidh', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250' },
+                { name: 'Dr. H. Syafiq Riza Basalamah, MA', role: 'Pakar Keuangan Islam', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=250' },
+              ].map((expert, idx) => (
+                <div key={idx} className="bg-slate-50/80 p-4 rounded-3xl border border-slate-100 text-center space-y-3 hover:shadow-md transition-all">
+                  <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-emerald-600 p-0.5 shadow-sm">
+                    <img src={expert.photo} alt={expert.name} className="w-full h-full object-cover rounded-full" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-slate-900 text-xs leading-tight">{expert.name}</h3>
+                    <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">{expert.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 6. App Download Banner (Mulai Perjalanan Keuangan Islami Anda Sekarang Juga) */}
+      <section className="my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#064E3B] text-white rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            
+            {/* Left Smartphone Graphic */}
+            <div className="lg:col-span-3 flex justify-center">
+              <div className="w-[180px] h-[340px] bg-slate-950 border-[5px] border-slate-800 rounded-[2.2rem] p-4 flex flex-col justify-center items-center shadow-xl text-center space-y-2">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-900/60 p-2 border border-emerald-500/30 flex items-center justify-center">
+                  <img src="/app logo.png" alt="Sharify Logo" className="w-full h-full object-contain" />
+                </div>
+                <span className="text-lg font-black text-white">Sharify</span>
+                <span className="text-[8px] text-amber-300 font-mono">AI-Based Islamic Financial Advisory</span>
+              </div>
+            </div>
+
+            {/* Center Call To Action Content */}
+            <div className="lg:col-span-6 space-y-5 text-center lg:text-left">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-white">
+                Mulai Perjalanan Keuangan Islami Anda Sekarang Juga
+              </h2>
+              <p className="text-xs sm:text-sm text-emerald-100 font-medium leading-relaxed max-w-lg">
+                Unduh Sharify dan dapatkan bimbingan keuangan yang sesuai syariah, dipersonalisasi untuk Anda.
+              </p>
+
+              {/* Download App Store Badges */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+                <button 
+                  onClick={() => navigate('/dashboard')}
+                  className="bg-black hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-white/20 flex items-center space-x-2 text-left"
+                >
+                  <Download className="w-5 h-5 text-amber-400" />
+                  <div>
+                    <span className="text-[8px] block opacity-75 font-mono">Download on the</span>
+                    <span className="text-xs font-black">App Store</span>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={() => navigate('/dashboard')}
+                  className="bg-black hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-white/20 flex items-center space-x-2 text-left"
+                >
+                  <Download className="w-5 h-5 text-emerald-400" />
+                  <div>
+                    <span className="text-[8px] block opacity-75 font-mono">GET IT ON</span>
+                    <span className="text-xs font-black">Google Play</span>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={() => navigate('/dashboard')}
+                  className="bg-black hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-white/20 flex items-center space-x-2 text-left"
+                >
+                  <Download className="w-5 h-5 text-rose-400" />
+                  <div>
+                    <span className="text-[8px] block opacity-75 font-mono">EXPLORE IT ON</span>
+                    <span className="text-xs font-black">AppGallery</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Security & Privacy Card */}
+            <div className="lg:col-span-3">
+              <div className="bg-amber-500/10 border border-amber-400/30 p-5 rounded-2xl space-y-2 text-center lg:text-left backdrop-blur-xs">
+                <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center mx-auto lg:mx-0">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <h4 className="text-xs font-extrabold text-amber-300">Aman & Terlindungi</h4>
+                <p className="text-[11px] text-emerald-100 font-medium leading-relaxed">
+                  Data Anda 100% aman dengan enkripsi tingkat tinggi dan tidak digunakan untuk kepentingan lain.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Footer Section */}
+      <footer className="bg-white border-t border-slate-100 pt-16 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-slate-100">
+            
+            {/* Logo & Description */}
+            <div className="md:col-span-2 space-y-4">
+              <div className="flex items-center space-x-3">
+                <img src="/app logo.png" alt="Sharify Logo" className="h-9 w-auto object-contain" />
+                <div>
+                  <span className="text-xl font-extrabold text-[#064E3B] tracking-tight block leading-none">Sharify</span>
+                  <span className="text-[9px] font-bold text-amber-600 tracking-wider uppercase">AI-Based Islamic Financial Advisory</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 font-medium max-w-sm leading-relaxed">
+                Platform penasihat keuangan berbasis kecerdasan buatan (AI) yang membantu Anda mengelola, menyucikan, dan mengembangakan keuangan keluarga secara syariah.
+              </p>
+            </div>
+
+            {/* Link Column 1: Produk */}
+            <div className="space-y-3 text-xs">
+              <h4 className="font-extrabold text-slate-900 uppercase tracking-wider">Produk</h4>
+              <ul className="space-y-2 font-semibold text-slate-600">
+                <li><a href="#fitur" className="hover:text-[#064E3B]">Fitur</a></li>
+                <li><a href="#harga" className="hover:text-[#064E3B]">Harga</a></li>
+                <li><button onClick={() => navigate('/dashboard')} className="hover:text-[#064E3B]">Unduh</button></li>
+              </ul>
+            </div>
+
+            {/* Link Column 2: Perusahaan */}
+            <div className="space-y-3 text-xs">
+              <h4 className="font-extrabold text-slate-900 uppercase tracking-wider">Perusahaan</h4>
+              <ul className="space-y-2 font-semibold text-slate-600">
+                <li><a href="#tentang-kami" className="hover:text-[#064E3B]">Tentang Kami</a></li>
+                <li><a href="#" className="hover:text-[#064E3B]">Karir</a></li>
+                <li><a href="#" className="hover:text-[#064E3B]">Kontak</a></li>
+              </ul>
+            </div>
+
+            {/* Link Column 3: Bantuan */}
+            <div className="space-y-3 text-xs">
+              <h4 className="font-extrabold text-slate-900 uppercase tracking-wider">Bantuan</h4>
+              <ul className="space-y-2 font-semibold text-slate-600">
+                <li><a href="#" className="hover:text-[#064E3B]">FAQ</a></li>
+                <li><a href="#" className="hover:text-[#064E3B]">Pusat Bantuan</a></li>
+                <li><Link to="/terms" className="hover:text-[#064E3B]">Syarat & Ketentuan</Link></li>
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Bottom Bar: Copyright & Socials */}
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-500">
+            <p>© 2024 Sharify. All rights reserved.</p>
+            
+            <div className="flex items-center space-x-4 text-slate-600">
+              <span className="text-[11px] font-bold text-slate-400 mr-1">Ikuti Kami:</span>
+              <a href="#" className="hover:text-[#064E3B]" aria-label="Instagram">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href="#" className="hover:text-[#064E3B]" aria-label="Facebook">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.592 9 4.415V8z"/></svg>
+              </a>
+              <a href="#" className="hover:text-[#064E3B]" aria-label="YouTube">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </a>
+              <a href="#" className="hover:text-[#064E3B]" aria-label="LinkedIn">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+      {/* Floating AI Chat Assistant Widget */}
       <FloatingAIChat unlimited />
     </div>
   );

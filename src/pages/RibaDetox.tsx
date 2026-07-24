@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
-import { RefreshCcw, Save, AlertTriangle, CheckCircle, TrendingDown, Quote } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 
@@ -16,18 +15,7 @@ type Debt = {
 export const RibaDetox: React.FC = () => {
   const { session } = useAuthStore();
   const [debts, setDebts] = useState<Debt[]>([]);
-  
-  // Form State
-  const [debtName, setDebtName] = useState('');
-  const [debtType, setDebtType] = useState('Credit Card');
-  const [balance, setBalance] = useState<number>(0);
-  const [interest, setInterest] = useState<number>(0);
-  const [minPayment, setMinPayment] = useState<number>(0);
-  
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // Load existing debts
   useEffect(() => {
     const fetchDebts = async () => {
       if (!session?.user?.id) return;
@@ -38,230 +26,105 @@ export const RibaDetox: React.FC = () => {
       if (data) setDebts(data);
     };
     fetchDebts();
-  }, [session?.user?.id, saveStatus]);
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!session?.user?.id || balance <= 0) return;
-    
-    setIsSaving(true);
-    setSaveStatus('idle');
-
-    const { error } = await supabase
-      .from('riba_detox_debts')
-      .insert({
-        user_id: session.user.id,
-        debt_name: debtName,
-        debt_type: debtType,
-        current_balance: balance,
-        interest_rate: interest,
-        minimum_payment: minPayment
-      });
-
-    setIsSaving(false);
-    if (!error) {
-      setSaveStatus('success');
-      setDebtName('');
-      setBalance(0);
-      setInterest(0);
-      setMinPayment(0);
-      setTimeout(() => setSaveStatus('idle'), 3000);
-    } else {
-      setSaveStatus('error');
-    }
-  };
-
-  // Logic Engine: Avalanche Method (Highest Interest First)
-  const sortedDebts = useMemo(() => {
-    return [...debts].sort((a, b) => b.interest_rate - a.interest_rate);
-  }, [debts]);
+  }, [session?.user?.id]);
 
   const totalDebt = useMemo(() => debts.reduce((sum, d) => sum + Number(d.current_balance), 0), [debts]);
-  const highestPriorityDebt = sortedDebts.length > 0 ? sortedDebts[0] : null;
 
   const islamicQuotes = [
     "Barangsiapa yang rohnya terpisah dari jasadnya dan ia terbebas dari tiga hal: sombong, ghulul (khianat), dan hutang, maka ia masuk surga. (HR. Ibnu Majah)",
-    "Penundaan pembayaran utang oleh orang yang mampu adalah suatu kezaliman. (HR. Bukhari & Muslim)",
-    "Ya Allah, aku berlindung kepada-Mu dari siksa kubur, dan aku berlindung kepada-Mu dari fitnah Al-Masih Ad-Dajjal, dan aku berlindung kepada-Mu dari fitnah kehidupan dan fitnah kematian. Ya Allah, aku berlindung kepada-Mu dari perbuatan dosa dan dari utang."
   ];
 
   return (
     <DashboardContainer>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-          <RefreshCcw className="h-6 w-6 text-red-500 mr-2" />
-          Program Riba Detox
-        </h1>
-        <p className="text-gray-500">Rencana pelunasan utang sistematis menggunakan metode Avalanche untuk meminimalisir Riba.</p>
-      </div>
-
-      {/* Motivational Quote */}
-      <div className="bg-gradient-to-r from-[#0F4C3A] to-primary rounded-xl p-6 mb-8 text-white relative overflow-hidden shadow-lg border border-[#0F4C3A]/20">
-        <Quote className="absolute top-4 right-4 h-12 w-12 text-white/10" />
-        <div className="relative z-10 flex items-start">
-          <p className="italic font-serif text-lg leading-relaxed max-w-3xl">"{islamicQuotes[0]}"</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Input Form */}
-        <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
-          <h2 className="font-bold text-gray-900 mb-6">Tambah Utang Konvensional</h2>
-          <form onSubmit={handleSave} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nama Utang</label>
-              <input
-                type="text"
-                value={debtName}
-                onChange={(e) => setDebtName(e.target.value)}
-                placeholder="e.g. Kartu Kredit BCA"
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Jenis Utang</label>
-              <select 
-                value={debtType} 
-                onChange={(e) => setDebtType(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-              >
-                <option value="Credit Card">Kartu Kredit</option>
-                <option value="Paylater">Paylater / Pinjol</option>
-                <option value="Mortgage">KPR Konvensional</option>
-                <option value="KTA">KTA (Kredit Tanpa Agunan)</option>
-                <option value="Other">Lainnya</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sisa Saldo (Rp)</label>
-              <input
-                type="number"
-                value={balance || ''}
-                onChange={(e) => setBalance(Number(e.target.value))}
-                required
-                min="0"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Bunga (% per thn)</label>
-                <input
-                  type="number"
-                  value={interest || ''}
-                  onChange={(e) => setInterest(Number(e.target.value))}
-                  required
-                  step="0.01"
-                  min="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cicilan Min. (Rp)</label>
-                <input
-                  type="number"
-                  value={minPayment || ''}
-                  onChange={(e) => setMinPayment(Number(e.target.value))}
-                  required
-                  min="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSaving}
-              className={`w-full mt-6 flex items-center justify-center py-3 rounded-lg font-bold text-sm transition-colors ${
-                isSaving ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600 text-white shadow-md'
-              }`}
-            >
-              {isSaving ? 'Menyimpan...' : <><Save className="w-4 h-4 mr-2" /> Catat Utang</>}
-            </button>
-            {saveStatus === 'success' && <p className="text-red-500 text-xs text-center mt-2 flex items-center justify-center"><CheckCircle className="w-3 h-3 mr-1"/> Berhasil dicatat!</p>}
-          </form>
+      <div className="p-5 space-y-5">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between pt-2">
+          <div>
+            <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Riba Detox</h1>
+            <p className="text-xs text-slate-500 font-medium">Identify & cleanse non-halal elements</p>
+          </div>
         </div>
 
-        {/* Right: Dashboard & Avalanche Roadmap */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Deep Emerald Header Card matching Screen 8 */}
+        <div className="bg-[#064E3B] text-white p-6 rounded-3xl relative overflow-hidden shadow-lg shadow-emerald-950/20 flex items-center justify-between">
+          <div className="relative z-10 max-w-[70%] space-y-1">
+            <h2 className="text-base font-extrabold text-white leading-tight">
+              Cleanse Your Wealth from Riba
+            </h2>
+            <p className="text-xs text-emerald-100/90 font-medium">
+              Identify and eliminate riba from your income
+            </p>
+          </div>
           
-          {/* Summary Cards */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-              <p className="text-sm font-medium text-gray-500 mb-1">Total Paparan Riba</p>
-              <p className="text-2xl font-bold text-red-500 font-mono">Rp {Math.round(totalDebt).toLocaleString('id-ID')}</p>
-            </div>
-            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-              <p className="text-sm font-medium text-gray-500 mb-1">Jumlah Utang Tercatat</p>
-              <p className="text-2xl font-bold text-gray-900">{debts.length} <span className="text-sm font-normal text-gray-400">akun</span></p>
-            </div>
+          <div className="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 text-amber-300 font-black text-xl">
+            %
+          </div>
+        </div>
+
+        {/* Analysis Summary Card */}
+        <div className="bg-white dark:bg-slate-800/90 p-5 rounded-3xl shadow-[0_2px_16px_rgba(0,0,0,0.04)] border border-slate-100 dark:border-slate-700/60 space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-700/50">
+            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wider">Analysis Summary</span>
+            <span className="text-[10px] font-extrabold text-amber-700 bg-amber-100 dark:bg-amber-950 dark:text-amber-400 px-2.5 py-1 rounded-full uppercase tracking-wider">
+              Action Required
+            </span>
           </div>
 
-          {/* Current Target (Highest Priority) */}
-          {highestPriorityDebt ? (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-6 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                TARGET PRIORITAS (AVALANCHE)
-              </div>
-              <h2 className="font-bold text-red-800 mb-4 flex items-center">
-                <AlertTriangle className="w-5 h-5 mr-2 text-red-600" /> Fokus Pelunasan Saat Ini
-              </h2>
-              
-              <div className="bg-white p-4 rounded-lg border border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div className="mb-4 sm:mb-0">
-                  <h3 className="font-bold text-gray-900 text-lg">{highestPriorityDebt.debt_name}</h3>
-                  <div className="flex items-center text-xs text-gray-500 mt-1">
-                    <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium mr-2">{highestPriorityDebt.debt_type}</span>
-                    <TrendingDown className="w-3 h-3 mr-1 text-red-500" /> Bunga: {highestPriorityDebt.interest_rate}%
-                  </div>
-                </div>
-                <div className="text-left sm:text-right">
-                  <p className="text-xs text-gray-500 mb-1">Sisa Saldo</p>
-                  <p className="font-bold text-red-600 font-mono text-xl">Rp {Math.round(highestPriorityDebt.current_balance).toLocaleString('id-ID')}</p>
-                </div>
-              </div>
-              <p className="text-sm text-red-700 mt-4 leading-relaxed">
-                <strong>Instruksi Detox:</strong> Bayar cicilan minimum untuk semua utang Anda yang lain, dan alokasikan <strong>semua sisa uang ekstra Anda</strong> untuk melunasi utang ini. Utang ini memiliki bunga tertinggi dan paling merugikan secara finansial maupun syariat.
-              </p>
+          <div className="grid grid-cols-2 gap-3 pt-1">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+              <span className="text-[10px] text-slate-400 font-medium block">Total Riba Paparan</span>
+              <span className="text-sm font-black text-rose-600 dark:text-rose-400 font-mono mt-0.5 block">
+                Rp {Math.round(totalDebt).toLocaleString('id-ID')}
+              </span>
             </div>
-          ) : (
-            <div className="bg-white p-10 rounded-xl shadow-sm border border-gray-100 text-center flex flex-col items-center justify-center min-h-[250px]">
-              <CheckCircle className="h-12 w-12 text-emerald-500 mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Alhamdulillah!</h3>
-              <p className="text-gray-500 max-w-sm">Anda belum mencatat utang konvensional apapun. Pertahankan status bebas Riba Anda.</p>
-            </div>
-          )}
 
-          {/* All Debts List */}
-          {sortedDebts.length > 1 && (
-            <div>
-              <h3 className="font-bold text-gray-900 mb-3">Antrean Pelunasan Berikutnya</h3>
-              <div className="space-y-3">
-                {sortedDebts.slice(1).map((debt, index) => (
-                  <div key={debt.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center opacity-80">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 font-bold text-xs mr-4">
-                        #{index + 2}
-                      </div>
-                      <div>
-                        <p className="font-bold text-gray-900 text-sm">{debt.debt_name}</p>
-                        <p className="text-xs text-gray-500">Bunga: {debt.interest_rate}%</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-gray-900 font-mono text-sm">Rp {Math.round(debt.current_balance).toLocaleString('id-ID')}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+              <span className="text-[10px] text-slate-400 font-medium block">Purification Needed</span>
+              <span className="text-sm font-black text-[#064E3B] dark:text-emerald-400 font-mono mt-0.5 block">
+                Rp {(totalDebt * 0.05).toLocaleString('id-ID')}
+              </span>
             </div>
-          )}
-
+          </div>
         </div>
+
+        {/* Steps to Detox */}
+        <div className="bg-white dark:bg-slate-800/90 p-5 rounded-3xl shadow-[0_2px_16px_rgba(0,0,0,0.04)] border border-slate-100 dark:border-slate-700/60 space-y-4">
+          <h3 className="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Steps to Detox</h3>
+
+          <div className="space-y-3">
+            {[
+              { step: '1', title: 'Identify riba sources', desc: 'List all riba-based income and debts' },
+              { step: '2', title: 'Stop acquiring riba', desc: 'Commit to halal income and sharia contracts only' },
+              { step: '3', title: 'Purify existing riba', desc: 'Donate non-halal proceeds to public social causes' },
+            ].map((item) => (
+              <div key={item.step} className="flex items-start space-x-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+                <div className="h-6 w-6 rounded-full bg-[#064E3B] text-amber-300 font-black text-xs flex items-center justify-center shrink-0">
+                  {item.step}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">{item.title}</h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => alert('Detox roadmap initiated! Tetap berjuang secara istiqomah.')}
+            className="w-full mt-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs py-3 px-4 rounded-2xl shadow-md shadow-amber-500/20 transition-all uppercase tracking-wider"
+          >
+            Start Detox Process
+          </button>
+        </div>
+
+        {/* Motivational Quote */}
+        <div className="p-4 bg-emerald-50/50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-800/30">
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 italic font-medium leading-relaxed">
+            "{islamicQuotes[0]}"
+          </p>
+        </div>
+
       </div>
     </DashboardContainer>
   );

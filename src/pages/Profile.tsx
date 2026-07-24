@@ -198,48 +198,49 @@ export const Profile: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Akun Saya</h1>
-        <p className="text-gray-500 mt-1">Kelola detail profil, preferensi notifikasi, dan status langganan Syariah Anda.</p>
-      </div>
+      <div className="px-6 pt-12 pb-6">
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Akun Saya</h1>
+          <p className="text-sm text-slate-500 mt-1">Kelola detail profil, preferensi notifikasi, dan status langganan Syariah Anda.</p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Elegant Account Card */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="flex flex-col gap-6">
           
-          {/* Main Profile Info Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Mesh-like Emerald and Gold gradient header banner */}
-            <div className="h-32 bg-gradient-to-r from-[#0F4C3A] via-[#0D5C45] to-[#D4AF37]/80 relative">
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fill-opacity=\\'1\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }}></div>
-            </div>
+          {/* Top Section: Elegant Account Card */}
+          <div className="space-y-6">
             
-            {/* Avatar & Core Meta */}
-            <div className="px-6 pb-6 relative">
-              <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 mb-6">
-                <div className="relative group h-28 w-28 bg-white p-1 rounded-full shadow-lg border border-emerald-500/10 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:border-emerald-500/30">
-                  {/* Profile Picture */}
-                  <div className="h-full w-full rounded-full overflow-hidden flex items-center justify-center bg-gray-50 relative">
-                    {isUploading ? (
-                      <div className="absolute inset-0 bg-[#0F4C3A]/70 flex flex-col items-center justify-center text-white z-10">
-                        <Loader2 className="w-6 h-6 animate-spin text-amber-300" />
-                        <span className="text-[9px] mt-1 font-bold tracking-wider uppercase text-white">Uploading</span>
-                      </div>
-                    ) : null}
-                    
-                    {user?.user_metadata?.avatar_url ? (
-                      <img 
-                        src={user.user_metadata.avatar_url} 
-                        alt="Profile Avatar" 
-                        className="h-full w-full object-cover shadow-inner"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-tr from-[#0F4C3A] to-[#10B981] rounded-full flex items-center justify-center text-white text-3xl font-black uppercase shadow-inner">
-                        {initialLetter}
-                      </div>
-                    )}
-                  </div>
+            {/* Main Profile Info Card */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 overflow-hidden">
+              {/* Mesh-like Emerald and Gold gradient header banner */}
+              <div className="h-32 bg-gradient-to-r from-emerald-600 via-teal-700 to-amber-500/80 relative">
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fill-opacity=\\'1\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }}></div>
+              </div>
+            
+              {/* Avatar & Core Meta */}
+              <div className="px-6 pb-6 relative">
+                <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 mb-6">
+                  <div className="relative group h-28 w-28 bg-white dark:bg-slate-900 p-1 rounded-full shadow-lg border border-slate-100 dark:border-slate-800 flex items-center justify-center transition-all duration-300">
+                    {/* Profile Picture */}
+                    <div className="h-full w-full rounded-full overflow-hidden flex items-center justify-center bg-slate-50 dark:bg-slate-800 relative">
+                      {isUploading ? (
+                        <div className="absolute inset-0 bg-emerald-600/70 flex flex-col items-center justify-center text-white z-10">
+                          <Loader2 className="w-6 h-6 animate-spin text-amber-300" />
+                          <span className="text-[9px] mt-1 font-bold tracking-wider uppercase text-white">Uploading</span>
+                        </div>
+                      ) : null}
+                      
+                      {user?.user_metadata?.avatar_url ? (
+                        <img 
+                          src={user.user_metadata.avatar_url} 
+                          alt="Profile Avatar" 
+                          className="h-full w-full object-cover shadow-inner"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full flex items-center justify-center text-white text-3xl font-black uppercase shadow-inner">
+                          {initialLetter}
+                        </div>
+                      )}
+                    </div>
 
                   {/* Camera Upload Button Overlay */}
                   <label 
@@ -265,213 +266,217 @@ export const Profile: React.FC = () => {
                 </div>
               </div>
 
-              <div className="border-b border-gray-100 pb-6">
-                <h3 className="text-2xl font-bold text-gray-900 text-center sm:text-left">
-                  {profile?.full_name || 'Memuat Nama...'}
-                </h3>
-                <p className="text-gray-500 text-center sm:text-left flex items-center justify-center sm:justify-start mt-1">
-                  <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                  {user?.email}
-                </p>
-
-                {/* Upload Status Indicators */}
-                {uploadError && (
-                  <p className="text-xs text-rose-500 font-bold mt-2 text-center sm:text-left bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg inline-block">
-                    ⚠️ {uploadError}
+                <div className="border-b border-slate-100 dark:border-slate-800 pb-6">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white text-center sm:text-left">
+                    {profile?.full_name || 'Memuat Nama...'}
+                  </h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-center sm:text-left flex items-center justify-center sm:justify-start mt-1">
+                    <Mail className="w-4 h-4 mr-2 text-slate-400" />
+                    {user?.email}
                   </p>
-                )}
-                {uploadSuccess && (
-                  <p className="text-xs text-emerald-600 font-bold mt-2 text-center sm:text-left bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-lg inline-block">
-                    ✓ Foto profil berhasil diperbarui!
-                  </p>
-                )}
-              </div>
 
-              {/* Account Details Form */}
-              <div className="mt-6 space-y-4">
-                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2">Informasi Personal</h4>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Nama Lengkap</span>
-                    <span className="block text-sm font-bold text-gray-800 mt-1">{profile?.full_name || 'Tidak ada'}</span>
-                  </div>
+                  {/* Upload Status Indicators */}
+                  {uploadError && (
+                    <p className="text-xs text-rose-500 font-bold mt-3 text-center sm:text-left bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-800/30 px-3 py-1.5 rounded-lg inline-block">
+                      ⚠️ {uploadError}
+                    </p>
+                  )}
+                  {uploadSuccess && (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-3 text-center sm:text-left bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 px-3 py-1.5 rounded-lg inline-block">
+                      ✓ Foto profil berhasil diperbarui!
+                    </p>
+                  )}
+                </div>
 
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Email Terdaftar</span>
-                    <span className="block text-sm font-bold text-gray-800 mt-1">{user?.email || 'Tidak ada'}</span>
-                  </div>
+                {/* Account Details Form */}
+                <div className="mt-6 space-y-4">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">Informasi Personal</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="block text-xs font-semibold text-slate-400 uppercase">Nama Lengkap</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white mt-1">{profile?.full_name || 'Tidak ada'}</span>
+                    </div>
 
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                    <span className="block text-xs font-semibold text-gray-400 uppercase flex items-center">
-                      <Calendar className="w-3.5 h-3.5 mr-1 text-gray-400" /> Tanggal Bergabung
-                    </span>
-                    <span className="block text-sm font-bold text-gray-800 mt-1">
-                      {formatJoinedDate(user?.created_at)}
-                    </span>
-                  </div>
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="block text-xs font-semibold text-slate-400 uppercase">Email Terdaftar</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white mt-1">{user?.email || 'Tidak ada'}</span>
+                    </div>
 
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                    <span className="block text-xs font-semibold text-gray-400 uppercase flex items-center">
-                      <Shield className="w-3.5 h-3.5 mr-1 text-gray-400" /> ID Pengguna
-                    </span>
-                    <span className="block text-xs font-mono text-gray-600 mt-1 select-all truncate">
-                      {user?.id}
-                    </span>
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="block text-xs font-semibold text-slate-400 uppercase flex items-center">
+                        <Calendar className="w-3.5 h-3.5 mr-1 text-slate-400" /> Tanggal Bergabung
+                      </span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white mt-1">
+                        {formatJoinedDate(user?.created_at)}
+                      </span>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <span className="block text-xs font-semibold text-slate-400 uppercase flex items-center">
+                        <Shield className="w-3.5 h-3.5 mr-1 text-slate-400" /> ID Pengguna
+                      </span>
+                      <span className="block text-xs font-mono text-slate-600 dark:text-slate-300 mt-1 select-all truncate">
+                        {user?.id}
+                      </span>
+                    </div>
                   </div>
                 </div>
+            </div>
+          </div>
+
+            {/* Preferences Card */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 p-6">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center uppercase tracking-wider">
+                <Bell className="w-4 h-4 text-emerald-600 mr-2" /> Preferensi Notifikasi & AI
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between py-3 border-b border-slate-50 dark:border-slate-800">
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-white">Weekly Sharia Finance Digest</h4>
+                    <p className="text-xs text-slate-500">Menerima ringkasan kesehatan finansial mingguan dan tips bebas Riba.</p>
+                  </div>
+                  <button 
+                    onClick={() => handleToggle('weeklyDigest')}
+                    className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                      notificationSettings.weeklyDigest ? 'bg-emerald-500 justify-end' : 'bg-slate-200 dark:bg-slate-700 justify-start'
+                    }`}
+                  >
+                    <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between py-3 border-b border-slate-50 dark:border-slate-800">
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-white">Zakat Due Reminders</h4>
+                    <p className="text-xs text-slate-500">Notifikasi otomatis saat nisab Zakat Anda terlampaui atau jatuh tempo haul.</p>
+                  </div>
+                  <button 
+                    onClick={() => handleToggle('zakatReminder')}
+                    className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                      notificationSettings.zakatReminder ? 'bg-emerald-500 justify-end' : 'bg-slate-200 dark:bg-slate-700 justify-start'
+                    }`}
+                  >
+                    <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between py-3">
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-white">AI Portfolio Alerts</h4>
+                    <p className="text-xs text-slate-500">Rekomendasi otomatis dari Sharify AI jika terdapat instrumen investasi non-halal baru terdeteksi.</p>
+                  </div>
+                  <button 
+                    onClick={() => handleToggle('aiInsights')}
+                    className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                      notificationSettings.aiInsights ? 'bg-emerald-500 justify-end' : 'bg-slate-200 dark:bg-slate-700 justify-start'
+                    }`}
+                  >
+                    <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-slate-100 dark:border-slate-800 gap-4">
+                <span className="text-xs text-slate-400">Pembaruan preferensi tidak mempengaruhi data transaksi utama.</span>
+                <button 
+                  onClick={handleSaveSettings}
+                  disabled={isSaving}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-colors flex items-center justify-center shadow-sm disabled:opacity-50"
+                >
+                  {isSaving ? 'Menyimpan...' : saveSuccess ? '✓ Tersimpan' : 'Simpan Perubahan'}
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Preferences Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-              <Bell className="w-5 h-5 text-[#0F4C3A] mr-2" /> Preferensi Notifikasi & AI
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b border-gray-50">
-                <div>
-                  <h4 className="text-sm font-bold text-gray-800">Weekly Sharia Finance Digest</h4>
-                  <p className="text-xs text-gray-500">Menerima ringkasan kesehatan finansial mingguan dan tips bebas Riba.</p>
-                </div>
-                <button 
-                  onClick={() => handleToggle('weeklyDigest')}
-                  className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
-                    notificationSettings.weeklyDigest ? 'bg-emerald-600 justify-end' : 'bg-gray-200 justify-start'
-                  }`}
-                >
-                  <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between py-3 border-b border-gray-50">
-                <div>
-                  <h4 className="text-sm font-bold text-gray-800">Zakat Due Reminders</h4>
-                  <p className="text-xs text-gray-500">Notifikasi otomatis saat nisab Zakat Anda terlampaui atau jatuh tempo haul.</p>
-                </div>
-                <button 
-                  onClick={() => handleToggle('zakatReminder')}
-                  className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
-                    notificationSettings.zakatReminder ? 'bg-emerald-600 justify-end' : 'bg-gray-200 justify-start'
-                  }`}
-                >
-                  <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between py-3">
-                <div>
-                  <h4 className="text-sm font-bold text-gray-800">AI Portfolio Alerts</h4>
-                  <p className="text-xs text-gray-500">Rekomendasi otomatis dari Sharify AI jika terdapat instrumen investasi non-halal baru terdeteksi.</p>
-                </div>
-                <button 
-                  onClick={() => handleToggle('aiInsights')}
-                  className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
-                    notificationSettings.aiInsights ? 'bg-emerald-600 justify-end' : 'bg-gray-200 justify-start'
-                  }`}
-                >
-                  <span className="w-4 h-4 bg-white rounded-full shadow-md"></span>
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between pt-4 border-t border-gray-100">
-              <span className="text-xs text-gray-400">Pembaruan preferensi tidak mempengaruhi data transaksi utama.</span>
-              <button 
-                onClick={handleSaveSettings}
-                disabled={isSaving}
-                className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors flex items-center shadow-sm disabled:opacity-50"
-              >
-                {isSaving ? 'Menyimpan...' : saveSuccess ? '✓ Tersimpan' : 'Simpan Perubahan'}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Subscription & Quick Actions */}
-        <div className="space-y-8">
+          {/* Bottom Section: Subscription & Quick Actions */}
+          <div className="space-y-6">
           
-          {/* Subscription Tier Overview */}
-          <div className="bg-gradient-to-br from-[#0F4C3A] to-[#0A3427] text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
-            {/* Geometric Gold Accent */}
-            <div className="absolute -top-16 -right-16 w-36 h-36 bg-[#D4AF37]/20 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <h3 className="text-lg font-bold mb-4 flex items-center">
-              <CreditCard className="w-5 h-5 text-[#D4AF37] mr-2" /> Detail Keanggotaan
-            </h3>
+            {/* Subscription Tier Overview */}
+            <div className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-3xl p-8 shadow-lg shadow-emerald-500/20 relative overflow-hidden">
+              {/* Geometric Gold Accent */}
+              <div className="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
+              
+              <div className="relative z-10">
+                <h3 className="text-sm font-bold mb-5 flex items-center uppercase tracking-wider text-amber-300">
+                  <CreditCard className="w-4 h-4 text-amber-400 mr-2" /> Detail Keanggotaan
+                </h3>
 
-            <div className="mb-6">
-              <span className="text-xs text-emerald-200 uppercase tracking-wider block">Status Langganan</span>
-              <div className="flex items-baseline mt-1 space-x-2">
-                <span className="text-2xl font-extrabold capitalize">{profile?.role || 'free'}</span>
-                <span className="text-xs text-emerald-300">
-                  {profile?.subscription_status ? '• Active' : '• Trial/Free Tier'}
+                <div className="mb-6">
+                  <span className="text-[10px] text-emerald-100 font-bold uppercase tracking-wider block">Status Langganan</span>
+                  <div className="flex items-baseline mt-1 space-x-2">
+                    <span className="text-3xl font-black capitalize">{profile?.role || 'free'}</span>
+                    <span className="text-[10px] text-emerald-200 font-bold uppercase tracking-wider">
+                      {profile?.subscription_status ? '• Active' : '• Trial/Free Tier'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white/10 rounded-2xl p-5 mb-6 border border-white/10 space-y-4 backdrop-blur-sm">
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center text-xs gap-1 sm:gap-0">
+                    <span className="opacity-80 font-medium">Metode Pembayaran</span>
+                    <span className="font-bold text-amber-300">Transfer Bank / E-Wallet</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center text-xs gap-1 sm:gap-0">
+                    <span className="opacity-80 font-medium">Haul/Tagihan Berikutnya</span>
+                    <span className="font-bold text-white">25 Juni 2026</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center text-xs gap-1 sm:gap-0">
+                    <span className="opacity-80 font-medium">Biaya Langganan</span>
+                    <span className="font-bold text-white">
+                      {profile?.role === 'pro' ? 'Rp 99.000 / bln' : profile?.role === 'plus' ? 'Rp 49.000 / bln' : 'Rp 0 (Gratis)'}
+                    </span>
+                  </div>
+                </div>
+
+                {profile?.role !== 'pro' && profile?.role !== 'admin' ? (
+                  <button 
+                    onClick={() => navigate('/upgrade')}
+                    className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-900 font-black py-4 rounded-xl transition-all shadow-md shadow-amber-500/20 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider"
+                  >
+                    <Sparkles className="w-4 h-4 animate-bounce" />
+                    <span>Upgrade ke Sharify Pro</span>
+                  </button>
+                ) : (
+                  <div className="bg-amber-400/20 border border-amber-400/30 rounded-xl p-4 flex items-center space-x-3 text-xs">
+                    <CheckCircle2 className="w-5 h-5 text-amber-300 flex-shrink-0" />
+                    <span className="font-bold text-amber-50 leading-relaxed">Anda menikmati seluruh fitur Premium Sharify!</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Actions Panel */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 p-6 space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Aksi Cepat</h3>
+              
+              <button className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700 transition-colors group">
+                <span className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300">
+                  <Key className="w-4 h-4 text-slate-400 mr-3" /> Ganti Kata Sandi
                 </span>
-              </div>
-            </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500" />
+              </button>
 
-            <div className="bg-white/10 rounded-xl p-4 mb-6 border border-white/5 space-y-3">
-              <div className="flex justify-between items-center text-xs">
-                <span className="opacity-80">Metode Pembayaran</span>
-                <span className="font-semibold text-[#D4AF37]">Transfer Bank / E-Wallet</span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="opacity-80">Haul/Tagihan Berikutnya</span>
-                <span className="font-semibold">25 Juni 2026</span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="opacity-80">Biaya Langganan</span>
-                <span className="font-semibold">
-                  {profile?.role === 'pro' ? 'Rp 99.000 / bln' : profile?.role === 'plus' ? 'Rp 49.000 / bln' : 'Rp 0 (Gratis)'}
+              <button className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700 transition-colors group">
+                <span className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300">
+                  <Download className="w-4 h-4 text-slate-400 mr-3" /> Unduh Laporan Keuangan
                 </span>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500" />
+              </button>
+
+              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-2">
+                <button 
+                  onClick={handleSignOut}
+                  className="w-full bg-rose-50/50 dark:bg-rose-900/10 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-sm font-bold py-4 rounded-2xl transition-colors flex items-center justify-center border border-rose-100 dark:border-rose-800/30"
+                >
+                  <LogOut className="w-4 h-4 mr-2" /> Keluar dari Aplikasi
+                </button>
               </div>
             </div>
 
-            {profile?.role !== 'pro' && profile?.role !== 'admin' ? (
-              <button 
-                onClick={() => navigate('/upgrade')}
-                className="w-full bg-gradient-to-r from-amber-500 to-[#D4AF37] hover:from-amber-600 hover:to-[#bfa032] text-[#0F4C3A] font-extrabold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2 text-sm"
-              >
-                <Sparkles className="w-4 h-4 animate-bounce" />
-                <span>Upgrade ke Sharify Pro</span>
-              </button>
-            ) : (
-              <div className="bg-amber-400/20 border border-amber-400/30 rounded-xl p-3 flex items-center space-x-2 text-xs">
-                <CheckCircle2 className="w-4 h-4 text-amber-300 flex-shrink-0" />
-                <span>Anda menikmati seluruh fitur Premium Sharify!</span>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Actions Panel */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Aksi Cepat</h3>
-            
-            <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 border border-gray-100 transition-colors group">
-              <span className="flex items-center text-sm font-bold text-gray-700">
-                <Key className="w-4 h-4 text-gray-400 mr-3" /> Ganti Kata Sandi
-              </span>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
-            </button>
-
-            <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 border border-gray-100 transition-colors group">
-              <span className="flex items-center text-sm font-bold text-gray-700">
-                <Download className="w-4 h-4 text-gray-400 mr-3" /> Unduh Laporan Keuangan
-              </span>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
-            </button>
-
-            <div className="pt-4 border-t border-gray-100">
-              <button 
-                onClick={handleSignOut}
-                className="w-full bg-red-50 hover:bg-red-100 text-red-600 text-sm font-bold py-3 px-4 rounded-xl transition-colors flex items-center justify-center border border-red-100"
-              >
-                <LogOut className="w-4 h-4 mr-2" /> Keluar dari Aplikasi
-              </button>
-            </div>
-          </div>
+        </div>
 
         </div>
 

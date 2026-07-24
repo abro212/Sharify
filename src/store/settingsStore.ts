@@ -64,7 +64,7 @@ export interface SystemSettings {
 }
 
 const DEFAULT_SETTINGS: SystemSettings = {
-  logo_url: '',
+  logo_url: '/app logo.png',
   favicon_url: '/favicon.ico',
   ai_widget_icon: 'Sparkles',
   chat_avatar_url: '',

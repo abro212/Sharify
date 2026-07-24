@@ -1,37 +1,41 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, MessageSquare, Calendar, User } from 'lucide-react';
+import { Home, Compass, MessageSquare, Target, User } from 'lucide-react';
 
 export const BottomNavigation: React.FC = () => {
   const navItems = [
-    { path: '/dashboard', icon: Home },
-    { path: '/chat', icon: MessageSquare },
-    { path: '/goals', icon: Calendar },
-    { path: '/profile', icon: User },
+    { label: 'Home', path: '/dashboard', icon: Home },
+    { label: 'Explore', path: '/explore', icon: Compass },
+    { label: 'Consult', path: '/chat', icon: MessageSquare },
+    { label: 'Goals', path: '/goals', icon: Target },
+    { label: 'Profile', path: '/profile', icon: User },
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-4 w-full max-w-[360px]">
-      <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/40 dark:border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.5)] rounded-full px-6 py-3 flex items-center justify-between">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] px-3 w-full max-w-[440px]">
+      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-[0_8px_32px_rgba(6,78,59,0.12)] rounded-2xl px-3 py-2 flex items-center justify-around">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `relative flex items-center justify-center w-[50px] h-[50px] rounded-full transition-all duration-300 ${
+              `flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40'
-                  : 'text-emerald-400/70 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-slate-800'
+                  ? 'text-[#064E3B] dark:text-emerald-400 font-bold scale-105'
+                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`
             }
           >
             {({ isActive }) => (
-              <item.icon
-                strokeWidth={isActive ? 2.5 : 2}
-                className={`w-6 h-6 transition-transform duration-300 ${
-                  isActive ? 'scale-105' : 'scale-100'
-                }`}
-              />
+              <>
+                <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-emerald-100/80 dark:bg-emerald-950/60 text-[#064E3B] dark:text-emerald-400' : ''}`}>
+                  <item.icon
+                    strokeWidth={isActive ? 2.5 : 2}
+                    className="w-5 h-5"
+                  />
+                </div>
+                <span className="text-[10px] font-semibold mt-0.5 tracking-tight">{item.label}</span>
+              </>
             )}
           </NavLink>
         ))}
