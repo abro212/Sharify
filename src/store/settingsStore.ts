@@ -65,7 +65,7 @@ export interface SystemSettings {
 
 const DEFAULT_SETTINGS: SystemSettings = {
   logo_url: '/app logo.png',
-  favicon_url: '/favicon.ico',
+  favicon_url: '/app logo.png',
   ai_widget_icon: 'Sparkles',
   chat_avatar_url: '',
   whatsapp_number: '',
