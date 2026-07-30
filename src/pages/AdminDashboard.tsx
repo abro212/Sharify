@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import { 
   ShieldAlert, Users, Settings, ArrowUpRight, 
   MessageSquare, CheckCircle2, AlertCircle, X, Search, Sparkles,
-  Scale, Clock, RefreshCw, ShieldCheck
+  Scale, Clock, RefreshCw, ShieldCheck, UserCheck
 } from 'lucide-react';
 
 interface SupportMessage {
@@ -725,6 +725,22 @@ export const AdminDashboard: React.FC = () => {
                       </td>
 
                       <td className="px-6 py-4 text-right space-x-2">
+                        <button
+                          onClick={() => {
+                            const nextRole = u.role === 'advisor' ? 'free' : 'advisor';
+                            handleUpdateUserRole(u.id, nextRole);
+                          }}
+                          className={`text-[10px] font-extrabold px-2.5 py-1 rounded-lg border transition-all cursor-pointer inline-flex items-center space-x-1 ${
+                            u.role === 'advisor'
+                              ? 'bg-emerald-700 text-white border-emerald-800'
+                              : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
+                          }`}
+                          title={u.role === 'advisor' ? 'Batalkan Role Advisor' : 'Tetapkan Sebagai Human Advisor Syariah'}
+                        >
+                          <UserCheck className="w-3 h-3 mr-1" />
+                          <span>{u.role === 'advisor' ? 'Role Advisor Active' : '+ Set Advisor'}</span>
+                        </button>
+
                         <button
                           onClick={() => handleToggleSuspendUser(u)}
                           className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
