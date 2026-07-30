@@ -35,7 +35,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     navigate('/');
   };
 
-  const menuItems = [
+  const isAdvisor = profile?.role === 'advisor';
+
+  let menuItems = [
     { name: 'Home', path: '/dashboard', icon: Home, badge: null },
     { name: 'Daily Cashflow', path: '/cashflow', icon: Coins, badge: null },
     { name: 'Health Check', path: '/health-check', icon: HeartPulse, badge: null },
@@ -49,7 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     { name: 'Zakat Tax', path: '/zakat-tax-report', icon: FileText, badge: 'Pro', badgeColor: 'bg-amber-500' },
   ];
 
-  const groupItems = [
+  let groupItems = [
     { name: 'Baitul Mal', path: '/family-dashboard', icon: Users, badge: 'Family', badgeColor: 'bg-blue-500' },
     { name: 'Digital Wasiat', path: '/wasiat-generator', icon: FileText, badge: 'Family', badgeColor: 'bg-blue-500' },
     { name: 'AI Assistant', path: '/chat', icon: MessageSquare, badge: null },
@@ -57,11 +59,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     { name: 'Upgrade', path: '/upgrade', icon: Crown, badge: null },
   ];
 
-  if (profile?.role === 'advisor' || profile?.role === 'admin') {
+  if (isAdvisor) {
+    menuItems = [
+      { name: 'Portal Advisor', path: '/advisor', icon: UserCheck, badge: 'Utama', badgeColor: 'bg-emerald-600' },
+    ];
+    groupItems = [
+      { name: 'Profile', path: '/profile', icon: User, badge: null },
+    ];
+  } else if (profile?.role === 'admin') {
     groupItems.push({ name: 'Portal Advisor', path: '/advisor', icon: UserCheck, badge: 'Advisor', badgeColor: 'bg-emerald-600' });
-  }
-
-  if (profile?.role === 'admin') {
     groupItems.push({ name: 'Admin Portal', path: '/admin', icon: ShieldCheck, badge: 'Admin', badgeColor: 'bg-red-500' });
   }
 

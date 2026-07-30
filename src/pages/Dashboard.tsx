@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { 
@@ -9,6 +9,12 @@ import { useAuthStore } from '../store/authStore';
 export const Dashboard: React.FC = () => {
   const { profile, user } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (profile?.role === 'advisor') {
+      navigate('/advisor', { replace: true });
+    }
+  }, [profile?.role, navigate]);
 
   const userName = profile?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Ahmad';
 
