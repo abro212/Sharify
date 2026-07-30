@@ -144,7 +144,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-slate-900 dark:text-white leading-none">{userName}</p>
                 <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                  {role} Plan
+                  {role === 'advisor' ? 'Human Advisor' : `${role} Plan`}
                 </span>
               </div>
               <div className="w-8 h-8 rounded-full bg-[#064E3B] text-amber-300 font-extrabold text-xs flex items-center justify-center shadow-xs overflow-hidden">

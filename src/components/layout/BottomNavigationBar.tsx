@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, MessageSquare, Calculator, User } from 'lucide-react';
+import { Home, MessageSquare, Calculator, User, UserCheck } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
 
 export const BottomNavigationBar: React.FC = () => {
+  const { profile } = useAuthStore();
+  const simulatedRole = typeof window !== 'undefined' ? localStorage.getItem('sharify_simulated_role') : null;
+  const activeRole = simulatedRole || profile?.role || 'free';
+
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
-  // ── Virtual Keyboard Detection ─────────────────────────────────
-  // Hides the bottom navigation bar when the virtual keyboard is open on mobile
-  // to prevent it from overlapping focused text inputs and shrinking the workspace.
   useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
-        // If visual viewport height is less than 75% of window height, keyboard is open
         setIsKeyboardOpen(window.visualViewport.height < window.innerHeight * 0.75);
       }
     };
@@ -28,12 +29,17 @@ export const BottomNavigationBar: React.FC = () => {
 
   if (isKeyboardOpen) return null;
 
-  const navItems = [
-    { name: 'Beranda', path: '/dashboard', icon: Home },
-    { name: 'AI Chat', path: '/chat', icon: MessageSquare },
-    { name: 'Kalkulator', path: '/zakat', icon: Calculator },
-    { name: 'Profil', path: '/profile', icon: User },
-  ];
+  const navItems = activeRole === 'advisor'
+    ? [
+        { name: 'Portal Advisor', path: '/advisor', icon: UserCheck },
+        { name: 'Profil', path: '/profile', icon: User },
+      ]
+    : [
+        { name: 'Beranda', path: '/dashboard', icon: Home },
+        { name: 'AI Chat', path: '/chat', icon: MessageSquare },
+        { name: 'Kalkulator', path: '/zakat', icon: Calculator },
+        { name: 'Profil', path: '/profile', icon: User },
+      ];
 
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-100/80 pb-safe z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.04)] rounded-t-[1.5rem] transition-all duration-300">

@@ -410,24 +410,24 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Quick Role Switcher Buttons for Testing Advisor Role */}
+        {/* Quick Access to Human Advisor Portal */}
         <div className="flex items-center space-x-2 shrink-0">
           <button
             onClick={handleSimulateAdvisorRole}
             className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95"
-            title="Uji coba tampilan & fitur sebagai Human Advisor"
+            title="Buka & kelola Portal Konsultan Syariah"
           >
             <UserCheck className="w-4 h-4 text-emerald-300" />
-            <span>Uji Coba Role Human Advisor</span>
+            <span>Portal Human Advisor</span>
           </button>
           
           {localStorage.getItem('sharify_simulated_role') && (
             <button
               onClick={handleResetAdminRole}
               className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-extrabold text-xs px-3 py-2 rounded-xl transition-all cursor-pointer"
-              title="Reset kembali ke role Admin"
+              title="Kembali ke Mode Admin"
             >
-              Reset Role
+              Mode Admin
             </button>
           )}
         </div>
