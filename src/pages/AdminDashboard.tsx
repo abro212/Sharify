@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import { 
   ShieldAlert, Users, Settings, ArrowUpRight, 
   MessageSquare, CheckCircle2, AlertCircle, X, Search, Sparkles,
-  Scale, Clock, FileText, RefreshCcw, ShieldCheck
+  Scale, Clock, RefreshCw, ShieldCheck
 } from 'lucide-react';
 
 interface SupportMessage {
@@ -37,7 +37,7 @@ export const AdminDashboard: React.FC = () => {
   const { settings, updateSettings } = useSettingsStore();
 
   // Navigation states
-  const [activeTab, setActiveTab] = useState<'branding' | 'cms' | 'users' | 'inbox'>('branding');
+  const [activeTab, setActiveTab] = useState<'branding' | 'users' | 'inbox'>('branding');
 
   // Success message toast states
   const [showToast, setShowToast] = useState(false);
@@ -115,7 +115,7 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  // TAB 3: USER MANAGEMENT STATE
+  // TAB 2: USER MANAGEMENT STATE
   const [usersList, setUsersList] = useState<UserProfileRow[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [userSearchTerm, setUserSearchTerm] = useState('');
@@ -192,7 +192,7 @@ export const AdminDashboard: React.FC = () => {
     u.role.toLowerCase().includes(userSearchTerm.toLowerCase())
   );
 
-  // TAB 4: ADVISOR INBOX STATE
+  // TAB 3: ADVISOR INBOX STATE
   const [messages, setMessages] = useState<SupportMessage[]>([
     {
       id: '1',
@@ -254,8 +254,6 @@ export const AdminDashboard: React.FC = () => {
     setReplyText('');
   };
 
-  const filteredMessages = messages;
-
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setShowToast(true);
@@ -265,17 +263,17 @@ export const AdminDashboard: React.FC = () => {
   const getRoleBadge = (role: string) => {
     switch (role.toLowerCase()) {
       case 'admin':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#064E3B]/10 dark:bg-emerald-950/50 text-[#064E3B] dark:text-emerald-400 border border-[#064E3B]/20 dark:border-emerald-800">Administrator</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#064E3B]/10 dark:bg-emerald-950/60 text-[#064E3B] dark:text-emerald-300 border border-[#064E3B]/20 dark:border-emerald-700">Administrator</span>;
       case 'pro':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-500/20 dark:border-amber-800">Pro Member</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/10 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-500/20 dark:border-amber-700">Pro Member</span>;
       case 'plus':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-800">Plus Member</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20 dark:border-emerald-700">Plus Member</span>;
       case 'family':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 dark:border-indigo-800">Family Plan</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-500/10 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border border-indigo-500/20 dark:border-indigo-700">Family Plan</span>;
       case 'suspended':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 animate-pulse">Ditangguhkan</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-700 animate-pulse">Ditangguhkan</span>;
       default:
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Free</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Free</span>;
     }
   };
 
@@ -298,34 +296,34 @@ export const AdminDashboard: React.FC = () => {
       {/* Admin Title Banner */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
-            <ShieldAlert className="h-7 w-7 text-[#064E3B] dark:text-emerald-400 mr-2.5" />
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center">
+            <ShieldAlert className="h-7 w-7 text-[#064E3B] dark:text-emerald-400 mr-2.5 shrink-0" />
             Super Admin Power Panel
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Platform management, live content CMS, users licensing, and executive system operations.</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">Platform management, system settings, users licensing, and executive operations.</p>
         </div>
-        <div className="flex items-center space-x-3">
-          <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/40">
+        <div className="flex items-center space-x-3 shrink-0">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
             <span className="h-2 w-2 rounded-full bg-emerald-500 mr-2 animate-ping"></span>
             System Status: Live
           </span>
           <button 
             onClick={() => fetchUsers()}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400 transition-colors cursor-pointer"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
             title="Muat Ulang Data"
           >
-            <RefreshCcw className="w-4 h-4" />
+            <RefreshCw className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Alert Warning Gate */}
-      <div className="bg-gradient-to-r from-rose-50 to-amber-50 dark:from-rose-950/30 dark:to-amber-950/30 border border-rose-200/80 dark:border-rose-900/40 rounded-2xl p-4 mb-6 flex items-start">
+      <div className="bg-rose-50 dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 rounded-2xl p-4 mb-6 flex items-start shadow-xs">
         <ShieldAlert className="h-5 w-5 text-rose-600 dark:text-rose-400 mr-3 mt-0.5 flex-shrink-0" />
         <div>
-          <h3 className="text-xs font-extrabold text-rose-900 dark:text-rose-300">Sistem Otorisasi: ADMINISTRATOR UTAMA</h3>
-          <p className="text-xs text-rose-700 dark:text-rose-400 mt-0.5">
-            Anda terautentikasi sebagai <span className="font-mono bg-rose-100 dark:bg-rose-900/50 px-1.5 py-0.5 rounded font-bold text-rose-900 dark:text-rose-200">{profile?.full_name || 'Admin'}</span>. Pembaruan branding dan teks Landing Page akan diterapkan secara instan bagi seluruh pengguna global secara real-time.
+          <h3 className="text-xs font-black text-rose-900 dark:text-rose-300">Sistem Otorisasi: ADMINISTRATOR UTAMA</h3>
+          <p className="text-xs text-rose-800 dark:text-rose-300 mt-0.5 font-medium leading-relaxed">
+            Anda terautentikasi sebagai <span className="font-mono bg-rose-100 dark:bg-rose-950 px-1.5 py-0.5 rounded font-black text-rose-900 dark:text-rose-200">{profile?.full_name || 'Admin'}</span>. Pembaruan branding dan pengaturan akan diterapkan secara instan bagi seluruh pengguna global secara real-time.
           </p>
         </div>
       </div>
@@ -334,87 +332,77 @@ export const AdminDashboard: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xs border border-slate-200/80 dark:border-slate-800 flex justify-between items-start">
           <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Users</p>
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Users</p>
             <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">1.284</h3>
-            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-extrabold">
               <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +12.4% <span className="text-slate-400 font-normal ml-1">vs bln lalu</span>
             </div>
           </div>
-          <div className="h-10 w-10 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center shrink-0"><Users className="h-5 w-5" /></div>
+          <div className="h-10 w-10 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-900/40"><Users className="h-5 w-5" /></div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xs border border-slate-200/80 dark:border-slate-800 flex justify-between items-start">
           <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Langganan Aktif</p>
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">Langganan Aktif</p>
             <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">432</h3>
-            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-extrabold">
               <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +8.1% <span className="text-slate-400 font-normal ml-1">vs bln lalu</span>
             </div>
           </div>
-          <div className="h-10 w-10 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center shrink-0"><Sparkles className="h-5 w-5" /></div>
+          <div className="h-10 w-10 bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-900/40"><Sparkles className="h-5 w-5" /></div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xs border border-slate-200/80 dark:border-slate-800 flex justify-between items-start">
           <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Zakat Dihitung</p>
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Zakat Dihitung</p>
             <h3 className="text-xl font-black text-slate-900 dark:text-white mt-1 font-mono">Rp 2.45B</h3>
-            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+            <div className="mt-3 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-extrabold">
               <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +18.3% <span className="text-slate-400 font-normal ml-1">vs bln lalu</span>
             </div>
           </div>
-          <div className="h-10 w-10 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0"><Scale className="h-5 w-5" /></div>
+          <div className="h-10 w-10 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/40"><Scale className="h-5 w-5" /></div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl shadow-xs border border-slate-200/80 dark:border-slate-800 flex justify-between items-start">
           <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Support Inbox</p>
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">Support Inbox</p>
             <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">{messages.filter(m => m.status === 'Menunggu').length} <span className="text-xs font-normal text-slate-400">Menunggu</span></h3>
-            <div className="mt-3 flex items-center text-xs text-amber-600 dark:text-amber-400 font-bold">
+            <div className="mt-3 flex items-center text-xs text-amber-600 dark:text-amber-400 font-extrabold">
               <Clock className="w-3.5 h-3.5 mr-1" /> Tanggapan Cepat Aktif
             </div>
           </div>
-          <div className="h-10 w-10 bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center shrink-0"><MessageSquare className="h-5 w-5" /></div>
+          <div className="h-10 w-10 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-900/40"><MessageSquare className="h-5 w-5" /></div>
         </div>
       </div>
 
       {/* Tab Control Buttons */}
-      <div className="flex border border-slate-200/80 dark:border-slate-800 mb-6 overflow-x-auto whitespace-nowrap bg-white dark:bg-slate-900 p-1.5 rounded-2xl shadow-xs">
+      <div className="flex border border-slate-200/80 dark:border-slate-800 mb-6 overflow-x-auto whitespace-nowrap bg-slate-100/80 dark:bg-slate-900/90 p-1.5 rounded-2xl shadow-xs">
         <button
           onClick={() => setActiveTab('branding')}
-          className={`flex-1 py-3 px-4 text-xs font-extrabold rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+          className={`flex-1 py-3 px-4 text-xs font-black rounded-xl flex items-center justify-center transition-all cursor-pointer ${
             activeTab === 'branding'
               ? 'bg-[#064E3B] text-white shadow-md'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'
           }`}
         >
           <Settings className="w-4 h-4 mr-2" /> App Settings (Branding)
         </button>
         <button
-          onClick={() => setActiveTab('cms')}
-          className={`flex-1 py-3 px-4 text-xs font-extrabold rounded-xl flex items-center justify-center transition-all cursor-pointer ${
-            activeTab === 'cms'
-              ? 'bg-[#064E3B] text-white shadow-md'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <FileText className="w-4 h-4 mr-2" /> Landing Page CMS
-        </button>
-        <button
           onClick={() => setActiveTab('users')}
-          className={`flex-1 py-3 px-4 text-xs font-extrabold rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+          className={`flex-1 py-3 px-4 text-xs font-black rounded-xl flex items-center justify-center transition-all cursor-pointer ${
             activeTab === 'users'
               ? 'bg-[#064E3B] text-white shadow-md'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'
           }`}
         >
           <Users className="w-4 h-4 mr-2" /> User Management
         </button>
         <button
           onClick={() => setActiveTab('inbox')}
-          className={`flex-1 py-3 px-4 text-xs font-extrabold rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+          className={`flex-1 py-3 px-4 text-xs font-black rounded-xl flex items-center justify-center transition-all cursor-pointer ${
             activeTab === 'inbox'
               ? 'bg-[#064E3B] text-white shadow-md'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'
           }`}
         >
           <MessageSquare className="w-4 h-4 mr-2" /> Advisor Inbox
@@ -425,32 +413,32 @@ export const AdminDashboard: React.FC = () => {
       {activeTab === 'branding' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-6">
-            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center">
+            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center">
               <Settings className="w-5 h-5 mr-2 text-[#064E3B] dark:text-emerald-400" />
               Branding Assets Configuration
             </h3>
             
             <form onSubmit={handleSaveBranding} className="space-y-6">
-              <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/40 rounded-2xl p-4 flex items-start text-xs text-amber-800 dark:text-amber-300">
-                <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mr-3 mt-0.5" />
+              <div className="bg-amber-50 dark:bg-slate-800/80 border border-amber-200 dark:border-amber-800/60 rounded-2xl p-4 flex items-start text-xs text-amber-900 dark:text-amber-200">
+                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mr-3 mt-0.5" />
                 <div>
-                  <h4 className="font-extrabold uppercase tracking-wide mb-1">Panduan Supabase Storage</h4>
-                  <p className="leading-relaxed text-[11px]">
-                    Pastikan Anda telah membuat bucket bernama <span className="font-mono bg-amber-100 dark:bg-amber-900/60 px-1 rounded font-bold text-amber-900 dark:text-amber-200">assets</span> dengan visibilitas <span className="font-bold underline">Public</span> di Supabase Dashboard.
+                  <h4 className="font-black uppercase tracking-wide mb-1">Panduan Supabase Storage</h4>
+                  <p className="leading-relaxed text-[11px] font-medium">
+                    Pastikan Anda telah membuat bucket bernama <span className="font-mono bg-amber-100 dark:bg-amber-950 px-1 py-0.5 rounded font-black text-amber-900 dark:text-amber-200">assets</span> dengan visibilitas <span className="font-bold underline">Public</span> di Supabase Dashboard.
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Logo File */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col justify-between space-y-3">
+                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700/60 rounded-2xl flex flex-col justify-between space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">Main Logo File</label>
-                    <span className="text-[10px] text-slate-400 block">Unggah logo utama Sharify (PNG/SVG)</span>
+                    <label className="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Main Logo File</label>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Unggah logo utama Sharify (PNG/SVG)</span>
                   </div>
                   {uploadLoading.logo_url ? (
-                    <div className="py-3 text-center text-xs text-slate-500 flex items-center justify-center space-x-2">
-                      <RefreshCcw className="w-4 h-4 text-emerald-600 animate-spin" />
+                    <div className="py-3 text-center text-xs text-slate-600 dark:text-slate-300 flex items-center justify-center space-x-2 font-bold">
+                      <RefreshCw className="w-4 h-4 text-emerald-600 animate-spin" />
                       <span>Mengunggah...</span>
                     </div>
                   ) : (
@@ -459,7 +447,7 @@ export const AdminDashboard: React.FC = () => {
                         type="file" 
                         accept="image/*"
                         onChange={e => handleFileUpload(e, 'logo_url')}
-                        className="block w-full text-[10px] text-slate-500 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-[#064E3B] dark:file:text-emerald-400 cursor-pointer"
+                        className="block w-full text-[10px] text-slate-600 dark:text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-emerald-50 dark:file:bg-emerald-950 file:text-[#064E3B] dark:file:text-emerald-400 cursor-pointer"
                       />
                       {brandingForm.logo_url && (
                         <div className="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-between">
@@ -472,14 +460,14 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Favicon File */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col justify-between space-y-3">
+                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700/60 rounded-2xl flex flex-col justify-between space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">App Favicon File</label>
-                    <span className="text-[10px] text-slate-400 block">Unggah favicon tab (.ico/.png)</span>
+                    <label className="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">App Favicon File</label>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Unggah favicon tab (.ico/.png)</span>
                   </div>
                   {uploadLoading.favicon_url ? (
-                    <div className="py-3 text-center text-xs text-slate-500 flex items-center justify-center space-x-2">
-                      <RefreshCcw className="w-4 h-4 text-emerald-600 animate-spin" />
+                    <div className="py-3 text-center text-xs text-slate-600 dark:text-slate-300 flex items-center justify-center space-x-2 font-bold">
+                      <RefreshCw className="w-4 h-4 text-emerald-600 animate-spin" />
                       <span>Mengunggah...</span>
                     </div>
                   ) : (
@@ -488,7 +476,7 @@ export const AdminDashboard: React.FC = () => {
                         type="file" 
                         accept="image/*"
                         onChange={e => handleFileUpload(e, 'favicon_url')}
-                        className="block w-full text-[10px] text-slate-500 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-[#064E3B] dark:file:text-emerald-400 cursor-pointer"
+                        className="block w-full text-[10px] text-slate-600 dark:text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-emerald-50 dark:file:bg-emerald-950 file:text-[#064E3B] dark:file:text-emerald-400 cursor-pointer"
                       />
                       {brandingForm.favicon_url && (
                         <div className="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-between">
@@ -501,10 +489,10 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* AI Widget Icon */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col justify-between space-y-3">
+                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700/60 rounded-2xl flex flex-col justify-between space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">Floating AI Widget Icon</label>
-                    <span className="text-[10px] text-slate-400 block">Pilih ikon pemicu asisten AI</span>
+                    <label className="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Floating AI Widget Icon</label>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Pilih ikon pemicu asisten AI</span>
                   </div>
                   <select 
                     value={brandingForm.ai_widget_icon}
@@ -519,10 +507,10 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* WhatsApp Number */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col justify-between space-y-3">
+                <div className="bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700/60 rounded-2xl flex flex-col justify-between space-y-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">WhatsApp Admin Support</label>
-                    <span className="text-[10px] text-slate-400 block">Format nomor internasional tanpa + (628...)</span>
+                    <label className="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">WhatsApp Admin Support</label>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Format nomor internasional tanpa + (628...)</span>
                   </div>
                   <input 
                     type="text" 
@@ -538,7 +526,7 @@ export const AdminDashboard: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSavingBranding}
-                  className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold px-6 py-3 rounded-2xl text-xs shadow-md transition-all cursor-pointer"
+                  className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-black px-6 py-3 rounded-2xl text-xs shadow-md transition-all cursor-pointer"
                 >
                   {isSavingBranding ? 'Menyimpan...' : 'Save Changes'}
                 </button>
@@ -549,11 +537,11 @@ export const AdminDashboard: React.FC = () => {
           {/* Branding Live Preview */}
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between space-y-6">
             <div>
-              <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">Branding Live Mockup Preview</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Pratinjau elemen branding yang dirender secara dinamis.</p>
+              <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider mb-2">Branding Live Mockup Preview</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 font-medium">Pratinjau elemen branding yang dirender secara dinamis.</p>
               
               <div className="space-y-4">
-                <div className="border border-slate-100 dark:border-slate-800 rounded-2xl p-3 bg-slate-50 dark:bg-slate-800/60">
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-3 bg-slate-50 dark:bg-slate-800/60">
                   <span className="text-[10px] text-slate-400 font-bold block mb-1">Navbar Logo</span>
                   <div className="flex items-center justify-between bg-white dark:bg-slate-900 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800">
                     {brandingForm.logo_url ? (
@@ -567,10 +555,10 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="border border-slate-100 dark:border-slate-800 rounded-2xl p-3 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-3 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-slate-400 font-bold block">WhatsApp Chat Preview</span>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-200">
                       {brandingForm.whatsapp_number ? `+${brandingForm.whatsapp_number}` : 'Belum Diatur'}
                     </span>
                   </div>
@@ -590,11 +578,11 @@ export const AdminDashboard: React.FC = () => {
           
           <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/50">
             <div>
-              <h2 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center">
                 <Users className="w-5 h-5 text-[#064E3B] dark:text-emerald-400 mr-2" />
                 User Licensing Management Suite
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Audit pengguna, modifikasi level keanggotaan/role Fiqh, atau nonaktifkan akun.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Audit pengguna, modifikasi level keanggotaan/role Fiqh, atau nonaktifkan akun.</p>
             </div>
             
             <div className="relative w-full sm:w-72">
@@ -612,13 +600,13 @@ export const AdminDashboard: React.FC = () => {
           <div className="overflow-x-auto">
             {isLoadingUsers ? (
               <div className="p-12 text-center text-slate-500">
-                <RefreshCcw className="w-8 h-8 text-emerald-600 mx-auto mb-3 animate-spin" />
+                <RefreshCw className="w-8 h-8 text-emerald-600 mx-auto mb-3 animate-spin" />
                 <p className="font-bold text-xs">Memuat database pengguna...</p>
               </div>
             ) : filteredUsers.length > 0 ? (
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-800/80 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
+                  <tr className="bg-slate-50 dark:bg-slate-800/80 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                     <th className="px-6 py-3.5">Nama / Pengguna</th>
                     <th className="px-6 py-3.5">Tipe Keanggotaan</th>
                     <th className="px-6 py-3.5">Status Layanan</th>
@@ -636,7 +624,7 @@ export const AdminDashboard: React.FC = () => {
                           </div>
                           <div>
                             <p className="font-bold text-slate-900 dark:text-white">{u.full_name}</p>
-                            <p className="text-[11px] text-slate-400">{u.email}</p>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400">{u.email}</p>
                           </div>
                         </div>
                       </td>
@@ -648,7 +636,7 @@ export const AdminDashboard: React.FC = () => {
                             <select
                               value={u.role}
                               onChange={e => handleUpdateUserRole(u.id, e.target.value as any)}
-                              className="text-[10px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-slate-700 dark:text-slate-200 font-bold focus:outline-none"
+                              className="text-[10px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-slate-900 dark:text-slate-200 font-bold focus:outline-none cursor-pointer"
                             >
                               <option value="free">FREE</option>
                               <option value="plus">PLUS</option>
@@ -663,16 +651,16 @@ export const AdminDashboard: React.FC = () => {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
                           u.role === 'suspended'
-                            ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400'
+                            ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
                             : u.subscription_status
-                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                         }`}>
                           {u.role === 'suspended' ? 'Disabled' : u.subscription_status ? 'Premium' : 'Standard'}
                         </span>
                       </td>
 
-                      <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">
+                      <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs font-medium">
                         {u.created_at}
                       </td>
 
@@ -682,7 +670,7 @@ export const AdminDashboard: React.FC = () => {
                           className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                             u.role === 'suspended'
                               ? 'bg-emerald-600 text-white border-transparent'
-                              : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/40'
+                              : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900/40'
                           }`}
                         >
                           {u.role === 'suspended' ? 'Pulihkan' : 'Suspend'}
@@ -707,20 +695,20 @@ export const AdminDashboard: React.FC = () => {
         <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
           <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/50 dark:bg-slate-800/50">
             <div>
-              <h2 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center">
                 <MessageSquare className="w-5 h-5 text-[#064E3B] dark:text-emerald-400 mr-2" />
                 Kotak Masuk Human Advisor
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tiket konsultasi langsung dari member Plus & Pro.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Tiket konsultasi langsung dari member Plus & Pro.</p>
             </div>
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {filteredMessages.map(msg => (
+            {messages.map(msg => (
               <div key={msg.id} className="p-5 hover:bg-slate-50/60 dark:hover:bg-slate-800/50 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="font-bold text-slate-900 dark:text-white text-xs">{msg.name}</span>
+                    <span className="font-black text-slate-900 dark:text-white text-xs">{msg.name}</span>
                     {getRoleBadge(msg.role)}
                     <span className="text-[10px] text-slate-400">• {msg.date}</span>
                   </div>
@@ -730,7 +718,7 @@ export const AdminDashboard: React.FC = () => {
 
                 <button
                   onClick={() => handleOpenReply(msg)}
-                  className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
+                  className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-black text-xs px-4 py-2 rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
                 >
                   Jawab Tiket
                 </button>
@@ -745,7 +733,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
             <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="font-extrabold text-slate-900 dark:text-white text-sm">Jawaban Konsultasi Syariah</h3>
+              <h3 className="font-black text-slate-900 dark:text-white text-sm">Jawaban Konsultasi Syariah</h3>
               <button onClick={() => setActiveMessage(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                 <X className="w-5 h-5" />
               </button>
@@ -753,7 +741,7 @@ export const AdminDashboard: React.FC = () => {
 
             <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-1">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Subjek Tiket</span>
-              <p className="text-xs font-bold text-slate-900 dark:text-white">{activeMessage.subject}</p>
+              <p className="text-xs font-black text-slate-900 dark:text-white">{activeMessage.subject}</p>
               <p className="text-xs text-slate-600 dark:text-slate-300 italic pt-1">"{activeMessage.message}"</p>
             </div>
 
@@ -777,7 +765,7 @@ export const AdminDashboard: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#064E3B] text-white font-extrabold text-xs rounded-xl shadow-md cursor-pointer"
+                  className="px-5 py-2 bg-[#064E3B] text-white font-black text-xs rounded-xl shadow-md cursor-pointer"
                 >
                   Kirim Jawaban
                 </button>
