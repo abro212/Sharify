@@ -17,13 +17,16 @@ export const ZakatCalculatorContent: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // Calculations
+  // Calculations (NaN safe)
   const NISAB_GOLD_GRAMS = 85;
-  const yearlyNisab = goldPrice * NISAB_GOLD_GRAMS;
+  const safeGoldPrice = Math.max(0, Number(goldPrice) || 0);
+  const safeWealthAmount = Math.max(0, Number(wealthAmount) || 0);
+  
+  const yearlyNisab = safeGoldPrice * NISAB_GOLD_GRAMS;
   const currentNisab = activeTab === 'maal' ? yearlyNisab : yearlyNisab / 12;
   
-  const isEligible = wealthAmount >= currentNisab;
-  const zakatObligation = isEligible ? wealthAmount * 0.025 : 0;
+  const isEligible = safeWealthAmount >= currentNisab && currentNisab > 0;
+  const zakatObligation = isEligible ? safeWealthAmount * 0.025 : 0;
 
   // Reset inputs when switching tabs
   useEffect(() => {
