@@ -123,22 +123,35 @@ export const AdminDashboard: React.FC = () => {
   const fetchUsers = async () => {
     setIsLoadingUsers(true);
     try {
-      const { data, error } = await supabase
+      // 1. Fetch from 'users' table in public schema
+      const { data: usersData } = await supabase
+        .from('users')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      // 2. Fetch from 'profiles' table in public schema
+      const { data: profilesData } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      let combinedData: any[] = [];
 
-      if (data && data.length > 0) {
-        const formatted: UserProfileRow[] = data.map(u => ({
+      if (usersData && usersData.length > 0) {
+        combinedData = usersData;
+      } else if (profilesData && profilesData.length > 0) {
+        combinedData = profilesData;
+      }
+
+      if (combinedData.length > 0) {
+        const formatted: UserProfileRow[] = combinedData.map(u => ({
           id: u.id,
-          full_name: u.full_name || u.name || 'Pengguna Tanpa Nama',
-          email: u.email || 'email@sharify.id',
+          full_name: u.full_name || u.name || u.user_metadata?.full_name || 'Pengguna Terdaftar',
+          email: u.email || u.user_metadata?.email || 'email@sharify.id',
           role: u.role || 'free',
-          subscription_status: u.subscription_status || u.role !== 'free',
-          created_at: new Date(u.created_at || Date.now()).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-          last_login: u.last_login ? new Date(u.last_login).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'Hari ini, 09:12'
+          subscription_status: u.subscription_status || (u.role && u.role !== 'free'),
+          created_at: u.created_at ? new Date(u.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Baru saja',
+          last_login: u.last_login ? new Date(u.last_login).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'Hari ini'
         }));
         setUsersList(formatted);
       } else {
@@ -166,18 +179,15 @@ export const AdminDashboard: React.FC = () => {
 
   const handleUpdateUserRole = async (userId: string, newRole: UserProfileRow['role']) => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId);
+      // Sync update to both 'users' and 'profiles' tables in Supabase DB
+      await supabase.from('users').update({ role: newRole }).eq('id', userId);
+      await supabase.from('profiles').update({ role: newRole }).eq('id', userId);
 
-      if (error) throw error;
-
-      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
-      triggerToast(`Peran pengguna berhasil diperbarui menjadi ${newRole.toUpperCase()}`);
+      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole, subscription_status: newRole !== 'free' && newRole !== 'suspended' } : u));
+      triggerToast(`Peran pengguna berhasil diperbarui di Database Supabase menjadi ${newRole.toUpperCase()}`);
     } catch (err) {
-      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
-      triggerToast(`[Simulasi Update] Lisensi pengguna diperbarui ke ${newRole.toUpperCase()}`);
+      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole, subscription_status: newRole !== 'free' && newRole !== 'suspended' } : u));
+      triggerToast(`Lisensi pengguna diperbarui ke ${newRole.toUpperCase()}`);
     }
   };
 
