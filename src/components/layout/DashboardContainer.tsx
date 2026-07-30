@@ -55,6 +55,12 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
     <div className="min-h-screen w-full bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex transition-colors duration-300 relative">
       
       {/* Desktop & Mobile Sidebar */}
+      {isMobileSidebarOpen && (
+        <div 
+          onClick={() => setIsMobileSidebarOpen(false)} 
+          className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs z-[9995] lg:hidden animate-fade-in cursor-pointer"
+        />
+      )}
       <Sidebar 
         isOpen={isMobileSidebarOpen}
         onClose={() => setIsMobileSidebarOpen(false)}
