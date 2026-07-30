@@ -26,7 +26,7 @@ interface UserProfileRow {
   id: string;
   full_name: string;
   email?: string;
-  role: 'admin' | 'free' | 'plus' | 'pro' | 'family' | 'suspended';
+  role: 'admin' | 'advisor' | 'free' | 'plus' | 'pro' | 'family' | 'suspended';
   subscription_status: boolean;
   created_at: string;
   last_login?: string;
@@ -264,6 +264,8 @@ export const AdminDashboard: React.FC = () => {
     switch (role.toLowerCase()) {
       case 'admin':
         return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#064E3B]/10 dark:bg-emerald-950/60 text-[#064E3B] dark:text-emerald-300 border border-[#064E3B]/20 dark:border-emerald-700">Administrator</span>;
+      case 'advisor':
+        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600/10 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-600/30">Human Advisor</span>;
       case 'pro':
         return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/10 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-500/20 dark:border-amber-700">Pro Member</span>;
       case 'plus':
@@ -699,6 +701,7 @@ export const AdminDashboard: React.FC = () => {
                               <option value="plus">PLUS</option>
                               <option value="pro">PRO</option>
                               <option value="family">FAMILY</option>
+                              <option value="advisor">ADVISOR</option>
                               <option value="admin">ADMIN</option>
                             </select>
                           )}

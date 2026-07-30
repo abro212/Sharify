@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { 
-  Home, MessageSquare, Calculator, User, ShieldCheck, HeartPulse, 
+  Home, MessageSquare, Calculator, User, ShieldCheck, UserCheck, HeartPulse, 
   Crown, Target, RefreshCcw, Search, FileText, Users, Heart, Coins, X,
   ChevronLeft, ChevronRight, Moon, Sun, Search as SearchIcon, LogOut, ShieldAlert
 } from 'lucide-react';
@@ -56,6 +56,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     { name: 'Profile', path: '/profile', icon: User, badge: null },
     { name: 'Upgrade', path: '/upgrade', icon: Crown, badge: null },
   ];
+
+  if (profile?.role === 'advisor' || profile?.role === 'admin') {
+    groupItems.push({ name: 'Portal Advisor', path: '/advisor', icon: UserCheck, badge: 'Advisor', badgeColor: 'bg-emerald-600' });
+  }
 
   if (profile?.role === 'admin') {
     groupItems.push({ name: 'Admin Portal', path: '/admin', icon: ShieldCheck, badge: 'Admin', badgeColor: 'bg-red-500' });

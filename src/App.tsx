@@ -12,6 +12,7 @@ import { SignUp } from './pages/SignUp';
 import { HealthCheck } from './pages/HealthCheck';
 import { Pricing } from './pages/Pricing';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { AdvisorDashboard } from './pages/AdvisorDashboard';
 import { Goals } from './pages/Goals';
 import { RibaDetox } from './pages/RibaDetox';
 import { JudolDetox } from './pages/JudolDetox';
@@ -156,6 +157,18 @@ function App() {
             </RequireRole>
           } />
           
+          {/* Human Advisor Only Routes */}
+          <Route path="/advisor" element={
+            <RequireRole allowedRoles={['advisor', 'admin']} fallbackMessage="Hanya Konsultan Syariah resmi (Advisor Role) yang memiliki akses ke portal ini.">
+              <AdvisorDashboard />
+            </RequireRole>
+          } />
+          <Route path="/advisor-dashboard" element={
+            <RequireRole allowedRoles={['advisor', 'admin']} fallbackMessage="Hanya Konsultan Syariah resmi (Advisor Role) yang memiliki akses ke portal ini.">
+              <AdvisorDashboard />
+            </RequireRole>
+          } />
+
           {/* Admin Only Routes */}
           <Route path="/admin" element={
             <RequireRole allowedRoles={['admin']} fallbackMessage="You do not have administrative privileges.">
