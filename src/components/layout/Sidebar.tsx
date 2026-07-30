@@ -141,13 +141,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
                   <img
                     src={resolvedLogoUrl}
                     alt="Sharify Logo"
-                    className="h-7 object-contain mr-2"
+                    className="h-8 w-auto object-contain max-w-[180px]"
                     onError={() => setLogoError(true)}
                   />
                 ) : (
-                  <img src="/app logo.png" alt="Sharify Logo" className="w-6 h-6 object-contain mr-2" />
+                  <img src="/app logo.png" alt="Sharify Logo" className="h-8 w-auto object-contain max-w-[180px]" />
                 )}
-                <span className="text-base font-bold text-slate-900 dark:text-white truncate">Sharify App</span>
               </Link>
             )}
           </div>
