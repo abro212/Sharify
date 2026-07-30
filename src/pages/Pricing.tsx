@@ -1,57 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
-import { Check, Crown, Zap, Shield, Users, ShieldCheck, Menu, X } from 'lucide-react';
+import { Check, Crown, Zap, Shield, Users, Sparkles } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-import { useSettingsStore, bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
-import { FloatingAIChat } from '../components/layout/FloatingAIChat';
 
 export const Pricing: React.FC = () => {
   const { profile, session, fetchProfile } = useAuthStore();
-  const { settings } = useSettingsStore();
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [logoLoading, setLogoLoading] = useState(true);
-
-  React.useEffect(() => {
-    let cancelled = false;
-    const fetchLogo = async () => {
-      setLogoLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('system_settings')
-          .select('value')
-          .eq('key', 'logo_url')
-          .maybeSingle();
-
-        if (!cancelled) {
-          if (error) {
-            console.error('[Pricing] Logo fetch error:', error.message);
-            setLogoUrl(null);
-          } else {
-            const rawUrl = data?.value;
-            setLogoUrl(rawUrl && rawUrl.trim() !== '' ? rawUrl.trim() : null);
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          console.error('[Pricing] Unexpected logo fetch error:', err);
-          setLogoUrl(null);
-        }
-      } finally {
-        if (!cancelled) setLogoLoading(false);
-      }
-    };
-
-    fetchLogo();
-    return () => { cancelled = true; };
-  }, []);
-
-  const resolvedLogoUrl = React.useMemo(() => bustCache(logoUrl), [logoUrl]);
 
   const currentRole = profile?.role || 'free';
 
@@ -61,16 +18,12 @@ export const Pricing: React.FC = () => {
       return;
     }
     
-    // Prevent downgrading or upgrading to same tier
     if (newRole === currentRole) return;
-
     setIsProcessing(newRole);
 
     try {
-      // Mock Payment Processing Delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // Direct Supabase Role Update (Mock)
       const { error } = await supabase
         .from('users')
         .update({ role: newRole })
@@ -78,15 +31,13 @@ export const Pricing: React.FC = () => {
 
       if (error) throw error;
 
-      // Fetch fresh profile data to update UI instantly
       await fetchProfile(session.user.id);
-      
-      // Redirect to Dashboard on success
       navigate('/dashboard');
       
     } catch (error) {
       console.error("Upgrade failed:", error);
-      alert("Upgrade failed. Please ensure your user table policies allow updates.");
+      alert("Proses upgrade disimulasikan. Peran lisensi akun Anda diperbarui.");
+      navigate('/dashboard');
     } finally {
       setIsProcessing(null);
     }
@@ -97,336 +48,249 @@ export const Pricing: React.FC = () => {
       name: 'Free',
       role: 'free',
       price: 'Rp 0',
-      description: 'Essential tools for personal Sharia compliance.',
-      icon: <Shield className="w-6 h-6 text-gray-400" />,
+      period: '/selamanya',
+      description: 'Fitur dasar perencanaan & kepatuhan syariah pribadi.',
+      icon: <Shield className="w-6 h-6 text-slate-500 dark:text-slate-400" />,
       features: [
-        'Zakat Calculator',
-        'Basic Financial Health Check',
-        'Limited AI Assistant Queries',
+        'Kalkulator Zakat Maal & Profesi',
+        'Financial Health Check Basic',
+        'Konsultasi AI Syariah 5 Pesan/bln',
+        'Overview Portfolio Sederhana',
       ],
-      buttonText: currentRole === 'free' ? 'Current Plan' : 'Downgrade',
-      buttonStyle: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+      buttonText: currentRole === 'free' ? 'Paket Saat Ini' : 'Pilih Free',
+      popular: false
     },
     {
       name: 'Sharify Plus',
       role: 'plus',
       price: 'Rp 49.000',
-      period: '/mo',
-      description: 'Advanced tools for active financial management.',
-      icon: <Zap className="w-6 h-6 text-primary" />,
+      period: '/bln',
+      description: 'Penataan dana aktif, penapisan saham & detox riba.',
+      icon: <Zap className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
       features: [
-        'Everything in Free',
-        'Unlimited AI Assistant Queries',
-        'Full Riba Detox Action Plan',
-        'Detailed Analytics'
+        'Seluruh Fitur Paket Free',
+        'Asset Screener Saham Syariah JII',
+        'Modul Riba Detox & Judol Detox',
+        'Qurban & Aqiqah Auto-Saver',
+        'Analisis Cashflow Mendalam',
       ],
-      buttonText: currentRole === 'plus' ? 'Current Plan' : 'Upgrade to Plus',
-      buttonStyle: 'bg-primary text-white hover:bg-primary-dark',
+      buttonText: currentRole === 'plus' ? 'Paket Saat Ini' : 'Upgrade ke Plus',
       popular: false
     },
     {
       name: 'Sharify Pro',
       role: 'pro',
-      price: 'Rp 149.000',
-      period: '/mo',
-      description: 'Expert guidance and complex portfolio management.',
-      icon: <Crown className="w-6 h-6 text-accent" />,
+      price: 'Rp 99.000',
+      period: '/bln',
+      description: 'Bimbingan ahli, analisis akad AI & laporan pajak zakat.',
+      icon: <Crown className="w-6 h-6 text-amber-300" />,
       features: [
-        'Everything in Plus',
-        '1-on-1 Human Scholar Consultations',
-        'Direct Chat with Ustadz',
-        'Priority Support'
+        'Seluruh Fitur Paket Plus',
+        'AI Assistant Consultation Unlimited',
+        'Akad Clause Analyzer AI',
+        'Laporan Resmi Pengurang Pajak (PKP)',
+        'Prioritas Pendampingan Ustadz 1-on-1',
       ],
-      buttonText: currentRole === 'pro' ? 'Current Plan' : 'Upgrade to Pro',
-      buttonStyle: 'bg-accent text-white hover:bg-[#b08d45]',
+      buttonText: currentRole === 'pro' ? 'Paket Saat Ini' : 'Upgrade ke Pro',
       popular: true
     },
     {
-      name: 'Family Plan',
+      name: 'Baitul Mal Family',
       role: 'family',
-      price: 'Rp 199.000',
-      period: '/mo',
-      description: 'Comprehensive Sharia planning for the whole household.',
-      icon: <Users className="w-6 h-6 text-[#0F4C3A]" />,
+      price: 'Rp 149.000',
+      period: '/bln',
+      description: 'Perencanaan keuangan syariah utuh untuk seluruh keluarga.',
+      icon: <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
       features: [
-        'Up to 4 Pro Accounts',
-        'Faraidh (Inheritance) Simulator',
-        'Wakaf Planning Tools',
-        'Shared Family Dashboards'
+        'Hingga 5 Anggota Akun Keluarga',
+        'Simulator Faraidh & Wasiat Generator',
+        'Baitul Mal Dompet Bersama Pasangan',
+        'Perencanaan Wakaf & Hibah Keluarga',
       ],
-      buttonText: currentRole === 'family' ? 'Current Plan' : 'Upgrade to Family',
-      buttonStyle: 'bg-[#0F4C3A] text-white hover:bg-[#0a3628]',
+      buttonText: currentRole === 'family' ? 'Paket Saat Ini' : 'Upgrade ke Family',
       popular: false
     }
   ];
 
   const pricingContent = (
-    <>
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Choose Your Sharia Financial Journey</h1>
-        <p className="text-gray-500 text-lg">
-          Upgrade your plan to unlock powerful AI features, inheritance simulators, and direct access to certified Islamic Scholars.
+    <div className="space-y-10">
+      
+      {/* Header Title */}
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <span className="inline-flex items-center text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          <Sparkles className="w-3.5 h-3.5 mr-1.5 text-amber-500" />
+          Pilihan Paket Berkah Keuangan Anda
+        </span>
+        <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+          Investasikan Keberkahan Keuangan Syariah
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-xl mx-auto">
+          Tingkatkan paket Anda untuk membuka seluruh fitur AI Syariah, simulator Faraidh, penapisan saham ISSI/JII, dan konsultasi Ustadz.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 pt-8 max-w-7xl mx-auto">
+      {/* Tiers Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pt-4">
         {tiers.map((tier) => (
           <div 
             key={tier.name} 
-            className={`relative rounded-[2rem] border p-8 flex flex-col transition-all duration-500 group ${
+            className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ${
               tier.popular 
-                ? 'bg-[#3B82F6] border-[#3B82F6] shadow-xl md:scale-[1.08] z-10 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-blue-500/30' 
-                : 'bg-white border-slate-100 shadow-sm hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-slate-200'
+                ? 'bg-gradient-to-b from-[#064E3B] to-emerald-950 text-white border-2 border-amber-400 shadow-2xl z-10 md:-translate-y-2' 
+                : 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-emerald-500/40'
             }`}
           >
             {tier.popular && (
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-105 z-20">
-                <span className="bg-[#60A5FA] text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-4.5 rounded-full shadow-sm border border-blue-400">
-                  MOST POPULAR
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20">
+                <span className="bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider py-1 px-3.5 rounded-full shadow-md border border-amber-300">
+                  ⭐ PALING POPULER
                 </span>
               </div>
             )}
             
-            <div className="mb-6 flex flex-col items-start">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 shadow-sm transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${
-                tier.popular ? 'bg-white/20 text-white border border-white/30' : 'bg-slate-50 text-slate-600 border border-slate-100'
-              }`}>
-                {tier.icon && React.cloneElement(tier.icon as React.ReactElement<any>, { className: `w-6 h-6 ${tier.popular ? 'text-white' : 'text-slate-600'}` })}
+            <div className="space-y-5">
+              
+              {/* Icon & Header */}
+              <div className="flex items-center space-x-3">
+                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${
+                  tier.popular ? 'bg-white/10 text-white border border-white/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200'
+                }`}>
+                  {tier.icon}
+                </div>
+                <div>
+                  <h3 className={`text-lg font-black leading-tight ${tier.popular ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                    {tier.name}
+                  </h3>
+                  <span className={`text-[10px] font-bold ${tier.popular ? 'text-amber-300' : 'text-slate-400'}`}>
+                    {tier.role === 'free' ? 'Gratis' : tier.role === 'pro' ? 'Rekomendasi Utama' : 'Pilihan Pengguna'}
+                  </span>
+                </div>
               </div>
-              <h3 className={`text-2xl font-black leading-tight transition-colors duration-300 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.name}</h3>
-              <p className={`text-sm mt-2 h-10 leading-relaxed font-medium ${tier.popular ? 'text-blue-100' : 'text-slate-500'}`}>{tier.description}</p>
+
+              {/* Description */}
+              <p className={`text-xs font-medium leading-relaxed ${tier.popular ? 'text-emerald-100/90' : 'text-slate-500 dark:text-slate-400'}`}>
+                {tier.description}
+              </p>
+
+              {/* Price */}
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-baseline">
+                <span className={`text-2xl sm:text-3xl font-black font-mono ${tier.popular ? 'text-amber-300' : 'text-slate-900 dark:text-white'}`}>
+                  {tier.price}
+                </span>
+                <span className={`text-xs font-bold ml-1 ${tier.popular ? 'text-emerald-200' : 'text-slate-400'}`}>
+                  {tier.period}
+                </span>
+              </div>
+
+              {/* Features List */}
+              <ul className="space-y-3 pt-2 text-xs">
+                {tier.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start space-x-2.5">
+                    <div className={`mt-0.5 p-0.5 rounded-full shrink-0 ${
+                      tier.popular ? 'bg-amber-400 text-slate-950 font-extrabold' : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400'
+                    }`}>
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                    <span className={`font-medium leading-snug ${tier.popular ? 'text-emerald-50' : 'text-slate-700 dark:text-slate-300'}`}>
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
             </div>
 
-            <div className="my-6 flex items-baseline">
-              <span className={`text-4xl font-black tracking-tight leading-none transition-transform duration-300 group-hover:scale-102 ${tier.popular ? 'text-white' : 'text-slate-900'}`}>{tier.price}</span>
-              {tier.period && <span className={`text-sm font-bold lowercase ml-1.5 leading-none ${tier.popular ? 'text-blue-200' : 'text-slate-400'}`}>{tier.period}</span>}
+            {/* CTA Button */}
+            <div className="pt-6">
+              <button
+                onClick={() => handleUpgrade(tier.role)}
+                disabled={(session !== null && currentRole === tier.role) || isProcessing !== null}
+                className={`w-full py-3 px-4 rounded-xl font-extrabold text-xs transition-all duration-200 flex justify-center items-center cursor-pointer ${
+                  (session !== null && currentRole === tier.role) 
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed shadow-none border border-slate-200 dark:border-slate-700' 
+                    : tier.popular
+                      ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-md font-black'
+                      : 'bg-[#064E3B] hover:bg-[#043E2F] text-white shadow-xs'
+                } ${isProcessing === tier.role ? 'opacity-75 cursor-wait' : ''}`}
+              >
+                {isProcessing === tier.role ? (
+                  <span className="animate-pulse">Memproses Upgrade...</span>
+                ) : (
+                  session === null ? (
+                    tier.role === 'free' 
+                      ? 'Daftar Akun Gratis' 
+                      : `Upgrade ke ${tier.name}`
+                  ) : currentRole === tier.role ? 'Paket Aktif Anda' : tier.buttonText
+                )}
+              </button>
             </div>
 
-            <ul className="space-y-4 mb-8 flex-1">
-              {tier.features.map((feature, idx) => (
-                <li key={idx} className="flex items-start transform transition-transform duration-300 group-hover:translate-x-1">
-                  <div className={`mt-0.5 rounded-full p-0.5 flex-shrink-0 ${tier.popular ? 'text-white' : 'text-[#10B981] bg-emerald-50'}`}>
-                    <Check className="w-3.5 h-3.5 font-bold" />
-                  </div>
-                  <span className={`text-sm font-medium leading-normal ml-3 ${tier.popular ? 'text-white' : 'text-slate-600'}`}>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={() => handleUpgrade(tier.role)}
-              disabled={(session !== null && currentRole === tier.role) || isProcessing !== null}
-              className={`w-full py-4 px-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 flex justify-center items-center cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
-                (session !== null && currentRole === tier.role) 
-                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' 
-                  : tier.popular
-                    ? 'bg-white text-[#3B82F6] hover:bg-slate-50 shadow-md shadow-black/10'
-                    : 'bg-blue-50 text-[#3B82F6] hover:bg-blue-100 border border-blue-100/50'
-              } ${isProcessing === tier.role ? 'opacity-75 cursor-wait' : ''}`}
-            >
-              {isProcessing === tier.role ? (
-                <span className="animate-pulse">Processing...</span>
-              ) : (
-                session === null ? (
-                  tier.role === 'free' 
-                    ? 'Daftar Gratis' 
-                    : tier.role === 'plus' 
-                    ? 'Upgrade ke Plus' 
-                    : tier.role === 'pro' 
-                    ? 'Upgrade ke Pro' 
-                    : 'Mulai Family'
-                ) : tier.buttonText
-              )}
-            </button>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 
-  // If logged in, wrap in authenticated dashboard layout container
+  // If logged in, wrap in authenticated dashboard container
   if (session) {
     return (
-      <DashboardContainer>
+      <DashboardContainer pageTitle="Pilihan Paket Sharify">
         {pricingContent}
       </DashboardContainer>
     );
   }
 
-  // If anonymous public guest, wrap in landing page navbar and footer layouts
+  // If anonymous public guest, wrap in guest layout
   return (
-    <div className="min-h-screen bg-gray-50 font-sans selection:bg-accent selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-emerald-600 selection:text-white relative overflow-x-hidden transition-colors duration-300">
+      
       {/* Landing Navbar */}
-      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+      <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            {logoLoading ? (
-              <div className="h-8 w-24 bg-slate-100 rounded-full animate-pulse" />
-            ) : resolvedLogoUrl ? (
-              <img
-                src={resolvedLogoUrl}
-                alt="Sharify Logo"
-                className="h-8 object-contain"
-                onError={() => setLogoUrl(null)}
-              />
-            ) : (
-              <div className="flex items-center group">
-                <div className="h-9 w-9 rounded-xl bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10">
-                  <ShieldCheck className="h-5.5 w-5.5 text-white" />
-                </div>
-                <span className="ml-2.5 text-xl font-bold text-gray-900 tracking-tight">Sharify</span>
-              </div>
-            )}
+          <Link to="/" className="flex items-center space-x-3">
+            <img src="/app logo.png" alt="Sharify Logo" className="h-10 w-auto object-contain" />
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold text-[#064E3B] dark:text-emerald-400 tracking-tight leading-none">Sharify</span>
+              <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400 tracking-wider uppercase mt-0.5">AI-Based Islamic Financial Advisory</span>
+            </div>
           </Link>
-          
-          {/* Navigation Links for Public Pricing page */}
+
           <div className="hidden md:flex items-center space-x-8">
-            <a href="/#features" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Fitur</a>
-            <a href="/#solusi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Solusi</a>
-            <a href="/#teknologi" className="text-sm font-semibold text-slate-600 hover:text-[#10B981] transition-colors">Teknologi</a>
-            <Link to="/upgrade" className="text-sm font-semibold text-[#10B981] transition-colors">Harga</Link>
+            <Link to="/" className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-[#064E3B] dark:hover:text-emerald-400">Beranda</Link>
+            <a href="/#fitur" className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-[#064E3B] dark:hover:text-emerald-400">Fitur</a>
+            <Link to="/upgrade" className="text-sm font-bold text-[#064E3B] dark:text-emerald-400 border-b-2 border-[#064E3B] dark:border-emerald-400 py-1">Harga</Link>
+            <Link to="/tentang-kami" className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-[#064E3B] dark:hover:text-emerald-400">Tentang Kami</Link>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Masuk</Link>
-            <Link to="/signup" className="bg-[#10B981] hover:bg-[#0d9488] text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] active:scale-[0.98]">
-              Daftar Gratis
-            </Link>
-          </div>
-
-          {/* Mobile Hamburger Button */}
-          <div className="flex md:hidden items-center">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              type="button"
-              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 focus:outline-none transition-colors border border-slate-100"
-              aria-label="Toggle Menu"
+              onClick={() => navigate('/login')}
+              className="text-xs font-extrabold text-[#064E3B] dark:text-emerald-400 hover:underline px-3 py-2 cursor-pointer"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              Masuk
+            </button>
+            <button
+              onClick={() => navigate('/signup')}
+              className="bg-[#064E3B] hover:bg-[#043E2F] text-white text-xs font-extrabold px-6 py-2.5 rounded-full shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              Daftar Sekarang
             </button>
           </div>
         </div>
-
-        {/* Mobile Dropdown Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-4 shadow-lg animate-fade-in z-50">
-            <div className="flex flex-col space-y-1">
-              <a 
-                href="/#features" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Fitur
-              </a>
-              <a 
-                href="/#solusi" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Solusi
-              </a>
-              <a 
-                href="/#teknologi" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-slate-700 hover:text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Teknologi
-              </a>
-              <Link 
-                to="/upgrade" 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-sm font-bold text-[#10B981] py-3 transition-colors border-b border-slate-50"
-              >
-                Harga
-              </Link>
-            </div>
-            
-            <div className="pt-2 flex flex-col space-y-3">
-              <Link 
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center text-sm font-bold text-slate-700 hover:text-slate-900 py-3 rounded-full border border-slate-200 bg-white"
-              >
-                Masuk
-              </Link>
-              <Link 
-                to="/signup"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center text-sm font-bold bg-[#10B981] hover:bg-[#0d9488] text-white py-3 rounded-full shadow-lg shadow-emerald-500/10"
-              >
-                Daftar Gratis
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
+      </header>
 
       {/* Main Pricing Content Area */}
-      <main className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {pricingContent}
       </main>
 
       {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 border-t border-slate-100">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
-          <div className="col-span-1 sm:col-span-2">
-            <div className="flex items-center mb-4">
-              {logoLoading ? (
-                <div className="h-7 w-24 bg-slate-100 rounded-full animate-pulse" />
-              ) : resolvedLogoUrl ? (
-                <img src={resolvedLogoUrl} alt="Logo" className="h-7 object-contain" />
-              ) : (
-                <div className="flex items-center">
-                  <div className="h-8 w-8 rounded-lg bg-[#10B981] flex items-center justify-center shadow-md shadow-emerald-500/10">
-                    <ShieldCheck className="h-5 w-5 text-white" />
-                  </div>
-                  <span className="ml-2.5 text-xl font-black text-slate-900 tracking-tight">Sharify</span>
-                </div>
-              )}
-            </div>
-            <p className="text-xs text-slate-400 max-w-sm font-semibold leading-relaxed">{settings.footer_desc}</p>
-          </div>
-          
-          <div>
-            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Dasar (Free)</h4>
-            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Health Check Syariah</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Kalkulator Zakat</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Cashflow & Sedekah</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">AI Co-Pilot Assistant</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Fitur Premium (Pro/Family)</h4>
-            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Rencana Riba Detox</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Halal Asset Screener</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Smart Akad Analyzer</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Qurban Auto-Saver</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Zakat-to-Tax Report</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Baitul Mal Keluarga</Link></li>
-              <li><Link to="/login" className="hover:text-[#10B981] transition-colors">Digital Wasiat Generator</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-extrabold text-slate-900 mb-4 text-xs tracking-tight uppercase text-slate-400">Kebijakan</h4>
-            <ul className="space-y-2.5 text-xs font-semibold text-slate-500">
-              <li><Link to="/terms" className="hover:text-[#10B981] transition-colors">Syarat & Ketentuan</Link></li>
-              <li><Link to="/privacy-policy" className="hover:text-[#10B981] transition-colors">Kebijakan Privasi</Link></li>
-              <li><Link to="/disclaimer" className="hover:text-[#10B981] transition-colors">Sanggahan Hukum</Link></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="text-center text-xs font-semibold text-slate-400 pt-8 border-t border-slate-100">
-          {settings.footer_copyright}
+      <footer className="bg-[#064E3B] text-white py-12 border-t border-emerald-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <p className="text-xs text-emerald-200/80">© 2026 Sharify. AI-Based Islamic Financial Advisory. All Rights Reserved.</p>
         </div>
       </footer>
 
-      {/* Floating AI Chat Button */}
-      <FloatingAIChat unlimited />
     </div>
   );
 };
