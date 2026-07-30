@@ -101,8 +101,8 @@ export const FamilyDashboard: React.FC = () => {
   };
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Baitul Mal Keluarga">
+      <div className="space-y-6">
         
         {/* Dynamic Toast System */}
         {showToast && (

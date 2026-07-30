@@ -174,8 +174,8 @@ export const Cashflow: React.FC = () => {
   };
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Manajemen Cashflow Harian">
+      <div className="space-y-6">
       {/* Dynamic Spiritual Nudging Alert Banner */}
       <div className="mb-8">
         {hasSedekahThisMonth ? (

@@ -11,8 +11,8 @@ export const ZakatCalculator: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>('zakat');
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Kalkulator Zakat & Faraidh">
+      <div className="space-y-6">
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-2xl font-extrabold text-slate-900 mb-2">Zakat & Faraidh</h1>

@@ -86,8 +86,8 @@ export const WasiatGenerator: React.FC = () => {
   };
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Faraidh & Wasiat Generator">
+      <div className="space-y-6">
         {/* Top Legal Banner */}
         <div className="bg-gradient-to-r from-emerald-600 via-teal-700 to-amber-500/80 text-white rounded-3xl p-6 mb-8 shadow-[0_2px_20px_rgb(0,0,0,0.04)] border border-emerald-500/20 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fill-opacity=\\'1\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }}></div>

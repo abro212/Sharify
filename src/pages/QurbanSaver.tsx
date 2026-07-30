@@ -127,8 +127,8 @@ export const QurbanSaver: React.FC = () => {
   const progressPercentage = Math.min(100, (simulatedSaved / calculations.targetPrice) * 100);
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Qurban & Aqiqah Auto-Saver">
+      <div className="space-y-6">
       
       {/* Toast System */}
       {showToast && (

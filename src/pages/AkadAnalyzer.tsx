@@ -158,8 +158,8 @@ Jika Pihak Kedua terlambat melakukan pembayaran angsuran bulanan karena kelalaia
   };
 
   return (
-    <DashboardContainer>
-      <div className="px-6 pt-12 pb-6">
+    <DashboardContainer pageTitle="Smart Akad Clause Analyzer">
+      <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-2xl font-extrabold text-slate-900 flex items-center mb-2">
             <FileText className="h-6 w-6 text-emerald-600 mr-2" />
