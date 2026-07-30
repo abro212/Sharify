@@ -49,12 +49,10 @@ export const LandingPage: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-7">
+          <nav className="hidden md:flex items-center space-x-8">
             {[
               { id: 'beranda', label: 'Beranda', href: '#' },
-              { id: 'fitur', label: 'Fitur Unggulan', href: '#fitur' },
-              { id: 'zakat-calc', label: 'Kalkulator Zakat', href: '#kalkulator' },
-              { id: 'detox', label: 'Riba & Judol Detox', href: '#detox' },
+              { id: 'fitur', label: 'Fitur', href: '#fitur' },
               { id: 'harga', label: 'Harga', href: '#harga' },
               { id: 'tentang-kami', label: 'Tentang Kami', href: '/tentang-kami' },
             ].map((item) => (
@@ -131,10 +129,8 @@ export const LandingPage: React.FC = () => {
           <div className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 space-y-3 shadow-xl animate-fade-in">
             {[
               { label: 'Beranda', href: '#' },
-              { label: 'Fitur Unggulan', href: '#fitur' },
-              { label: 'Kalkulator Zakat', href: '#kalkulator' },
-              { label: 'Riba & Judol Detox', href: '#detox' },
-              { label: 'Harga & Paket', href: '#harga' },
+              { label: 'Fitur', href: '#fitur' },
+              { label: 'Harga', href: '#harga' },
               { label: 'Tentang Kami', href: '/tentang-kami' },
             ].map((item, idx) => (
               <a 
