@@ -35,7 +35,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     navigate('/');
   };
 
-  const isAdvisor = profile?.role === 'advisor';
+  const simulatedRole = typeof window !== 'undefined' ? localStorage.getItem('sharify_simulated_role') : null;
+  const activeRole = simulatedRole || profile?.role || 'free';
+  const isAdvisor = activeRole === 'advisor';
+  const isAdmin = activeRole === 'admin';
 
   let menuItems = [
     { name: 'Home', path: '/dashboard', icon: Home, badge: null },
@@ -66,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     groupItems = [
       { name: 'Profile', path: '/profile', icon: User, badge: null },
     ];
-  } else if (profile?.role === 'admin') {
+  } else if (isAdmin) {
     groupItems.push({ name: 'Portal Advisor', path: '/advisor', icon: UserCheck, badge: 'Advisor', badgeColor: 'bg-emerald-600' });
     groupItems.push({ name: 'Admin Portal', path: '/admin', icon: ShieldCheck, badge: 'Admin', badgeColor: 'bg-red-500' });
   }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
@@ -35,6 +36,25 @@ interface UserProfileRow {
 export const AdminDashboard: React.FC = () => {
   const { profile } = useAuthStore();
   const { settings, updateSettings } = useSettingsStore();
+  const navigate = useNavigate();
+
+  const handleSimulateAdvisorRole = () => {
+    localStorage.setItem('sharify_simulated_role', 'advisor');
+    if (profile) {
+      useAuthStore.setState({ profile: { ...profile, role: 'advisor' } });
+    }
+    triggerToast('Mode Human Advisor Berhasil Diaktifkan! Mengalihkan ke Portal Advisor...');
+    setTimeout(() => navigate('/advisor'), 800);
+  };
+
+  const handleResetAdminRole = () => {
+    localStorage.removeItem('sharify_simulated_role');
+    if (profile) {
+      useAuthStore.setState({ profile: { ...profile, role: 'admin' } });
+    }
+    triggerToast('Kembali ke Mode Super Admin.');
+    window.location.reload();
+  };
 
   // Navigation states
   const [activeTab, setActiveTab] = useState<'branding' | 'users' | 'inbox'>('branding');
@@ -379,13 +399,37 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Alert Warning Gate */}
-      <div className="bg-rose-50 dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 rounded-2xl p-4 mb-6 flex items-start shadow-xs">
-        <ShieldAlert className="h-5 w-5 text-rose-600 dark:text-rose-400 mr-3 mt-0.5 flex-shrink-0" />
-        <div>
-          <h3 className="text-xs font-black text-rose-900 dark:text-rose-300">Sistem Otorisasi: ADMINISTRATOR UTAMA</h3>
-          <p className="text-xs text-rose-800 dark:text-rose-300 mt-0.5 font-medium leading-relaxed">
-            Anda terautentikasi sebagai <span className="font-mono bg-rose-100 dark:bg-rose-950 px-1.5 py-0.5 rounded font-black text-rose-900 dark:text-rose-200">{profile?.full_name || 'Admin'}</span>. Pembaruan branding dan pengaturan akan diterapkan secara instan bagi seluruh pengguna global secara real-time.
-          </p>
+      <div className="bg-rose-50 dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 rounded-2xl p-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-start">
+          <ShieldAlert className="h-5 w-5 text-rose-600 dark:text-rose-400 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="text-xs font-black text-rose-900 dark:text-rose-300">Sistem Otorisasi: ADMINISTRATOR UTAMA</h3>
+            <p className="text-xs text-rose-800 dark:text-rose-300 mt-0.5 font-medium leading-relaxed">
+              Anda terautentikasi sebagai <span className="font-mono bg-rose-100 dark:bg-rose-950 px-1.5 py-0.5 rounded font-black text-rose-900 dark:text-rose-200">{profile?.full_name || 'Admin'}</span>. 
+            </p>
+          </div>
+        </div>
+
+        {/* Quick Role Switcher Buttons for Testing Advisor Role */}
+        <div className="flex items-center space-x-2 shrink-0">
+          <button
+            onClick={handleSimulateAdvisorRole}
+            className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95"
+            title="Uji coba tampilan & fitur sebagai Human Advisor"
+          >
+            <UserCheck className="w-4 h-4 text-emerald-300" />
+            <span>Uji Coba Role Human Advisor</span>
+          </button>
+          
+          {localStorage.getItem('sharify_simulated_role') && (
+            <button
+              onClick={handleResetAdminRole}
+              className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-extrabold text-xs px-3 py-2 rounded-xl transition-all cursor-pointer"
+              title="Reset kembali ke role Admin"
+            >
+              Reset Role
+            </button>
+          )}
         </div>
       </div>
 
