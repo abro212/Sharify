@@ -38,22 +38,8 @@ export const AdminDashboard: React.FC = () => {
   const { settings, updateSettings } = useSettingsStore();
   const navigate = useNavigate();
 
-  const handleSimulateAdvisorRole = () => {
-    localStorage.setItem('sharify_simulated_role', 'advisor');
-    if (profile) {
-      useAuthStore.setState({ profile: { ...profile, role: 'advisor' } });
-    }
-    triggerToast('Mode Human Advisor Berhasil Diaktifkan! Mengalihkan ke Portal Advisor...');
-    setTimeout(() => navigate('/advisor'), 800);
-  };
-
-  const handleResetAdminRole = () => {
-    localStorage.removeItem('sharify_simulated_role');
-    if (profile) {
-      useAuthStore.setState({ profile: { ...profile, role: 'admin' } });
-    }
-    triggerToast('Kembali ke Mode Super Admin.');
-    window.location.reload();
+  const handleOpenAdvisorPortal = () => {
+    navigate('/advisor');
   };
 
   // Navigation states
@@ -198,16 +184,26 @@ export const AdminDashboard: React.FC = () => {
   ];
 
   const handleUpdateUserRole = async (userId: string, newRole: UserProfileRow['role']) => {
+    // If updating the active logged-in user's role, update active auth profile
+    if (profile && profile.id === userId) {
+      useAuthStore.setState({
+        profile: { ...profile, role: newRole as any }
+      });
+    }
+
+    const targetUser = usersList.find(u => u.id === userId);
+    const targetName = targetUser?.full_name || 'Pengguna';
+
     try {
       // Sync update to both 'users' and 'profiles' tables in Supabase DB
       await supabase.from('users').update({ role: newRole }).eq('id', userId);
       await supabase.from('profiles').update({ role: newRole }).eq('id', userId);
 
       setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole, subscription_status: newRole !== 'free' && newRole !== 'suspended' } : u));
-      triggerToast(`Peran pengguna berhasil diperbarui di Database Supabase menjadi ${newRole.toUpperCase()}`);
+      triggerToast(`Pengguna ${targetName} resmi ditetapkan dengan role ${newRole.toUpperCase()} di Database!`);
     } catch (err) {
       setUsersList(prev => prev.map(u => u.id === userId ? { ...u, role: newRole, subscription_status: newRole !== 'free' && newRole !== 'suspended' } : u));
-      triggerToast(`Lisensi pengguna diperbarui ke ${newRole.toUpperCase()}`);
+      triggerToast(`Role ${targetName} diperbarui ke ${newRole.toUpperCase()}`);
     }
   };
 
@@ -413,23 +409,13 @@ export const AdminDashboard: React.FC = () => {
         {/* Quick Access to Human Advisor Portal */}
         <div className="flex items-center space-x-2 shrink-0">
           <button
-            onClick={handleSimulateAdvisorRole}
+            onClick={handleOpenAdvisorPortal}
             className="bg-[#064E3B] hover:bg-[#043E2F] text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95"
             title="Buka & kelola Portal Konsultan Syariah"
           >
             <UserCheck className="w-4 h-4 text-emerald-300" />
             <span>Portal Human Advisor</span>
           </button>
-          
-          {localStorage.getItem('sharify_simulated_role') && (
-            <button
-              onClick={handleResetAdminRole}
-              className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-extrabold text-xs px-3 py-2 rounded-xl transition-all cursor-pointer"
-              title="Kembali ke Mode Admin"
-            >
-              Mode Admin
-            </button>
-          )}
         </div>
       </div>
 

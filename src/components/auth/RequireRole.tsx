@@ -19,9 +19,7 @@ export const RequireRole: React.FC<RequireRoleProps> = ({
   // If not logged in, or if profile hasn't loaded yet
   if (!session) return null;
   
-  const simulatedRole = typeof window !== 'undefined' ? localStorage.getItem('sharify_simulated_role') : null;
-  const currentRole = simulatedRole || profile?.role || 'free';
-  
+  const currentRole = profile?.role || 'free';
   const isAuthorized = allowedRoles.includes(currentRole) || currentRole === 'admin';
 
   if (isAuthorized) {

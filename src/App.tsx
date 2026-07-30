@@ -48,6 +48,9 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
+    // Clear any legacy role simulation keys
+    localStorage.removeItem('sharify_simulated_role');
+
     // Fetch global configuration and CMS settings once on load
     fetchSettings();
 

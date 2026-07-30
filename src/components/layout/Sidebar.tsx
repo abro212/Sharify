@@ -35,8 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     navigate('/');
   };
 
-  const simulatedRole = typeof window !== 'undefined' ? localStorage.getItem('sharify_simulated_role') : null;
-  const activeRole = simulatedRole || profile?.role || 'free';
+  const activeRole = profile?.role || 'free';
   const isAdvisor = activeRole === 'advisor';
   const isAdmin = activeRole === 'admin';
 

@@ -5,8 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 
 export const BottomNavigationBar: React.FC = () => {
   const { profile } = useAuthStore();
-  const simulatedRole = typeof window !== 'undefined' ? localStorage.getItem('sharify_simulated_role') : null;
-  const activeRole = simulatedRole || profile?.role || 'free';
+  const activeRole = profile?.role || 'free';
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
