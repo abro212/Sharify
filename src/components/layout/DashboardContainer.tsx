@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { BottomNavigation } from './BottomNavigation';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeStore } from '../../store/useThemeStore';
+import { useNotificationStore } from '../../store/notificationStore';
+import { NotificationModal } from '../notifications/NotificationModal';
 import { Bell, Sun, Moon, Search, Menu } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -14,14 +16,24 @@ interface DashboardContainerProps {
 export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children, pageTitle }) => {
   const { profile, user } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
+  const { unreadCount, fetchNotifications, subscribeToRealtime, unsubscribeFromRealtime } = useNotificationStore();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   const userName = profile?.full_name || user?.email?.split('@')[0] || 'Ahmad';
   const role = profile?.role || 'free';
+
+  useEffect(() => {
+    fetchNotifications(user?.id);
+    subscribeToRealtime(user?.id);
+    return () => {
+      unsubscribeFromRealtime();
+    };
+  }, [user?.id, fetchNotifications, subscribeToRealtime, unsubscribeFromRealtime]);
 
   const getPageTitle = () => {
     if (pageTitle) return pageTitle;
@@ -102,13 +114,20 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
               {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-600" />}
             </button>
 
-            {/* Notifications */}
+            {/* Notifications Button */}
             <button
-              onClick={() => navigate('/profile')}
-              className="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              onClick={() => setIsNotificationOpen(true)}
+              className="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              title="Notifikasi"
             >
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+              {unreadCount > 0 ? (
+                <span className="absolute -top-0.5 -right-0.5 px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[9px] font-black shadow-sm animate-pulse">
+                  {unreadCount}
+                </span>
+              ) : (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+              )}
             </button>
 
             {/* User Profile Pill */}
@@ -146,6 +165,12 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       <div className="lg:hidden">
         <BottomNavigation />
       </div>
+
+      {/* Interactive System Notification Modal */}
+      <NotificationModal 
+        isOpen={isNotificationOpen} 
+        onClose={() => setIsNotificationOpen(false)} 
+      />
     </div>
   );
 };
