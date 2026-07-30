@@ -29,9 +29,9 @@ export const AboutUsPage: React.FC = () => {
   const level2 = orgMembers.filter(m => !advisory.includes(m));
 
   return (
-    <div className="min-h-screen font-sans bg-slate-50 selection:bg-emerald-200 selection:text-emerald-900 overflow-x-hidden">
+    <div className="min-h-screen font-sans bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 selection:bg-emerald-200 selection:text-emerald-900 overflow-x-hidden transition-colors duration-300">
       {/* Navbar */}
-      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+      <nav className="fixed w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center">
             {logoUrl ? (

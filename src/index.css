@@ -7,32 +7,46 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #FFFFFF;
+    background-color: #F8FAFC;
+    color: #0F172A;
   }
+
+  html.dark {
+    background-color: #020617;
+    color: #F8FAFC;
+  }
+
   body {
-    background-color: #FFFFFF;
-    @apply text-slate-900 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden;
+    background-color: #F8FAFC;
+    @apply text-slate-900 font-sans antialiased text-sm min-h-screen relative overflow-x-hidden transition-colors duration-300;
   }
+
+  html.dark body {
+    background-color: #020617;
+    @apply text-slate-100;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', 'Inter', sans-serif;
-    @apply tracking-tight text-slate-900 font-bold;
+    @apply tracking-tight text-slate-900 dark:text-slate-100 font-bold;
   }
 
   /* Ultra-Clean Modern Typography & Color Styling */
-  .text-slate-900, .text-slate-950 {
-    color: #0F172A;
+  .text-\[\#064E3B\] {
+    color: #064E3B;
   }
-  .text-slate-800, .text-slate-700 {
-    color: #1E293B;
+  .dark .text-\[\#064E3B\] {
+    color: #34D399;
   }
-  .text-slate-600, .text-slate-500 {
-    color: #475569;
-  }
-  .text-emerald-600 {
-    color: #059669;
-  }
-  .text-emerald-700 {
-    color: #047857;
+
+  /* Inputs & Form Elements in Dark Mode */
+  html.dark input[type="text"],
+  html.dark input[type="number"],
+  html.dark input[type="email"],
+  html.dark input[type="password"],
+  html.dark textarea,
+  html.dark select {
+    color-scheme: dark;
   }
 }
 
@@ -40,18 +54,30 @@
   /* Pristine Soft White-to-Gray Radial Gradient Backdrop */
   .bg-cyber-grid {
     background-color: #FFFFFF;
-    background-image: 
-      radial-gradient(circle at 50% 50%, #FFFFFF 0%, #F9FAFB 100%);
+    background-image: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #F9FAFB 100%);
     background-attachment: fixed;
   }
 
-  /* Futuristic Soft Light Glass-HUD Panels */
+  .dark .bg-cyber-grid {
+    background-color: #020617;
+    background-image: radial-gradient(circle at 50% 50%, #0F172A 0%, #020617 100%);
+  }
+
+  /* Futuristic Soft Light & Dark Glass-HUD Panels */
   .glass-hud-emerald {
     background: rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(16, 185, 129, 0.18);
     box-shadow: 0 8px 32px 0 rgba(4, 120, 87, 0.05), inset 0 0 10px rgba(16, 185, 129, 0.02);
+  }
+
+  .dark .glass-hud-emerald {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .glass-hud-gold {
@@ -62,6 +88,14 @@
     box-shadow: 0 8px 32px 0 rgba(212, 175, 55, 0.06), inset 0 0 10px rgba(212, 175, 55, 0.02);
   }
 
+  .dark .glass-hud-gold {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  }
+
   .glass-hud-dark {
     background: rgba(250, 253, 251, 0.88);
     backdrop-filter: blur(20px);
@@ -70,7 +104,15 @@
     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
   }
 
-  /* Neon Glowing Shadows in Light Theme */
+  .dark .glass-hud-dark {
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(30, 41, 59, 0.8);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Neon Glowing Shadows */
   .shadow-neon-emerald {
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.18);
   }
@@ -78,14 +120,14 @@
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.18);
   }
 
-  /* Shimmering Metallic Gold text suited for Light backgrounds */
+  /* Shimmering Metallic Gold text */
   @keyframes goldShimmer {
     0% { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
 
   .shimmer-gold-text {
-    background: linear-gradient(to right, #B45309 10%, #D97706 50%, #B45309 90%);
+    background: linear-gradient(to right, #F59E0B 10%, #FBBF24 50%, #F59E0B 90%);
     background-size: 100% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -97,7 +139,7 @@
   }
 
   .shimmer-emerald-text {
-    background: linear-gradient(to right, #047857 10%, #10B981 50%, #047857 90%);
+    background: linear-gradient(to right, #10B981 10%, #34D399 50%, #10B981 90%);
     background-size: 100% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -108,7 +150,7 @@
     filter: brightness(1.08);
   }
 
-  /* Teleporter Scale interactions - Optimised to prevent transition-all layout repaints */
+  /* Teleporter Scale interactions */
   .interactive-teleport {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.3s ease;
   }
@@ -116,64 +158,9 @@
     @apply transform scale-[1.025] -translate-y-[3px] border-emerald-400/40;
     box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
   }
-
-  /* Holographic Scan Line sweep in Light Mode */
-  @keyframes scanSweep {
-    0% { transform: translateY(-100%); opacity: 0; }
-    10% { opacity: 0.3; }
-    90% { opacity: 0.3; }
-    100% { transform: translateY(200%); opacity: 0; }
-  }
-
-  .hologram-scanner {
-    position: relative;
-    overflow: hidden;
-  }
-  .hologram-scanner::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right, transparent, rgba(16, 185, 129, 0.4), transparent);
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-    animation: scanSweep 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    pointer-events: none;
-  }
-
-  /* Astronomical orbit animations */
-  @keyframes orbitRotation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  .animate-orbit-slow {
-    animation: orbitRotation 60s linear infinite;
-  }
-  .animate-orbit-medium {
-    animation: orbitRotation 30s linear infinite;
-  }
-  .animate-orbit-fast {
-    animation: orbitRotation 15s linear infinite;
-  }
-
-  /* Glowing Diagnostic Nodes */
-  .cyber-ping {
-    position: relative;
-  }
-  .cyber-ping::after {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #10B981;
-    box-shadow: 0 0 8px #10B981;
-    animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-  }
 }
 
-/* Scrollbar Overrides: Futuristic Light */
+/* Scrollbar Overrides */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -181,10 +168,16 @@
 ::-webkit-scrollbar-track {
   background: #F4FAF7;
 }
+html.dark ::-webkit-scrollbar-track {
+  background: #020617;
+}
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.2);
   border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover {
+html.dark ::-webkit-scrollbar-thumb {
   background: rgba(16, 185, 129, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.4);
 }
