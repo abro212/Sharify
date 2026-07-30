@@ -64,7 +64,17 @@ ATURAN KETAT:
 ${getDsnMuiSystemKnowledge()}
 `;
 
-export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash", customApiKey?: string, systemPrompt?: string) => {
+export interface ChatHistoryMessage {
+  role: 'user' | 'model';
+  parts: { text: string }[];
+}
+
+export const getGeminiChatSession = (
+  modelName: string = "gemini-2.5-flash", 
+  customApiKey?: string, 
+  systemPrompt?: string,
+  initialHistory?: ChatHistoryMessage[]
+) => {
   const genAIClient = customApiKey ? new GoogleGenerativeAI(customApiKey) : fallbackGenAI;
   
   // Model name safety fallback: map invalid or legacy model names to stable gemini-2.5-flash
@@ -79,7 +89,7 @@ export const getGeminiChatSession = (modelName: string = "gemini-2.5-flash", cus
   });
   
   return model.startChat({
-    history: [],
+    history: initialHistory || [],
     generationConfig: {
       temperature: 0.3,
       maxOutputTokens: 4096,
