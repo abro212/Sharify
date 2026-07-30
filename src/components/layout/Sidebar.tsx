@@ -110,9 +110,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
   );
 
   return (
-    <aside className={`fixed inset-y-0 left-0 lg:my-4 lg:ml-4 z-[10000] flex flex-col bg-white dark:bg-[#1C1C1E] transition-all duration-300 ease-in-out border border-slate-200 dark:border-slate-800 lg:rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/50 ${
+    <aside className={`fixed inset-y-0 left-0 z-[10000] flex flex-col bg-white dark:bg-[#1C1C1E] transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800 shadow-lg ${
       isOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'
-    } ${isCollapsed ? 'lg:w-[72px]' : 'lg:w-64'}`}>
+    } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}`}>
       
       {/* Collapse Toggle Button (Desktop Only) */}
       <button

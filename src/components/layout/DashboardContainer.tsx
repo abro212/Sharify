@@ -53,7 +53,7 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
 
       {/* Main Outer Content Area */}
       <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${
-        isCollapsed ? 'lg:pl-24' : 'lg:pl-72'
+        isCollapsed ? 'lg:pl-20' : 'lg:pl-64'
       }`}>
         
         {/* Top Header Navigation Bar */}
