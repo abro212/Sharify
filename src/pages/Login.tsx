@@ -4,16 +4,25 @@ import { useForm } from 'react-hook-form';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { bustCache } from '../store/settingsStore';
 import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../store/authStore';
 
 export const Login: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const { session, setSession } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoLoading, setLogoLoading] = useState(true);
+
+  // Auto-redirect if user already logged in
+  useEffect(() => {
+    if (session) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [session, navigate]);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,17 +61,29 @@ export const Login: React.FC = () => {
   const onSubmit = async (data: any) => {
     setLoading(true);
     setErrorMsg('');
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      navigate('/dashboard');
+      if (error) {
+        setErrorMsg(
+          error.message === 'Invalid login credentials' 
+            ? 'Email atau password yang Anda masukkan salah.' 
+            : error.message
+        );
+        setLoading(false);
+      } else {
+        if (authData?.session) {
+          setSession(authData.session);
+        }
+        navigate('/dashboard', { replace: true });
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Gagal melakukan login.');
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoogleLogin = async () => {
