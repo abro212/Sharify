@@ -27,7 +27,7 @@ export interface ChatSessionData {
 const DEFAULT_WELCOME_MESSAGE: Message = {
   id: 'welcome-1',
   role: 'model',
-  content: 'Assalamu alaikum! Saya Sharify, Penasihat Keuangan & Syariah Senior Anda. Seluruh analisis saya dipandu KETAT oleh **Fatwa DSN-MUI (Dewan Syariah Nasional Majelis Ulama Indonesia)** & Fiqh Muamalah secara komprehensif tanpa mengarang. Ada yang ingin Anda tanyakan seputar akad KPR, investasi saham, hukum paylater, zakat, atau detoks riba hari ini? 🛡️✨',
+  content: 'Assalamu alaikum! ✨ Saya Sharify, teman ngobrol & penasihat keuangan syariah kamu. Jawaban saya santai, langsung *to-the-point*, dan pastinya 100% berlandaskan **Fatwa DSN-MUI**. Ada yang mau kamu tanyakan soal zakat, investasi halal, paylater, atau KPR hari ini? 😊🍃',
 };
 
 const STORAGE_KEY_SESSIONS = 'sharify_chat_sessions_v2';
