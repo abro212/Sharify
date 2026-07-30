@@ -12,8 +12,8 @@ export const BottomNavigation: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[100] px-3 w-full max-w-[460px]">
-      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/80 dark:border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-3xl pt-0 px-2 pb-2 overflow-hidden flex flex-col justify-between">
+    <div className="fixed bottom-0 left-0 right-0 z-[100] w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border-t border-slate-200/80 dark:border-slate-800 shadow-[0_-6px_25px_rgba(0,0,0,0.06)] rounded-t-3xl pb-2 pt-0">
+      <div className="max-w-md mx-auto px-2">
         
         {/* 5 Icons Navigation Row */}
         <div className="grid grid-cols-5 gap-1 items-stretch">
@@ -22,7 +22,7 @@ export const BottomNavigation: React.FC = () => {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-between pt-0 pb-1.5 transition-all duration-200 relative ${
+                `flex flex-col items-center justify-between pt-0 pb-1 transition-all duration-200 relative ${
                   isActive
                     ? 'text-[#064E3B] dark:text-emerald-400 font-bold'
                     : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
@@ -31,8 +31,8 @@ export const BottomNavigation: React.FC = () => {
             >
               {({ isActive }) => (
                 <>
-                  {/* Top Active Indicator Bar */}
-                  <div className={`w-full h-1 rounded-full mb-2 transition-all duration-300 ${
+                  {/* Top Active Indicator Bar (Flush with top border) */}
+                  <div className={`w-full h-1 rounded-b-full mb-1.5 transition-all duration-300 ${
                     isActive ? 'bg-[#064E3B] dark:bg-emerald-400 scale-x-100' : 'bg-transparent scale-x-0'
                   }`} />
                   
@@ -43,15 +43,15 @@ export const BottomNavigation: React.FC = () => {
                   />
 
                   {/* Label */}
-                  <span className="text-[10px] font-semibold mt-1 tracking-tight">{item.label}</span>
+                  <span className="text-[10px] font-semibold mt-0.5 tracking-tight">{item.label}</span>
                 </>
               )}
             </NavLink>
           ))}
         </div>
 
-        {/* Bottom iPhone Home Indicator Pill */}
-        <div className="w-32 h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mx-auto mt-1" />
+        {/* Bottom Home Bar Indicator */}
+        <div className="w-28 h-1 bg-slate-300/80 dark:bg-slate-700/80 rounded-full mx-auto mt-1" />
 
       </div>
     </div>
