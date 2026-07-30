@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
-import { FloatingAIChat } from './FloatingAIChat';
 import { BottomNavigation } from './BottomNavigation';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeStore } from '../../store/useThemeStore';
@@ -147,9 +146,6 @@ export const DashboardContainer: React.FC<DashboardContainerProps> = ({ children
       <div className="lg:hidden">
         <BottomNavigation />
       </div>
-
-      {/* AI Floating Chat Widget */}
-      <FloatingAIChat />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import {
   ShieldCheck, Users, Star, Download, Play, Lock, ChevronDown, 
   Globe, Sparkles, Menu, X
 } from 'lucide-react';
-import { FloatingAIChat } from '../components/layout/FloatingAIChat';
+import { FloatingWhatsAppChat } from '../components/layout/FloatingWhatsAppChat';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -686,8 +686,8 @@ export const LandingPage: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating AI Chat Assistant Widget */}
-      <FloatingAIChat unlimited />
+      {/* Floating WhatsApp Admin Chat Widget */}
+      <FloatingWhatsAppChat />
     </div>
   );
 };
