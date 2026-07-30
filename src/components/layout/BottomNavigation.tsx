@@ -12,33 +12,47 @@ export const BottomNavigation: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] px-3 w-full max-w-[440px]">
-      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-[0_8px_32px_rgba(6,78,59,0.12)] rounded-2xl px-3 py-2 flex items-center justify-around">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200 ${
-                isActive
-                  ? 'text-[#064E3B] dark:text-emerald-400 font-bold scale-105'
-                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-emerald-100/80 dark:bg-emerald-950/60 text-[#064E3B] dark:text-emerald-400' : ''}`}>
+    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[100] px-3 w-full max-w-[460px]">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/80 dark:border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-3xl pt-0 px-2 pb-2 overflow-hidden flex flex-col justify-between">
+        
+        {/* 5 Icons Navigation Row */}
+        <div className="grid grid-cols-5 gap-1 items-stretch">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-between pt-0 pb-1.5 transition-all duration-200 relative ${
+                  isActive
+                    ? 'text-[#064E3B] dark:text-emerald-400 font-bold'
+                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {/* Top Active Indicator Bar */}
+                  <div className={`w-full h-1 rounded-full mb-2 transition-all duration-300 ${
+                    isActive ? 'bg-[#064E3B] dark:bg-emerald-400 scale-x-100' : 'bg-transparent scale-x-0'
+                  }`} />
+                  
+                  {/* Icon */}
                   <item.icon
                     strokeWidth={isActive ? 2.5 : 2}
-                    className="w-5 h-5"
+                    className={`w-5 h-5 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}
                   />
-                </div>
-                <span className="text-[10px] font-semibold mt-0.5 tracking-tight">{item.label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
+
+                  {/* Label */}
+                  <span className="text-[10px] font-semibold mt-1 tracking-tight">{item.label}</span>
+                </>
+              )}
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Bottom iPhone Home Indicator Pill */}
+        <div className="w-32 h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mx-auto mt-1" />
+
       </div>
     </div>
   );
