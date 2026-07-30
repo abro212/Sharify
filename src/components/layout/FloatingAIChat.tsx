@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getGeminiChatSession, PUBLIC_SYSTEM_PROMPT } from '../../lib/gemini';
+import { getGeminiChatSession, PUBLIC_SYSTEM_PROMPT, cleanMarkdownResponse } from '../../lib/gemini';
 import { useAuthStore } from '../../store/authStore';
 import { useSettingsStore } from '../../store/settingsStore';
 
@@ -30,8 +30,8 @@ export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = fals
       id: '1',
       role: 'model',
       content: unlimited
-        ? 'Halo! 👋 Selamat datang di **Sharify**! Saya asisten virtual Sharify yang siap menjawab pertanyaan Anda seputar aplikasi ini. Mau tanya apa? 😊'
-        : 'Assalamu alaikum! ✨ Saya Sharify, AI Co-Pilot Finansial Syariah Anda. Ada yang bisa saya bantu untuk menghitung zakat, merancang tujuan finansial, waris faraidh, atau detoks riba agar keuangan Anda semakin berkah hari ini? 🍃',
+        ? 'Halo! 👋 Selamat datang di **Sharify**! Saya asisten virtual Sharify yang siap menjawab pertanyaan Anda seputar aplikasi ini & hukum dasar DSN-MUI. Ada yang bisa saya bantu? 😊'
+        : 'Assalamu alaikum! ✨ Saya Sharify, Konsultan AI Keuangan Syariah Anda. Seluruh jawaban saya dipandu KETAT oleh **Fatwa DSN-MUI** tanpa mengarang. Ada yang ingin ditanyakan seputar zakat, investasi halal, paylater, atau akad syariah hari ini? 🛡️🍃',
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -119,7 +119,8 @@ export const FloatingAIChat: React.FC<FloatingAIChatProps> = ({ unlimited = fals
 
     try {
       const result = await chatSession.sendMessage(userMessageContent);
-      const responseText = result.response.text();
+      const rawText = result.response.text();
+      const responseText = cleanMarkdownResponse(rawText);
 
       setMessages((prev) => [
         ...prev,

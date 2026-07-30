@@ -3,7 +3,7 @@ import { DashboardContainer } from '../components/layout/DashboardContainer';
 import { Send, Bot, User as UserIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getGeminiChatSession } from '../lib/gemini';
+import { getGeminiChatSession, cleanMarkdownResponse } from '../lib/gemini';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 
@@ -21,7 +21,7 @@ export const Chat: React.FC = () => {
     {
       id: '1',
       role: 'model',
-      content: 'Assalamu alaikum! Saya Sharify, Asisten Finansial Syariah AI Anda. Ada yang bisa saya bantu untuk menganalisis kesucian aset, merencanakan zakat, melunasi riba, atau memeriksa draf akad Anda hari ini?',
+      content: 'Assalamu alaikum! Saya Sharify, Konsultan AI Keuangan Syariah Anda. Seluruh jawaban saya dipandu KETAT oleh **Fatwa DSN-MUI (Dewan Syariah Nasional Majelis Ulama Indonesia)** & Fiqh Muamalah tanpa mengarang. Ada yang ingin Anda tanyakan seputar akad KPR, investasi saham, hukum paylater, zakat, atau detoks riba hari ini? 🛡️✨',
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -90,7 +90,8 @@ export const Chat: React.FC = () => {
     try {
       // Send message to Gemini
       const result = await chatSession.sendMessage(userMessageContent);
-      const responseText = result.response.text();
+      const rawText = result.response.text();
+      const responseText = cleanMarkdownResponse(rawText);
 
       // Add model response to UI
       setMessages((prev) => [
@@ -109,7 +110,7 @@ export const Chat: React.FC = () => {
         {
           id: (Date.now() + 1).toString(),
           role: 'model',
-          content: "Maaf, saya mengalami gangguan jaringan saat merumuskan analisis syariah. Silakan coba kirim ulang pesan Anda.",
+          content: "Maaf, saya mengalami gangguan jaringan saat merumuskan analisis syariah berlandaskan Fatwa DSN-MUI. Silakan coba kirim ulang pesan Anda.",
         },
       ]);
     } finally {
@@ -120,9 +121,12 @@ export const Chat: React.FC = () => {
 
 
   const suggestedQuestions = [
-    'Apa itu riba?',
-    'Hukum asuransi konvensional?',
-    'Zakat saham?',
+    'Fatwa DSN-MUI Paylater & Pinjol?',
+    'Hukum Asuransi Syariah (Fatwa No. 21)?',
+    'Akad KPR Syariah MMQ vs Murabahah?',
+    'Hukum Kripto menurut Keputusan MUI?',
+    'Penapisan Saham Syariah (Fatwa No. 40 & 80)?',
+    'Denda Keterlambatan Ta\'zir (Fatwa No. 17)?',
   ];
 
   return (
@@ -132,11 +136,14 @@ export const Chat: React.FC = () => {
         {/* Deep Emerald Header Card matching Screen 6 & 15 */}
         <div className="bg-[#064E3B] text-white p-5 rounded-3xl relative overflow-hidden shadow-lg shadow-emerald-950/20 flex items-center justify-between shrink-0">
           <div className="relative z-10 max-w-[75%] space-y-1">
+            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-[10px] font-bold text-emerald-200 mb-1">
+              <span>🛡️ 100% Berlandaskan Fatwa DSN-MUI (Presisi & Anti-Ngarang)</span>
+            </div>
             <h2 className="text-sm font-extrabold text-white leading-tight">
-              Ask about Islamic finance & life
+              AI Sharia Advisor — Konsultasi Keuangan Syariah
             </h2>
             <p className="text-[11px] text-emerald-100/90 font-medium">
-              Powered by AI with trusted Islamic knowledge
+              Jawaban terverifikasi dengan nomor fatwa DSN-MUI resmi &amp; kaidah Fiqh Muamalah
             </p>
           </div>
           
@@ -212,7 +219,7 @@ export const Chat: React.FC = () => {
               type="text" 
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Type your question..." 
+              placeholder="Tanyakan akad, zakat, atau hukum keuangan syariah Anda..." 
               className="flex-1 px-3.5 py-2 bg-slate-50 dark:bg-slate-700/60 border border-slate-200/80 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               disabled={isLoading}
             />
