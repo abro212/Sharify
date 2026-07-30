@@ -14,6 +14,7 @@ import { Pricing } from './pages/Pricing';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Goals } from './pages/Goals';
 import { RibaDetox } from './pages/RibaDetox';
+import { JudolDetox } from './pages/JudolDetox';
 import { Screener } from './pages/Screener';
 import { AkadAnalyzer } from './pages/AkadAnalyzer';
 import { FamilyDashboard } from './pages/FamilyDashboard';
@@ -123,6 +124,7 @@ function App() {
               <RibaDetox />
             </RequireRole>
           } />
+          <Route path="/judol-detox" element={<JudolDetox />} />
           <Route path="/screener" element={
             <RequireRole allowedRoles={['plus', 'pro', 'family', 'admin']} fallbackMessage="Fitur premium Asset Screener memerlukan langganan Plus atau lebih tinggi.">
               <Screener />

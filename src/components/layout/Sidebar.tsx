@@ -3,8 +3,9 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { 
   Home, MessageSquare, Calculator, User, ShieldCheck, HeartPulse, 
   Crown, Target, RefreshCcw, Search, FileText, Users, Heart, Coins, X,
-  ChevronLeft, ChevronRight, Moon, Sun, Search as SearchIcon, LogOut
+  ChevronLeft, ChevronRight, Moon, Sun, Search as SearchIcon, LogOut, ShieldAlert
 } from 'lucide-react';
+
 import { useAuthStore } from '../../store/authStore';
 import { useSettingsStore, bustCache } from '../../store/settingsStore';
 import { useThemeStore } from '../../store/useThemeStore';
@@ -41,6 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isCollapsed, 
     { name: 'Goal Planning', path: '/goals', icon: Target, badge: null },
     { name: 'Zakat & Faraidh', path: '/zakat', icon: Calculator, badge: null },
     { name: 'Riba Detox', path: '/riba-detox', icon: RefreshCcw, badge: 'Plus', badgeColor: 'bg-emerald-500' },
+    { name: 'Judol Detox', path: '/judol-detox', icon: ShieldAlert, badge: 'Safe', badgeColor: 'bg-rose-500' },
     { name: 'Asset Screener', path: '/screener', icon: Search, badge: 'Plus', badgeColor: 'bg-emerald-500' },
     { name: 'Qurban Saver', path: '/qurban-saver', icon: Heart, badge: 'Plus', badgeColor: 'bg-emerald-500' },
     { name: 'Smart Akad', path: '/akad-analyzer', icon: FileText, badge: 'Pro', badgeColor: 'bg-amber-500' },
